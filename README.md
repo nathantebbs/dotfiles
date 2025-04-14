@@ -21,3 +21,5 @@ $ dotfiles add <file>
 ```
 
 This is important as to not push important information to GitHub.
+
+> See .bashrc for dotfiles alias!
