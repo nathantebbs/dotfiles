@@ -1,9 +1,11 @@
+adobe-source-code-pro-fonts
 base
 base-devel
 dmenu
 docker
 dosfstools
 efibootmgr
+emacs
 fastfetch
 firefox
 fuse3
@@ -27,9 +29,12 @@ linux-firmware
 linux-headers
 mtools
 nano
-neovim
 network-manager-applet
 networkmanager
+noto-fonts
+noto-fonts-cjk
+noto-fonts-emoji
+noto-fonts-extra
 os-prober
 pavucontrol
 peaclock
@@ -39,6 +44,10 @@ smartmontools
 tldr
 tmux
 tree
+ttf-dejavu
+ttf-fira-code
+ttf-hack
+ttf-symbola
 vim
 vulkan-intel
 vulkan-nouveau
