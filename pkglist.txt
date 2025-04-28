@@ -21,6 +21,7 @@ i3status
 intel-media-driver
 intel-ucode
 iwd
+jupyterlab
 libva-intel-driver
 lightdm
 lightdm-gtk-greeter
