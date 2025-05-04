@@ -5,10 +5,10 @@
 (hl-line-mode)
 
 (add-to-list 'default-frame-alist `(font . "JetBrains Mono"))
-
 (require 'package)
 (add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/"))
+	     '("melpa" . "https://melpa.org/packages/")
+	     '("gnu" . "https://elpa.gnu.org/packages/"))
 (package-initialize)
 (package-refresh-contents)
 
@@ -31,7 +31,9 @@
      default))
  '(display-line-numbers-type 'relative)
  '(inhibit-startup-screen t)
- '(package-selected-packages nil))
+ '(package-selected-packages
+   '(auctex auto-complete auto-complete-auctex evil gruber-darker-theme
+	    magit)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
