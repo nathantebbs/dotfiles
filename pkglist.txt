@@ -1,4 +1,5 @@
 adobe-source-code-pro-fonts
+alacritty
 base
 base-devel
 dmenu
@@ -53,7 +54,6 @@ vim
 vulkan-intel
 vulkan-nouveau
 vulkan-radeon
-wezterm
 wget
 wireless_tools
 xdg-utils
