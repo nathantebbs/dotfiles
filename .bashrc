@@ -12,10 +12,13 @@ alias cl='peaclock'
 alias fp='find ~/Github -type f | fzf'
 alias dotfiles=/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME
 alias less='less --RAW-CONTROL-CHARS'
+alias emacs='emacs & disown'
 
 # Color options
 export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
+
+PATH=/usr/local/texlive/2025/bin/x86_64-linux:$PATH
 
 PS1='[\u@\h \W]\$ '

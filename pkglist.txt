@@ -30,6 +30,7 @@ linux
 linux-firmware
 linux-headers
 mtools
+mupdf
 nano
 network-manager-applet
 networkmanager
@@ -67,4 +68,5 @@ xterm
 yay
 yay-debug
 zathura
+zathura-pdf-poppler
 zram-generator

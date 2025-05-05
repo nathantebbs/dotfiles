@@ -1,3 +1,13 @@
+;; -*- lexical-binding: t; eval: (local-set-key (kbd "C-c i") #'consult-outline); outline-regexp: ";;;"; -*-
+
+;;; startup
+(setq gc-cons-threshold (* 100 1000 1000))
+(add-hook 'emacs-startup-hook
+	  #'(lambda ()
+	      (message "Startup in %s sec with %d garbage collections"
+		       (emacs-init-time "%.2f")
+		       gcs-done)))
+
 (tool-bar-mode 0)
 (menu-bar-mode 0)
 (scroll-bar-mode 0)
@@ -5,38 +15,43 @@
 (hl-line-mode)
 
 (add-to-list 'default-frame-alist `(font . "JetBrains Mono"))
+(load-theme 'gruber-darker t)
+
 (require 'package)
 (add-to-list 'package-archives
 	     '("melpa" . "https://melpa.org/packages/")
 	     '("gnu" . "https://elpa.gnu.org/packages/"))
 (package-initialize)
-(package-refresh-contents)
 
-(unless (package-installed-p 'evil)
-  (package-install 'evil))
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+(require 'use-package)
 
-(require 'evil)
-(evil-mode 1)
+(use-package evil
+  :ensure t
+  :config
+  (evil-mode)
+  (setq evil-search-module 'evil-search)
+  (evil-set-undo-system 'undo-tree))
+
+(use-package undo-tree
+  :ensure t
+  :config
+  (global-undo-tree-mode)
+  (setq undo-tree-auto-save-history nil))
+
+(use-package auctex
+  :ensure t
+  :defer t)
+
+
+(use-package consult
+  :ensure t
+  :bind (("C-c i" . consult-outline))
+  :init
+  (setq outline-regexp ";;;"))  ;; Customize to treat lines starting with ;;; as headings
+
+
 
 (setq backup-directory-alist            '((".*" . "~/.Trash")))
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes '(gruber-darker))
- '(custom-safe-themes
-   '("e13beeb34b932f309fb2c360a04a460821ca99fe58f69e65557d6c1b10ba18c7"
-     default))
- '(display-line-numbers-type 'relative)
- '(inhibit-startup-screen t)
- '(package-selected-packages
-   '(auctex auto-complete auto-complete-auctex evil gruber-darker-theme
-	    magit)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(setq custom-file "~/.custom.el")
