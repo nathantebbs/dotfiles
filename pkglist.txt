@@ -52,6 +52,7 @@ ttf-fira-code
 ttf-hack
 ttf-symbola
 vim
+vlc
 vulkan-intel
 vulkan-nouveau
 vulkan-radeon
