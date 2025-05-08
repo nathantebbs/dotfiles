@@ -33,6 +33,7 @@ linux-headers
 mtools
 mupdf
 nano
+nautilus
 network-manager-applet
 networkmanager
 noto-fonts
