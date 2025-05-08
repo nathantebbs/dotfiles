@@ -13,6 +13,7 @@ alias fp='find ~/Github -type f | fzf'
 alias dotfiles=/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME
 alias less='less --RAW-CONTROL-CHARS'
 alias emacs='emacs & disown'
+alias sshmc='ssh root@146.190.151.145'
 
 # Color options
 export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'

@@ -23,6 +23,7 @@ intel-media-driver
 intel-ucode
 iwd
 jupyterlab
+less
 libva-intel-driver
 lightdm
 lightdm-gtk-greeter
@@ -43,6 +44,7 @@ pavucontrol
 peaclock
 pulseaudio
 pulsemixer
+screen
 smartmontools
 tldr
 tmux
@@ -58,6 +60,7 @@ vulkan-nouveau
 vulkan-radeon
 wget
 wireless_tools
+xclip
 xdg-utils
 xf86-video-amdgpu
 xf86-video-ati
