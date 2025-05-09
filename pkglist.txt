@@ -15,6 +15,7 @@ git
 google-chrome
 grub
 htop
+hugo
 i3-wm
 i3blocks
 i3lock
@@ -25,6 +26,7 @@ iwd
 jupyterlab
 less
 libva-intel-driver
+libxcrypt-compat
 lightdm
 lightdm-gtk-greeter
 linux
@@ -34,6 +36,7 @@ mtools
 mupdf
 nano
 nautilus
+neovim
 network-manager-applet
 networkmanager
 noto-fonts
