@@ -12,6 +12,7 @@ firefox
 fuse3
 fzf
 git
+gnu-netcat
 google-chrome
 grub
 htop
