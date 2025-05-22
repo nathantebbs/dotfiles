@@ -50,10 +50,12 @@ pavucontrol
 peaclock
 pulseaudio
 pulsemixer
+qbittorrent-nox
 screen
 smartmontools
 tldr
 tmux
+torbrowser-launcher
 tree
 ttf-dejavu
 ttf-fira-code
