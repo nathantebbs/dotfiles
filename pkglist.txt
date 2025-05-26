@@ -2,6 +2,7 @@ adobe-source-code-pro-fonts
 alacritty
 base
 base-devel
+clang
 dmenu
 docker
 dosfstools
@@ -34,6 +35,7 @@ lightdm-gtk-greeter
 linux
 linux-firmware
 linux-headers
+lua-language-server
 mtools
 mupdf
 nano
@@ -51,6 +53,7 @@ peaclock
 pulseaudio
 pulsemixer
 qbittorrent-nox
+rust-analyzer
 screen
 smartmontools
 tldr
@@ -59,8 +62,10 @@ torbrowser-launcher
 tree
 ttf-dejavu
 ttf-fira-code
+ttf-font-awesome
 ttf-hack
 ttf-symbola
+unzip
 vim
 vlc
 vulkan-intel
@@ -78,7 +83,6 @@ xorg-xinit
 xss-lock
 xterm
 yay
-yay-debug
 zathura
 zathura-pdf-poppler
 zram-generator
