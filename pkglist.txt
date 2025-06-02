@@ -3,12 +3,14 @@ alacritty
 base
 base-devel
 clang
+codeblocks
 dmenu
 docker
 dosfstools
 efibootmgr
 emacs
 fastfetch
+fd
 firefox
 flameshot
 fuse3
@@ -28,6 +30,8 @@ intel-ucode
 iwd
 jupyterlab
 less
+libc++
+libc++abi
 libva-intel-driver
 libxcrypt-compat
 lightdm
@@ -47,7 +51,6 @@ noto-fonts
 noto-fonts-cjk
 noto-fonts-emoji
 noto-fonts-extra
-ocrmypdf
 os-prober
 pavucontrol
 peaclock
@@ -56,6 +59,7 @@ pulsemixer
 pyenv
 pyenv-virtualenv
 qbittorrent-nox
+ripgrep
 rust-analyzer
 screen
 smartmontools
@@ -68,6 +72,8 @@ ttf-dejavu
 ttf-fira-code
 ttf-font-awesome
 ttf-hack
+ttf-jetbrains-mono-nerd
+ttf-nerd-fonts-symbols
 ttf-symbola
 unzip
 vim
