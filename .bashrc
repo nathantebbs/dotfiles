@@ -22,9 +22,4 @@ export LSCOLORS=ExFxCxDxBxegedabagacad
 
 PATH=/usr/local/texlive/2025/bin/x86_64-linux:$PATH
 
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
-
 PS1='[\[\e[0;31m\]\u\[\e[0m\]@\h:\[\e[34m\]\w\[\e[0m\]]$ '
