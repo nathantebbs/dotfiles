@@ -40,6 +40,9 @@ linux
 linux-firmware
 linux-headers
 lua-language-server
+luarocks
+man-db
+man-pages
 mtools
 mupdf
 nano
