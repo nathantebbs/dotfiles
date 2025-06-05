@@ -27,4 +27,4 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 
-PS1='[\u@\h \W]\$ '
+PS1='[\[\e[0;31m\]\u\[\e[0m\]@\h:\[\e[34m\]\w\[\e[0m\]]$ '
