@@ -26,7 +26,9 @@ This is important as to not push important information to GitHub.
 
 ## How to restore system packages via pkglist.txt
 
-If you are using [Arch Linux](https://archlinux.org/), or some other linux distrobution that supports downloading from dependencies from a file.
+If you are using a linux distrobution that supports installing packages via a text file:
+
+### [Arch Linux](https://archlinux.org/)
 
 ```bash
 $ sudo pacman -S - < pkglist.txt
