@@ -3,18 +3,19 @@
 DOTFILES_DIR="$HOME/dotfiles"
 
 declare -A DOTFILES=(
-    ["bashrc"]=".$HOME/.bashrc"
-    ["pkglist"]=".$HOME/pkglist.txt"
+    ["bashrc"]="$HOME/.bashrc"
+    ["pkglist"]="$HOME/pkglist.txt"
+    ["alacritty"]="$HOME/.alacritty.toml"
 )
 
 # Ensure dotfiles directory
-if [ ! -d "DOTFILES_DIR" ]; then
+if [ ! -d "$DOTFILES_DIR" ]; then
     echo "ERROR: Dotfiles dir -> $DOTFILES_DIR [NOT FOUND]"
     exit 1
 fi
 
 # Backup directory
-BACKUP_DIR="$HOME/.dotfiles_backup/$(date +%Y%m%d_%H%M%S)"
+BACKUP_DIR="$HOME/dotfiles_backup/$(date +%Y%m%d_%H%M%S)"
 mkdir -p "$BACKUP_DIR"
 
 # Function to create symlinks
