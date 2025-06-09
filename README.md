@@ -15,7 +15,10 @@ git clone https://github.com/nathantebbs/dotfiles.git
 2. Run the install script to symlink individual dotfiles
 
 ```bash
-~/dotfiles/install.sh
+cd ~/dotfiles
+./install.sh
+# Optional neovim installation [--nvim|-n]
+./install.sh --nvim
 ```
 
 ## How to restore system packages via pkglist.txt
