@@ -19,7 +19,8 @@ cd ~/dotfiles
 pacman -S - < pkglists/pkglist.txt
 ```
 
-> [!NOTE] See the pkglists/pkglist-aur.txt for the aur packages I use. It is importatnt to use the official pkglist.txt for initial installations on new systems.
+> [!NOTE]
+> See the pkglists/pkglist-aur.txt for the aur packages I use. It is importatnt to use the official pkglist.txt for initial installations on new systems.
 
 - Run the install script to symlink individual dotfiles
 
