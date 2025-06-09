@@ -3,9 +3,9 @@
 DOTFILES_DIR="$HOME/dotfiles"
 
 declare -A DOTFILES=(
-    ["bashrc"]="$HOME/.bashrc"
-    ["pkglist"]="$HOME/pkglist.txt"
-    ["alacritty"]="$HOME/.alacritty.toml"
+    [".bashrc"]="$HOME/.bashrc"
+    ["pkglist.txt"]="$HOME/pkglist.txt"
+    [".alacritty.toml"]="$HOME/.alacritty.toml"
 )
 
 # Ensure dotfiles directory
