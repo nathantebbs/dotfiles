@@ -1,1 +1,0 @@
-/home/nate/Programming/remote/nvim-config/init.lua
