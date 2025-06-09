@@ -1,6 +1,6 @@
 #! /bin/bash
 
-DOTFILES_DIR="$HOME/.dotfiles"
+DOTFILES_DIR="$HOME/dotfiles"
 
 declare -A DOTFILES=(
     ["bashrc"]=".$HOME/.bashrc"
