@@ -1,0 +1,6 @@
+google-chrome 137.0.7151.68-1
+peaclock 0.4.3-2
+peaclock-debug 0.4.3-2
+ttf-symbola 14.00-2
+yay 12.5.0-1
+yay-debug 12.5.0-1

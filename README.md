@@ -5,14 +5,23 @@
 
 ## Using this repo
 
-1. Clone the repo into your home directory
+- Clone the repo into your home directory
 
 ```bash
 cd ~/
 git clone https://github.com/nathantebbs/dotfiles.git
 ```
 
-2. Run the install script to symlink individual dotfiles
+- Inside the new dotfiles directory. Use the pkglists directory install the official pkglist backup
+
+```bash
+cd ~/dotfiles
+pacman -S - < pkglists/pkglist.txt
+```
+
+> [!NOTE] See the pkglists/pkglist-aur.txt for the aur packages I use. It is importatnt to use the official pkglist.txt for initial installations on new systems.
+
+- Run the install script to symlink individual dotfiles
 
 ```bash
 cd ~/dotfiles
@@ -21,7 +30,7 @@ cd ~/dotfiles
 ./install.sh --nvim
 ```
 
-## How to restore system packages via pkglist.txt
+## Supported Linux Distros
 
 If you are using a linux distrobution that supports installing packages via a text file:
 
