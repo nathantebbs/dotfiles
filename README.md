@@ -38,6 +38,7 @@ cd ~/dotfiles
 <details>
 <summary>The following script will take a specified set of files present within this repository and symlink them to the approraite configuration
 directories on your computer.</summary>
+
 ```bash
 #!/bin/bash
 
