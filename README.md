@@ -38,7 +38,7 @@ The following script will take a specified set of files present within this repo
 directories on your computer.
 
 <details>
-<summary>./util/backup.sh</summary>
+<summary>./util/install.sh</summary>
 
 ```bash
 #!/bin/bash
