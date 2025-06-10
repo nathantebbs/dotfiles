@@ -76,8 +76,8 @@ faad2 2.11.2-1
 fakeroot 1.37.1.2-1
 fastfetch 2.45.0-1
 fd 10.2.0-1
-ffmpeg 2:7.1.1-3
-ffmpeg4.4 4.4.5-5
+ffmpeg 2:7.1.1-4
+ffmpeg4.4 4.4.6-1
 fftw 3.3.10-7
 file 5.46-4
 filesystem 2025.05.03-1
@@ -136,13 +136,13 @@ gsettings-desktop-schemas 48.0-1
 gsettings-system-schemas 48.0-1
 gsm 1.0.22-2
 gssdp 1.6.3-2
-gst-plugins-bad-libs 1.26.2-1
-gst-plugins-base-libs 1.26.2-1
-gstreamer 1.26.2-1
+gst-plugins-bad-libs 1.26.2-2
+gst-plugins-base-libs 1.26.2-2
+gstreamer 1.26.2-2
 gtest 1.17.0-1
-gtk-update-icon-cache 1:4.18.5-2
+gtk-update-icon-cache 1:4.18.6-1
 gtk3 1:3.24.49-2
-gtk4 1:4.18.5-2
+gtk4 1:4.18.6-1
 gtkmm-4.0 4.18.0-2
 guile 3.0.10-1
 gulp 5.0.0-1
@@ -227,7 +227,7 @@ libblockdev-nvme 3.3.0-1
 libblockdev-part 3.3.0-1
 libblockdev-swap 3.3.0-1
 libbluray 1.3.4-3
-libbpf 1.5.0-1
+libbpf 1.5.1-1
 libbs2b 3.1.0-9
 libbytesize 2.11-1
 libc++ 20.1.6-1
@@ -270,7 +270,7 @@ libgpg-error 1.55-1
 libgsf 1.14.53-2
 libgudev 238-3
 libgxps 0.3.2-5
-libheif 1.19.8-1
+libheif 1.19.8-3
 libice 1.1.2-1
 libidn 1.43-1
 libidn2 2.3.7-1
@@ -377,7 +377,7 @@ libva 2.22.0-1
 libva-intel-driver 2.4.1-5
 libvdpau 1.5-3
 libverto 0.3.2-5
-libvlc 3.0.21-20
+libvlc 3.0.21-21
 libvorbis 1.3.7-4
 libvpl 2.15.0-1
 libvpx 1.15.0-1
@@ -423,11 +423,11 @@ libyuv r2426+464c51a03-1
 licenses 20240728-1
 lightdm 1:1.32.0-6
 lightdm-gtk-greeter 1:2.0.9-1
-linux 6.14.10.arch1-1
-linux-api-headers 6.14-1
+linux 6.15.1.arch1-2
+linux-api-headers 6.15-1
 linux-firmware 20250508.788aadc8-2
 linux-firmware-whence 20250508.788aadc8-2
-linux-headers 6.14.10.arch1-1
+linux-headers 6.15.1.arch1-2
 llvm-libs 20.1.6-3
 lm_sensors 1:3.6.2-1
 lmdb 0.9.33-1
@@ -469,7 +469,7 @@ network-manager-applet 1.36.0-1
 networkmanager 1.52.0-1
 nm-connection-editor 1.36.0-1
 node-gyp 11.2.0-1
-nodejs 24.1.0-2
+nodejs 24.2.0-1
 nodejs-nopt 7.2.1-1
 noto-fonts 1:2025.06.01-1
 noto-fonts-cjk 20240730-1
@@ -493,7 +493,7 @@ osinfo-db 20250124-1
 p11-kit 0.25.5-1
 pacman 7.0.0.r6.gc685ae6-6
 pacman-mirrorlist 20250522-1
-pahole 1:1.30-1
+pahole 1:1.30-2
 pam 1.7.0-2
 pambase 20230918-2
 pango 1:1.56.3-1
@@ -531,7 +531,7 @@ perl-uri 5.31-1
 perl-www-robotrules 6.02-14
 perl-xml-parser 2.47-2
 pinentry 1.3.1-5
-pixman 0.46.0-1
+pixman 0.46.2-1
 pkgconf 2.4.3-1
 pngquant 3.0.3-2
 polkit 126-2
@@ -754,7 +754,7 @@ vi 1:070224-6
 vid.stab 1.1.1-2
 vim 9.1.1431-1
 vim-runtime 9.1.1431-1
-vlc 3.0.21-20
+vlc 3.0.21-21
 vmaf 3.0.0-1
 volume_key 0.3.12-11
 vulkan-icd-loader 1.4.313.0-1
@@ -771,7 +771,7 @@ wpa_supplicant 2:2.11-3
 wxwidgets-common 3.2.8.1-2
 wxwidgets-gtk3 3.2.8.1-2
 x264 3:0.164.r3108.31e19f9-2
-x265 4.0-1
+x265 4.1-1
 xbitmaps 1.1.3-2
 xcb-proto 1.17.0-3
 xcb-util 0.4.1-2
