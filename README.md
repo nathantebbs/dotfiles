@@ -34,10 +34,11 @@ cd ~/dotfiles
 ## Util
 
 ### Installation Script
+The following script will take a specified set of files present within this repository and symlink them to the approraite configuration
+directories on your computer.
 
 <details>
-<summary>The following script will take a specified set of files present within this repository and symlink them to the approraite configuration
-directories on your computer.</summary>
+<summary>./util/backup.sh</summary>
 
 ```bash
 #!/bin/bash
@@ -150,6 +151,28 @@ echo "INSTALLATION COMPLETE"
 Within the `util` directory in the root of this repository you will find the backup script for arch linux which seperates your system packages into
 3 lists. pklist.txt are official archlinux packages, pkglist-aur.txt are [AUR](https://aur.archlinux.org/) packages, and pkglist-full.txt combines both
 lists into one document
+
+<details>
+
+<summary>./util/backup.sh</summary>
+
+```bash
+#! /bin/bash
+
+# Ensure pkglists dir
+mkdir -p ./pkglists
+
+# Backup official packages
+pacman -Qe | awk '{print $1}' > ./pkglists/pkglist.txt
+
+# Backup AUR Packages
+pacman -Qm > ./pkglists/aur-pkglist.txt
+
+# Complete list of all system packages AUR & Official
+pacman -Q > ./pkglists/full-pkglist.txt
+```
+
+</details>
 
 ## Supported Linux Distros
 
