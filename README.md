@@ -143,12 +143,13 @@ fi
 
 echo "INSTALLATION COMPLETE"
 ```
+</details>
 
 ### System Backups
 
 Within the `util` directory in the root of this repository you will find the backup script for arch linux which seperates your system packages into
 3 lists. pklist.txt are official archlinux packages, pkglist-aur.txt are [AUR](https://aur.archlinux.org/) packages, and pkglist-full.txt combines both
-lists into one document. 
+lists into one document
 
 ## Supported Linux Distros
 
