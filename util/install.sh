@@ -25,7 +25,7 @@ done
 # Define dotfiles and their destinations
 declare -A DOTFILES=(
     [".bashrc"]="$HOME/.bashrc"
-    ["pkglist.txt"]="$HOME/pkglist.txt"
+    ["pkglists"]="$HOME/pkglists"
     [".alacritty.toml"]="$HOME/.alacritty.toml"
     ["i3"]="$HOME/.config/i3" # i3wm configuration
 )
