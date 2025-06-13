@@ -7,7 +7,6 @@
 
 # Alias Hub
 alias ls='ls --color=auto'
-alias grep='grep --color=auto'
 alias cl='peaclock'
 alias fp='find ~/Github -type f | fzf'
 alias dotfiles=/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME
