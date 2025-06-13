@@ -8,6 +8,7 @@ dmenu
 docker
 dosfstools
 efibootmgr
+emacs
 fastfetch
 fd
 firefox

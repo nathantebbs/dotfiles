@@ -1,5 +1,7 @@
 #! /bin/bash
 
+set -xe
+
 # Ensure pkglists dir
 mkdir -p ./pkglists
 
