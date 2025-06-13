@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -xe
+
 DOTFILES_DIR="$HOME/dotfiles"
 NVIM_CONFIG_REPO="https://github.com/nathantebbs/nvim-config.git"  # Replace with your repo URL
 NVIM_CONFIG_DIR="$DOTFILES_DIR/nvim"
