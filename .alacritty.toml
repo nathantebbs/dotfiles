@@ -5,30 +5,37 @@ normal = { family = "JetBrains Mono Nerd Font", style = "Regular" }
 
 
 
-# author: rexim
-# from: https://github.com/rexim/gruber-darker-theme
+# Dark Pride
+# A dark trans pride colour inspired theme
 
+# Primary colors
 [colors.primary]
-background = "#181818"
-foreground = "#E4E4E4"
+background = '#0d0d1b'
+foreground = '#ccccce'
 
+# Colors used for 'custom_cursor_colors'
+[colors.cursor]
+text = '#bbbbbb'
+cursor = '#ff0017'
+
+# Colors 0 through 7
 [colors.normal]
-black   = "#181818"
-red     = "#F43841"
-green   = "#73D936"
-yellow  = "#FFDD33"
-blue    = "#96A6C8"
-magenta = "#9E95C7"
-cyan    = "#95A99F"
-white   = "#E4E4E4"
+black = '#282828'
+red = '#ca1444'
+green = '#789aba'
+yellow = '#b3879f'
+blue = '#95569b'
+magenta = '#cb6fa1'
+cyan = '#fb6e93'
+white = '#cf98c1'
 
+# Colors 8 through 15
 [colors.bright]
-black   = "#52494E"
-red     = "#FF4F58"
-green   = "#73D936"
-yellow  = "#FFDD33"
-blue    = "#96A6C8"
-magenta = "#AFAFD7"
-cyan    = "#95A99F"
-white   = "#F5F5F5"
-
+black = '#98218e'
+red = '#cb515d'
+green = '#5a87b1'
+yellow = '#9c61ab'
+blue = '#9a77b1'
+magenta = '#f2a297'
+cyan = '#f4436f'
+white = '#ebdbb2'
