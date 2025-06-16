@@ -2,6 +2,8 @@
 size = 14
 normal = { family = "JetBrains Mono Nerd Font", style = "Regular" }
 
+[window]
+opacity = 0.85
 
 
 
