@@ -51,10 +51,10 @@ curl 8.14.1-1
 dav1d 1.5.1-1
 db5.3 5.3.28-5
 dbus 1.16.2-1
-dbus-broker 36-4
-dbus-broker-units 36-4
+dbus-broker 37-2
+dbus-broker-units 37-2
 dbus-glib 0.114-1
-dbus-units 36-4
+dbus-units 37-2
 dconf 0.40.0-3
 debugedit 5.1-1
 default-cursors 3-1
@@ -80,7 +80,7 @@ fakeroot 1.37.1.2-1
 fastfetch 2.45.0-1
 fd 10.2.0-1
 feh 3.10.3-1
-ffcall 2.4-3
+ffcall 2.5-1
 ffmpeg 2:7.1.1-4
 ffmpeg4.4 4.4.6-1
 fftw 3.3.10-7
@@ -110,7 +110,7 @@ gettext 0.25-1
 ghostscript 10.05.1-2
 giflib 5.2.2-2
 girara 0.4.5-1
-git 2.49.0-2
+git 2.50.0-1
 git-lfs 3.6.1-1
 glib-networking 1:2.80.1-1
 glib2 2.84.3-1
@@ -127,7 +127,7 @@ gnulib-l10n 20241231-1
 gnupg 2.4.7-3
 gnutls 3.8.9-1
 go 2:1.24.4-1
-google-chrome 137.0.7151.103-1
+google-chrome 137.0.7151.119-1
 gperftools 2.16-1
 gpgme 2.0.0-1
 gpgmepp 2.0.0-2
@@ -377,7 +377,7 @@ libuninameslist 20240910-1
 libunistring 1.3-1
 libunwind 1.8.1-3
 libupnp 1.14.24-1
-liburing 2.9-1
+liburing 2.11-1
 libusb 1.0.29-1
 libusbmuxd 2.1.1-1
 libutempter 1.2.3-1
@@ -415,7 +415,7 @@ libxkbcommon 1.10.0-1
 libxkbcommon-x11 1.10.0-1
 libxkbfile 1.1.3-1
 libxklavier 5.4-6
-libxml2 2.14.3-1
+libxml2 2.14.4-1
 libxmlb 0.3.22-1
 libxmu 1.2.1-1
 libxpm 3.5.17-2
@@ -447,7 +447,7 @@ lua 5.4.8-2
 lua-language-server 3.14.0-1
 lua51-lpeg 1.1.0-3
 luajit 2.1.1748459687-1
-luarocks 3.12.0-1
+luarocks 3.12.1-1
 luit 20240910-1
 lz4 1:1.10.0-2
 lzo 2.10-5
@@ -572,7 +572,7 @@ python-babel 2.17.0-1
 python-beautifulsoup4 4.13.3-1
 python-bleach 6.2.0-2
 python-build 1.2.2-3
-python-certifi 2025.04.26-1
+python-certifi 2025.06.15-1
 python-cffi 1.17.1-2
 python-chardet 5.2.0-6
 python-charset-normalizer 3.4.2-1
@@ -629,7 +629,7 @@ python-parso 1:0.8.4-3
 python-pathspec 0.12.1-3
 python-pdfminer 20240706-2
 python-pexpect 4.9.0-4
-python-pikepdf 9.8.1-1
+python-pikepdf 9.9.0-1
 python-pillow 11.2.1-1
 python-platformdirs 4.3.6-2
 python-pluggy 1.6.0-1
@@ -837,8 +837,8 @@ xf86-video-nouveau 1.0.18-1
 xf86-video-vmware 13.4.0-4
 xkeyboard-config 2.45-1
 xorg-fonts-encodings 1.1.0-1
-xorg-server 21.1.16-1
-xorg-server-common 21.1.16-1
+xorg-server 21.1.18-1
+xorg-server-common 21.1.18-1
 xorg-setxkbmap 1.3.4-2
 xorg-xauth 1.1.4-1
 xorg-xinit 1.4.4-1
@@ -849,7 +849,7 @@ xorg-xrdb 1.2.2-2
 xorg-xset 1.2.5-2
 xorgproto 2024.1-2
 xss-lock 0.3.0.r30.gac39fdc-1
-xterm 399-1
+xterm 400-1
 xvidcore 1.3.7-3
 xxhash 0.8.3-1
 xz 5.8.1-1
