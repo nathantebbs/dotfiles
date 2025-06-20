@@ -8,12 +8,13 @@
 # Alias Hub
 alias ls='ls --color=auto'
 alias cl='peaclock'
-alias fp='find ~/Github -type f | fzf'
+alias fp='find ~/Programming -type f | fzf'
 alias dotfiles=/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME
 alias less='less --RAW-CONTROL-CHARS'
-alias emacs='emacs & disown'
 alias sshmc='ssh root@146.190.151.145'
 alias sleep='systemctl sleep'
+alias dr='~/.config/emacs/bin/doom sync'
+alias dd='~/.config/emacs/bin/doom doctor'
 
 # Color options
 export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
