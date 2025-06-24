@@ -2,11 +2,5 @@
 size = 14
 normal = { family = "JetBrains Mono Nerd Font", style = "Regular" }
 
-[window]
-opacity = 0.85
 
 
-[general]
-import = [
-    "~/.config/alacritty/themes/themes/rose_pine.toml"
-]

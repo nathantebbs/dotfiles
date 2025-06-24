@@ -55,6 +55,7 @@ neovide
 neovim
 network-manager-applet
 networkmanager
+nim
 noto-fonts
 noto-fonts-cjk
 noto-fonts-emoji
