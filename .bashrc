@@ -15,6 +15,7 @@ alias sshmc='ssh root@146.190.151.145'
 alias sleep='systemctl sleep'
 alias dr='~/.config/emacs/bin/doom sync'
 alias dd='~/.config/emacs/bin/doom doctor'
+alias emacs='emacsclient -c -a emacs'
 
 # Color options
 export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
