@@ -59,7 +59,7 @@ dconf 0.40.0-3
 debugedit 5.1-1
 default-cursors 3-1
 desktop-file-utils 0.28-1
-device-mapper 2.03.32-1
+device-mapper 2.03.33-1
 diffutils 3.12-2
 dmenu 5.3-3
 docker 1:28.3.0-1
@@ -91,7 +91,7 @@ firefox 140.0.2-1
 flac 1.5.0-1
 flameshot 12.1.0-6
 flex 2.6.4-5
-fontconfig 2:2.17.0-1
+fontconfig 2:2.17.0-2
 fontforge 20230101-6
 freetype2 2.13.3-3
 fribidi 1.0.16-2
@@ -129,7 +129,7 @@ gnulib-l10n 20241231-1
 gnupg 2.4.8-1
 gnutls 3.8.9-1
 go 2:1.24.4-1
-google-chrome 138.0.7204.49-1
+google-chrome 138.0.7204.92-1
 gperftools 2.16-1
 gpgme 2.0.0-1
 gpgmepp 2.0.0-2
@@ -152,7 +152,7 @@ gtk3 1:3.24.49-2
 gtk4 1:4.18.6-1
 gtkmm-4.0 4.18.0-2
 guile 3.0.10-1
-gulp 5.0.0-1
+gulp 5.0.1-1
 gumbo-parser 0.13.1-1
 gupnp 1:1.6.9-1
 gupnp-dlna 0.12.0-4
@@ -247,7 +247,7 @@ libcap-ng 0.8.5-3
 libcdio 2.2.0-1
 libcdio-paranoia 10.2+2.0.2-1
 libcloudproviders 0.3.6-2
-libcolord 1.4.7-2
+libcolord 1.4.8-1
 libconfig 1.8.1-1
 libcue 2.3.0-1
 libcups 2:2.4.12-2
@@ -301,7 +301,7 @@ libmad 0.15.1b-10
 libmatroska 1.7.1-2
 libmd 1.1.0-2
 libmfx 23.2.2-4
-libmm-glib 1.24.0-1
+libmm-glib 1.24.0-2
 libmnl 1.0.5-2
 libmodplug 0.8.9.0-6
 libmpc 1.3.1-2
@@ -309,7 +309,7 @@ libmpcdec 1:0.1+r475-6
 libmpeg2 0.5.1-10
 libmspack 1:1.11-1
 libmupdf 1.26.2-1
-libnautilus-extension 48.2-1
+libnautilus-extension 48.3-1
 libndp 1.9-1
 libnet 2:1.3-1
 libnetfilter_conntrack 1.0.9-2
@@ -484,7 +484,7 @@ mtdev 1.1.7-1
 mtools 1:4.0.49-1
 mupdf 1.26.2-1
 nano 8.5-1
-nautilus 48.2-1
+nautilus 48.3-1
 ncurses 6.5-4
 neovide 0.15.0-1
 neovim 0.11.2-3
@@ -627,7 +627,7 @@ python-jupyter-client 8.6.3-3
 python-jupyter-core 5.8.1-1
 python-jupyter-events 0.12.0-1
 python-jupyterlab-server 2.27.3-3
-python-lxml 5.4.0-1
+python-lxml 6.0.0-1
 python-markdown-it-py 3.0.0-4
 python-markupsafe 3.0.2-1
 python-matplotlib-inline 0.1.7-2
@@ -710,7 +710,7 @@ ripgrep 14.1.1-1
 rtkit 0.13-3
 rubberband 4.0.0-1
 runc 1.3.0-1
-rust-analyzer 20250623-1
+rust-analyzer 20250630-1
 rustup 1.28.2-2
 screen 5.0.1-3
 sdl2-compat 2.32.56-1
@@ -733,12 +733,12 @@ sqlite 3.50.2-1
 srt 1.5.4-1
 startup-notification 0.12-8
 stylua 2.1.0-1
-sudo 1.9.16.p2-2
+sudo 1.9.17.p1-1
 svt-av1 3.0.2-1
 systemd 257.7-1
 systemd-libs 257.7-1
 systemd-sysvcompat 257.7-1
-taglib 2.1-1
+taglib 2.1.1-1
 tar 1.35-2
 tdb 1.4.13-1
 tesseract 5.5.1-1
@@ -810,8 +810,8 @@ v4l-utils 1.30.1-1
 vapoursynth R70-2
 vi 1:070224-6
 vid.stab 1.1.1-2
-vim 9.1.1492-1
-vim-runtime 9.1.1492-1
+vim 9.1.1497-1
+vim-runtime 9.1.1497-1
 vlc 3.0.21-24
 vmaf 3.0.0-1
 volume_key 0.3.12-11
