@@ -53,7 +53,12 @@ tiling_drag modifier titlebar
 
 # start a terminal
 bindsym $mod+Return exec alacritty
-bindsym $mod+b exec google-chrome-stable
+
+# Start browser
+bindsym $mod+b exec zen-browser
+
+# Start emacs
+bindsym $mod+Shift+Return exec emacs
 
 # kill focused window
 bindsym $mod+Shift+q kill
