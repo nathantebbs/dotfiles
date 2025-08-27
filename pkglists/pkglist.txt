@@ -2,6 +2,7 @@ adobe-source-code-pro-fonts
 alacritty
 base
 base-devel
+btop
 calcurse
 clang
 clojure
@@ -55,6 +56,7 @@ neovide
 neovim
 network-manager-applet
 networkmanager
+nim
 noto-fonts
 noto-fonts-cjk
 noto-fonts-emoji
@@ -127,4 +129,5 @@ xterm
 yay
 zathura
 zathura-pdf-poppler
+zen-browser-bin
 zram-generator
