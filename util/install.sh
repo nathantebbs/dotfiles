@@ -28,6 +28,7 @@ declare -A DOTFILES=(
     ["pkglists"]="$HOME/pkglists"
     [".alacritty.toml"]="$HOME/.alacritty.toml"
     ["i3"]="$HOME/.config/i3" # i3wm configuration
+    ["doom"]="$HOME/.config/doom" # doom emacs configuration
 )
 
 # If neovim flag is passed we add it to the list of dirs/files we are symlinking
