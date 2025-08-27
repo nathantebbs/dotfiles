@@ -1,9 +1,6 @@
 [font]
 size = 14
-normal = { family = "JetBrains Mono Nerd Font", style = "Regular" }
-
-[window]
-opacity = 0.85
+normal = { family = "CaskaydiaCove Nerd Font Mono", style = "Regular" }
 
 
 [general]
