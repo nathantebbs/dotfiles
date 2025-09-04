@@ -49,3 +49,4 @@
 ;; (unpin! t)
 
 (package! tldr)
+(package! org-modern)
