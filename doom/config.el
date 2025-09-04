@@ -38,11 +38,25 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
+
+;; Org Modern Stuff
+(use-package! org-modern
+  :hook
+  (org-mode . org-modern-mode)
+  :config
+  ;; Optional tweaks
+  (setq org-modern-star 'replace       ;; Prettify leading stars
+        org-modern-table nil           ;; Keep tables ASCII, or set to 'hline for nice tables
+        org-modern-list '((43 . "•")   ;; Replace + with •
+                          (45 . "–")   ;; Replace - with en dash
+                          (42 . "•"))  ;; Replace * with •
+        org-modern-todo-faces
+        '(("TODO" :inverse t :inherit org-todo)
+          ("DONE" :strike-through t :inherit org-done))))
+
+
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
-(setq org-agenda-files '("~/org/summer25/school.org" "~/org/life.org"))
-(setq org-log-done 'time)
 
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
