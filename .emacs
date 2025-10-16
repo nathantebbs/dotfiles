@@ -20,6 +20,16 @@
 ;; Change file backup location
 (setq backup-firactory-alist '(("."."~/.emacs.d/backups")))
 
+;; ================
+;; Keybindings
+;; ================
+
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "C-x C-c") '(lambda () (interactive) (find-file "~/.emacs")))
+
+
+
+
 ;; Straight.el bootstrap
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -58,3 +68,11 @@
 (use-package company
   :straight t
   :hook (prog-mode . global-company-mode))
+
+(use-package markdown-mode
+  :straight t
+  :mode ("\\.md\\'" . markdown-mode)
+  :init
+  (setq markdown-command "multimarkdown")  ;; or "pandoc"
+  :config
+  (setq markdown-fontify-code-blocks-natively t))
