@@ -14,7 +14,7 @@ git clone https://github.com/nathantebbs/dotfiles.git
 2. Symlink
 
 ```bash
-ln -s ./nvim/ ~/.config/nvim/
-ln -s ./.emacs ~/.emacs
-ln -s ./ghostty/ ~/.config/ghostty/
+ln -s ~/dotfiles/nvim/ ~/.config/nvim/
+ln -s ~/dotfiles/.emacs ~/.emacs
+ln -s ~/dotfiles/ghostty/ ~/.config/ghostty/
 ```
