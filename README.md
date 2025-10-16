@@ -16,3 +16,5 @@ git clone https://github.com/nathantebbs/dotfiles.git
 ```bash
 ln -s ./nvim/ ~/.config/nvim/
 ln -s ./.emacs ~/.emacs
+ln -s ./ghostty/ ~/.config/ghostty/
+```
