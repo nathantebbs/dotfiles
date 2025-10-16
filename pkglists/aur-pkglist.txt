@@ -1,8 +1,0 @@
-google-chrome 138.0.7204.92-1
-peaclock 0.4.3-2
-peaclock-debug 0.4.3-2
-ttf-symbola 14.00-2
-xf86-video-vmware 13.4.0-4
-yay 12.5.0-1
-yay-debug 12.5.0-1
-zen-browser-bin 1.14.2b-1
