@@ -7,15 +7,20 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 
-(load-theme 'modus-vivendi) ;; Theme
-
 (global-display-line-numbers-mode t) ;; Line numbers
+
+(setq inhibit-startup-screen t) ;; Disable startup screen
+
+;; Tabs
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 2)
 
 ;; Mini-buffer completion mode
 (fido-vertical-mode)
 
 ;; Misc
 (electric-pair-mode t) ;; Autopairs
+(which-key-mode) ;; which-key
 
 ;; Change file backup location
 (setq backup-firactory-alist '(("."."~/.emacs.d/backups")))
@@ -26,9 +31,7 @@
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-x C-c") '(lambda () (interactive) (find-file "~/.emacs")))
-
-
-
+(global-set-key (kbd "C-x e") 'eval-buffer)
 
 ;; Straight.el bootstrap
 (defvar bootstrap-version)
@@ -53,11 +56,21 @@
 ;; Install Packages:
 ;; =================
 
+;; Theme
+(use-package gruber-darker-theme
+  :straight t
+  :config
+  (load-theme 'gruber-darker t))
+
 ;; Evil mode
 (use-package evil
   :straight t)
 (require 'evil)
 (evil-mode 1)
+
+;; Magit
+(use-package magit
+  :straight t)
 
 ;; Devdocs
 ;; NOTE: use M-x devdocs-install
@@ -69,6 +82,13 @@
   :straight t
   :hook (prog-mode . global-company-mode))
 
+;; Fzf
+(use-package fzf
+  :bind ("C-c s" . fzf-grep)
+  :straight t)
+
+
+;; Markdown
 (use-package markdown-mode
   :straight t
   :mode ("\\.md\\'" . markdown-mode)
