@@ -21,17 +21,24 @@
 ;; Misc
 (electric-pair-mode t) ;; Autopairs
 (which-key-mode) ;; which-key
+(setq org-agenda-files '("~/org/todo.org"))
+(setq evil-want-C-u-scroll t) ;; Please fix scroll!! (this works)
 
 ;; Change file backup location
-(setq backup-firactory-alist '(("."."~/.emacs.d/backups")))
+(setq make-backup-file nil) ;; No more
+(setq auto-save-default nil) ;; No autosave files
+(setq backup-directory-alist '((".*" . "~/.Trash")))
 
-;; ================
+;; ==============
 ;; Keybindings
-;; ================
+;; ==============
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-x C-c") '(lambda () (interactive) (find-file "~/.emacs")))
 (global-set-key (kbd "C-x e") 'eval-buffer)
+(global-set-key (kbd "C-c a") 'org-agenda-list)
+(global-set-key (kbd "C-c o") '(lambda () (interactive) (find-file "~/org/todo.org")))
+
 
 ;; Straight.el bootstrap
 (defvar bootstrap-version)
@@ -50,11 +57,11 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-(straight-use-package 'use-package)
-
 ;; =================
 ;; Install Packages:
 ;; =================
+
+(straight-use-package 'use-package)
 
 ;; Theme
 (use-package gruber-darker-theme
@@ -96,3 +103,11 @@
   (setq markdown-command "multimarkdown")  ;; or "pandoc"
   :config
   (setq markdown-fontify-code-blocks-natively t))
+
+;; ox-hugo
+(use-package ox-hugo
+  :straight t
+  :after ox)
+
+(use-package vterm
+  :straight t)
