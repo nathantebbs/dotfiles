@@ -22,23 +22,11 @@
 (electric-pair-mode t) ;; Autopairs
 (which-key-mode) ;; which-key
 (setq org-agenda-files '("~/org/todo.org"))
-(setq evil-want-C-u-scroll t) ;; Please fix scroll!! (this works)
 
 ;; Change file backup location
 (setq make-backup-file nil) ;; No more
 (setq auto-save-default nil) ;; No autosave files
 (setq backup-directory-alist '((".*" . "~/.Trash")))
-
-;; ==============
-;; Keybindings
-;; ==============
-
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-(global-set-key (kbd "C-x C-c") '(lambda () (interactive) (find-file "~/.emacs")))
-(global-set-key (kbd "C-x e") 'eval-buffer)
-(global-set-key (kbd "C-c a") 'org-agenda-list)
-(global-set-key (kbd "C-c o") '(lambda () (interactive) (find-file "~/org/todo.org")))
-
 
 ;; Straight.el bootstrap
 (defvar bootstrap-version)
@@ -71,9 +59,44 @@
 
 ;; Evil mode
 (use-package evil
-  :straight t)
-(require 'evil)
-(evil-mode 1)
+  :straight t
+
+  :init
+  (setq evil-want-C-u-scroll t) ;; Fixes C-u scrolling
+
+  :config
+  (evil-mode 1)
+
+  ;; Keymaps (*Evil*)
+  
+  ;; Leader
+  (define-prefix-command 'nate/leader-map)
+  (define-key evil-normal-state-map (kbd "SPC") 'nate/leader-map)
+  (define-key evil-visual-state-map (kbd "SPC") 'nate/leader-map)
+
+  ;; Fzf
+  (define-key nate/leader-map (kbd "s n") (lambda () (interactive) (fzf-find-file-in-dir "~/dotfiles/")))
+  (define-key nate/leader-map (kbd "s f") (lambda () (interactive) (fzf-find-file)))
+  (define-key nate/leader-map (kbd "s p") (lambda () (interactive) (fzf-find-file-in-dir "~/dev/probe/")))
+  (define-key nate/leader-map (kbd "f") #'find-file)
+
+  ;; Magit
+  (define-key nate/leader-map (kbd "g s") #'magit)
+
+  ;; State
+  (define-key evil-insert-state-map (kbd "C-g") 'evil-change-to-previous-state)
+  (define-key evil-visual-state-map (kbd "C-g") 'evil-change-to-previous-state)
+
+  ;; Buffers
+  (define-key nate/leader-map (kbd "b") #'switch-to-buffer)
+  (define-key nate/leader-map (kbd "B") #'ibuffer-other-window)
+  (define-key nate/leader-map (kbd "w") #'save-buffer)
+  (define-key nate/leader-map (kbd "q") #'save-buffers-kill-terminal)
+
+  ;; Config
+  (define-key nate/leader-map (kbd "r r") (lambda () (interactive) (load-file "~/.emacs")))
+
+  )
 
 ;; Magit
 (use-package magit
@@ -91,7 +114,6 @@
 
 ;; Fzf
 (use-package fzf
-  :bind ("C-c s" . fzf-grep)
   :straight t)
 
 
@@ -100,7 +122,7 @@
   :straight t
   :mode ("\\.md\\'" . markdown-mode)
   :init
-  (setq markdown-command "multimarkdown")  ;; or "pandoc"
+  (setq markdown-command "pandoc")
   :config
   (setq markdown-fontify-code-blocks-natively t))
 
@@ -109,5 +131,27 @@
   :straight t
   :after ox)
 
+;; Terminal
 (use-package vterm
   :straight t)
+
+;; Org pomodoro
+(use-package org-pomodoro
+  :straight t)
+
+;; Popup Mgmt
+(use-package popper
+  :straight t
+
+  :bind (("C-`"   . popper-toggle)
+         ("M-`"   . popper-cycle)
+         ("C-M-`" . popper-toggle-type))
+  :init
+  (setq popper-reference-buffers
+        '("\\*Messages\\*"
+          "Output\\*$"
+          "\\*compilation\\*"
+          help-mode
+          compilation-mode))
+  (popper-mode +1)
+  (popper-echo-mode +1))                ; For echo area hints
