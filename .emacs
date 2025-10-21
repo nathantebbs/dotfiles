@@ -146,12 +146,6 @@
 (use-package org
   :straight t (:type built-in)
 
-  :config
-  ;; Directory
-  (setq org-directory "~/org/"
-        org-agenda-files '("~/org/projects.org" "assignments.org" "~/org/todo.org")
-        org-default-notes-file (concat org-directory "notes.org" ))
-
   ;; Indentation
   (setq org-hide-leading-stars t
         org-startup-indented t
@@ -196,8 +190,9 @@
           ("CS425" . ?3)
           ("GEOS251" . ?4)
           ("PROJECT" . ?P)
-          ("QUIZ" . ?Q)
-          ("ASSIGNMENT" . ?A)
+          ("LIFE" . ?l)
+          ("QUIZ" . ?q)
+          ("ASSIGNMENT" . ?a)
           ("OPTIONAL" . ?o)))
 
   ;; Time
