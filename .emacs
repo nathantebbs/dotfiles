@@ -1,6 +1,6 @@
 ;; File: .emacs
 ;; Author: Nathan Tebbs
-;; Purpose: Simple Emacs configuration
+;; Purpose: Simple (ish) Emacs Configuration
 
 ;; Remove window decorations
 (menu-bar-mode -1)
@@ -24,8 +24,11 @@
 
 ;; Change file backup location
 (setq make-backup-file nil) ;; No more
-(setq auto-save-default nil) ;; No autosave files
+(setq auto-save-default nil) ;; Autosave files
 (setq backup-directory-alist '((".*" . "~/.Trash")))
+
+;; General Keymaps
+(define-key dired-mode-map (kbd "-") #'dired-up-directory)
 
 ;; Straight.el bootstrap
 (defvar bootstrap-version)
@@ -66,7 +69,9 @@
   :config
   (evil-mode 1)
 
-  ;; Keymaps (*Evil*)
+  ;; =================
+  ;; *Evil* Keymaps 
+  ;; =================
   
   ;; Leader
   (define-prefix-command 'nate/leader-map)
@@ -99,8 +104,7 @@
   (define-key nate/leader-map (kbd "B") #'ibuffer-other-window)
 
   ;; Config
-  (define-key nate/leader-map (kbd "r r") (lambda () (interactive) (load-file "~/.emacs")))
-  )
+  (define-key nate/leader-map (kbd "r r") (lambda () (interactive) (load-file "~/.emacs"))))
 
 ;; Magit
 (use-package magit
@@ -119,7 +123,6 @@
 ;; Fzf
 (use-package fzf
   :straight t)
-
 
 ;; Markdown
 (use-package markdown-mode
@@ -142,6 +145,7 @@
 ;; Org mode
 (use-package org
   :straight t (:type built-in)
+
   :config
   ;; Directory
   (setq org-directory "~/org/"
@@ -155,8 +159,6 @@
         org-return-follows-link t
         org-cycle-separator-lines 0)
 
-  ;; Keywords
-  ;; See x11 colors for available faces
   :config
   ;; Base directories
   (setq org-directory "~/org/"
@@ -170,6 +172,7 @@
            "ASSIGNED(a)" "WORKING(w)" "SUBMITTED(s)" "|" "GRADED(g)" "CANCELLED(c)")))
 
   ;; Faces for visual distinction
+  ;; NOTE: See X11 Colors
   (setq org-todo-keyword-faces
         '(("TODO" . (:foreground "deep pink" :weight bold))
           ("IN-PROGRESS" . (:foreground "deep sky blue" :weight bold))
@@ -208,8 +211,6 @@
   :hook (org-mode . org-superstar-mode)
   :config
   (setq org-superstar-headline-bullets-list '("●" "○" "◆" "◇")))
-
-
 
 ;; Org pomodoro
 (use-package org-pomodoro
