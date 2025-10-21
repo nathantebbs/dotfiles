@@ -25,7 +25,7 @@ ln -s ~/dotfiles/.emacs ~/.emacs
 - Any file specific bindings (**especially org-mode**) heavily rely on file structure.
 if you receive any errors on startup, read the .emacs file to see if you are missing any dependencies or
 file structure requirements. If the issue is related to org-mode I suggest changing the files org-mode relies
-on [here](https://github.com/nathantebbs/dotfiles/blob/main/.emacs#L163).
+on [here](https://github.com/nathantebbs/dotfiles/blob/main/.emacs#L157).
 
 ## TODO
 
