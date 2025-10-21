@@ -146,6 +146,7 @@
 (use-package org
   :straight t (:type built-in)
 
+  :config
   ;; Indentation
   (setq org-hide-leading-stars t
         org-startup-indented t
@@ -153,7 +154,6 @@
         org-return-follows-link t
         org-cycle-separator-lines 0)
 
-  :config
   ;; Base directories
   (setq org-directory "~/org/"
         org-agenda-files '("~/org/projects.org" "~/org/assignments.org" "~/org/todo.org"))
