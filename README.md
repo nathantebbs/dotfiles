@@ -19,3 +19,9 @@ ln -s ~/dotfiles/ghostty/ ~/.config/ghostty/
 ln -s ~/dotfiles/.bashrc ~/.bashrc
 ln -s ~/dotfiles/.emacs ~/.emacs
 ```
+
+## Notes On Emacs
+
+- Any file specific bindings (**especially org-mode**) heavily rely on file structure.
+if you receive any errors on startup, read the .emacs file to see if you are missing any dependencies or
+file structure requirements.
