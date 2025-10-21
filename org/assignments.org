@@ -1,0 +1,8 @@
+#+title: Assignments
+
+* School                                                            :@school:
+
+** Database Design                                                    :CS460:
+
+*** ASSIGNED [#A] Homework #3                                  :ASSIGNMENT:
+DEADLINE: <2025-10-22 Wed>

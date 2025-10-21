@@ -21,7 +21,6 @@
 ;; Misc
 (electric-pair-mode t) ;; Autopairs
 (which-key-mode) ;; which-key
-(setq org-agenda-files '("~/org/todo.org"))
 
 ;; Change file backup location
 (setq make-backup-file nil) ;; No more
@@ -74,15 +73,23 @@
   (define-key evil-normal-state-map (kbd "SPC") 'nate/leader-map)
   (define-key evil-visual-state-map (kbd "SPC") 'nate/leader-map)
 
-  ;; Fzf
+  ;; Finding Files
   (define-key nate/leader-map (kbd "s n") (lambda () (interactive) (fzf-find-file-in-dir "~/dotfiles/")))
   (define-key nate/leader-map (kbd "s f") (lambda () (interactive) (fzf-find-file)))
   (define-key nate/leader-map (kbd "s p") (lambda () (interactive) (fzf-find-file-in-dir "~/dev/probe/")))
   (define-key nate/leader-map (kbd "f") #'find-file)
+  (define-key nate/leader-map (kbd "e") #'dired-jump)
 
   ;; Magit
   (define-key nate/leader-map (kbd "g s") #'magit)
 
+  ;; Org Mode
+  (define-key nate/leader-map (kbd "o p") #'org-pomodoro)
+  (define-key nate/leader-map (kbd "o t") (lambda () (interactive) (find-file "~/org/todo.org")))
+  (define-key nate/leader-map (kbd "o a") #'org-agenda)
+  (define-key nate/leader-map (kbd "o c") #'org-capture)
+  (define-key nate/leader-map (kbd "o v") #'org-tags-view)
+  
   ;; State
   (define-key evil-insert-state-map (kbd "C-g") 'evil-change-to-previous-state)
   (define-key evil-visual-state-map (kbd "C-g") 'evil-change-to-previous-state)
@@ -90,12 +97,9 @@
   ;; Buffers
   (define-key nate/leader-map (kbd "b") #'switch-to-buffer)
   (define-key nate/leader-map (kbd "B") #'ibuffer-other-window)
-  (define-key nate/leader-map (kbd "w") #'save-buffer)
-  (define-key nate/leader-map (kbd "q") #'save-buffers-kill-terminal)
 
   ;; Config
   (define-key nate/leader-map (kbd "r r") (lambda () (interactive) (load-file "~/.emacs")))
-
   )
 
 ;; Magit
@@ -134,6 +138,78 @@
 ;; Terminal
 (use-package vterm
   :straight t)
+
+;; Org mode
+(use-package org
+  :straight t (:type built-in)
+  :config
+  ;; Directory
+  (setq org-directory "~/org/"
+        org-agenda-files '("~/org/projects.org" "assignments.org" "~/org/todo.org")
+        org-default-notes-file (concat org-directory "notes.org" ))
+
+  ;; Indentation
+  (setq org-hide-leading-stars t
+        org-startup-indented t
+        org-pretty-entities t
+        org-return-follows-link t
+        org-cycle-separator-lines 0)
+
+  ;; Keywords
+  ;; See x11 colors for available faces
+  :config
+  ;; Base directories
+  (setq org-directory "~/org/"
+        org-agenda-files '("~/org/projects.org" "~/org/assignments.org" "~/org/todo.org"))
+
+  ;; TODO workflow
+  (setq org-todo-keywords
+        '((sequence
+           "TODO(t)" "IN-PROGRESS(i)" "BLOCKED(b)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")
+          (sequence
+           "ASSIGNED(a)" "WORKING(w)" "SUBMITTED(s)" "|" "GRADED(g)" "CANCELLED(c)")))
+
+  ;; Faces for visual distinction
+  (setq org-todo-keyword-faces
+        '(("TODO" . (:foreground "deep pink" :weight bold))
+          ("IN-PROGRESS" . (:foreground "deep sky blue" :weight bold))
+          ("BLOCKED" . (:foreground "orange red" :weight bold))
+          ("REVIEW" . (:foreground "plum" :weight bold))
+          ("DONE" . (:foreground "lime green" :weight bold))
+          ("CANCELLED" . (:foreground "gray" :weight bold))
+          ("ASSIGNED" . (:foreground "purple" :weight bold))
+          ("WORKING" . (:foreground "pink" :weight bold))
+          ("SUBMITTED" . (:foreground "light salmon" :weight bold))
+          ("GRADED" . (:foreground "pale green" :weight bold))))
+
+  ;; Tag presets
+  (setq org-tag-alist
+        '((:startgroup)
+          ("@school" . ?s)
+          ("@personal" . ?p)
+          (:endgroup)
+          ("CS352" . ?1)
+          ("CS460" . ?2)
+          ("CS425" . ?3)
+          ("GEOS251" . ?4)
+          ("PROJECT" . ?P)
+          ("QUIZ" . ?Q)
+          ("ASSIGNMENT" . ?A)
+          ("OPTIONAL" . ?o)))
+
+  ;; Time
+  (setq org-log-done 'time
+        org-log-into-drawer t))
+
+
+;; Org Superstar
+(use-package org-superstar
+  :straight t
+  :hook (org-mode . org-superstar-mode)
+  :config
+  (setq org-superstar-headline-bullets-list '("●" "○" "◆" "◇")))
+
+
 
 ;; Org pomodoro
 (use-package org-pomodoro
