@@ -28,7 +28,8 @@
 (setq backup-directory-alist '((".*" . "~/.Trash")))
 
 ;; General Keymaps
-(define-key dired-mode-map (kbd "-") #'dired-up-directory)
+(with-eval-after-load 'dired
+  (define-key dired-mode-map (kbd "-") #'dired-up-directory))
 
 ;; Straight.el bootstrap
 (defvar bootstrap-version)
@@ -100,8 +101,9 @@
   (define-key evil-visual-state-map (kbd "C-g") 'evil-change-to-previous-state)
 
   ;; Buffers
-  (define-key nate/leader-map (kbd "b") #'switch-to-buffer)
+  (define-key nate/leader-map (kbd "b s") #'switch-to-buffer)
   (define-key nate/leader-map (kbd "B") #'ibuffer-other-window)
+  (define-key nate/leader-map (kbd "b k") #'kill-buffer)
 
   ;; Config
   (define-key nate/leader-map (kbd "r r") (lambda () (interactive) (load-file "~/.emacs"))))
@@ -156,7 +158,7 @@
 
   ;; Base directories
   (setq org-directory "~/org/"
-        org-agenda-files '("~/org/projects.org" "~/org/assignments.org" "~/org/todo.org"))
+        org-agenda-files '("~/org/projects.org" "~/org/assignments.org" "~/org/todo.org" "~/org/notes.org"))
 
   ;; TODO workflow
   (setq org-todo-keywords
@@ -192,6 +194,7 @@
           ("PROJECT" . ?P)
           ("LIFE" . ?l)
           ("QUIZ" . ?q)
+          ("NOTE" . ?n)
           ("ASSIGNMENT" . ?a)
           ("OPTIONAL" . ?o)))
 
