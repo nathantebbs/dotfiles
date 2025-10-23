@@ -30,4 +30,4 @@ on [here](https://github.com/nathantebbs/dotfiles/blob/main/.emacs#L157).
 ## TODO
 
 - [ ] Dependency Checking
-- [ ] Backup -> Install Script
+- [X] Backup -> Install Script
