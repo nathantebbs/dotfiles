@@ -7,7 +7,9 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 
-(global-display-line-numbers-mode t) ;; Line numbers
+;; Lines
+(global-display-line-numbers-mode t)
+(setq truncate-lines t) ;; No visual wrapping
 
 (setq inhibit-startup-screen t) ;; Disable startup screen
 
@@ -26,6 +28,11 @@
 (setq make-backup-file nil) ;; No more
 (setq auto-save-default nil) ;; Autosave files
 (setq backup-directory-alist '((".*" . "~/.Trash")))
+
+
+;; Window Splitting
+(setq split-height-threshold 80)
+(setq split-width-threshold 100)
 
 ;; General Keymaps
 (with-eval-after-load 'dired
@@ -101,8 +108,8 @@
   (define-key evil-visual-state-map (kbd "C-g") 'evil-change-to-previous-state)
 
   ;; Buffers
-  (define-key nate/leader-map (kbd "b s") #'switch-to-buffer)
-  (define-key nate/leader-map (kbd "B") #'ibuffer-other-window)
+  (define-key nate/leader-map (kbd "b b") #'switch-to-buffer)
+  (define-key nate/leader-map (kbd "b i") #'ibuffer-other-window)
   (define-key nate/leader-map (kbd "b k") #'kill-buffer)
 
   ;; Config
@@ -146,19 +153,20 @@
 
 ;; Org mode
 (use-package org
-  :straight t (:type built-in)
+  :straight (:type built-in)
 
   :config
   ;; Indentation
-  (setq org-hide-leading-stars t
-        org-startup-indented t
+  (setq org-startup-indented t
+        org-agenda-window-setup 'current-window
         org-pretty-entities t
         org-return-follows-link t
         org-cycle-separator-lines 0)
 
   ;; Base directories
-  (setq org-directory "~/org/"
-        org-agenda-files '("~/org/projects.org" "~/org/assignments.org" "~/org/todo.org" "~/org/notes.org"))
+  (setq org-directory "~/org/")
+  (setq org-agenda-files (directory-files-recursively "~/org" "\\.org$"))
+
 
   ;; TODO workflow
   (setq org-todo-keywords
