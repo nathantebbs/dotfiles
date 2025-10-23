@@ -24,6 +24,12 @@
 (electric-pair-mode t) ;; Autopairs
 (which-key-mode) ;; which-key
 
+;; Change custom file location
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
+
+
 ;; Change file backup location
 ;; Create backup and autosave directories if they don't exist
 (let ((backup-dir (expand-file-name "backups/" user-emacs-directory))
@@ -45,15 +51,18 @@
         auto-save-timeout 20        ; save every 20 sec idle
         auto-save-interval 200))    ; or every 200 keystrokes
 
-
-
 ;; Window Splitting
-(setq split-height-threshold 100)
-(setq split-width-threshold 120)
+(setq split-height-threshold 120)
+(setq split-width-threshold 140)
 
 ;; General Keymaps
 (with-eval-after-load 'dired
   (define-key dired-mode-map (kbd "-") #'dired-up-directory))
+
+;; Lectura (Or other commonly used VMs)
+(defun connect-lectura ()
+  (interactive)
+  (dired "/ssh:ntebbs@lec.cs.arizona.edu:/home/ntebbs/"))
 
 ;; Straight.el bootstrap
 (defvar bootstrap-version)
@@ -193,7 +202,7 @@
         '((sequence
            "TODO(t)" "IN-PROGRESS(i)" "BLOCKED(b)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")
           (sequence
-           "ASSIGNED(a)" "WORKING(w)" "SUBMITTED(s)" "|" "GRADED(g)" "CANCELLED(c)")))
+           "ASSIGNED(a)" "WORKING(w)" "|" "SUBMITTED(s)" "GRADED(g)" "CANCELLED(c)")))
 
   ;; Faces for visual distinction
   ;; NOTE: See X11 Colors
@@ -258,3 +267,10 @@
           compilation-mode))
   (popper-mode +1)
   (popper-echo-mode +1))                ; For echo area hints
+
+;; Dired Single (No More Messy Buffer)
+(use-package dired-single
+  :straight t
+  :bind (:map dired-mode-map
+              ("RET" . dired-single-buffer)
+              ("^"   . dired-single-up-directory)))
