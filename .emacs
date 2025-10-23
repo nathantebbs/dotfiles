@@ -20,19 +20,36 @@
 ;; Mini-buffer completion mode
 (fido-vertical-mode)
 
-
 ;; Misc
 (electric-pair-mode t) ;; Autopairs
 (which-key-mode) ;; which-key
 
 ;; Change file backup location
-(setq backup-directory-alist `((".*" . "~/.Trash")))
-(setq auto-save-file-name-transforms `((".*" . "~/.Trash")))
+;; Create backup and autosave directories if they don't exist
+(let ((backup-dir (expand-file-name "backups/" user-emacs-directory))
+      (autosave-dir (expand-file-name "autosaves/" user-emacs-directory)))
+  (make-directory backup-dir t)
+  (make-directory autosave-dir t)
+
+  ;; Backups (files ending with ~)
+  (setq backup-directory-alist `(("." . ,backup-dir))
+        make-backup-files t
+        version-control t          ; use versioned backups
+        kept-new-versions 10
+        kept-old-versions 2
+        delete-old-versions t)
+
+  ;; Autosave files (#foo#)
+  (setq auto-save-file-name-transforms `((".*" ,autosave-dir t))
+        auto-save-default t
+        auto-save-timeout 20        ; save every 20 sec idle
+        auto-save-interval 200))    ; or every 200 keystrokes
+
 
 
 ;; Window Splitting
-(setq split-height-threshold 80)
-(setq split-width-threshold 100)
+(setq split-height-threshold 100)
+(setq split-width-threshold 120)
 
 ;; General Keymaps
 (with-eval-after-load 'dired
@@ -98,10 +115,13 @@
 
   ;; Org Mode
   (define-key nate/leader-map (kbd "o p") #'org-pomodoro)
-  (define-key nate/leader-map (kbd "o t") (lambda () (interactive) (find-file "~/org/todo.org")))
   (define-key nate/leader-map (kbd "o a") #'org-agenda)
   (define-key nate/leader-map (kbd "o c") #'org-capture)
   (define-key nate/leader-map (kbd "o v") #'org-tags-view)
+  (define-key nate/leader-map (kbd "o t") (lambda () (interactive) (find-file "~/org/todo.org")))
+  (define-key nate/leader-map (kbd "o n") (lambda () (interactive) (find-file "~/org/notes.org")))
+  (define-key nate/leader-map (kbd "o P") (lambda () (interactive) (find-file "~/org/projects.org")))
+  (define-key nate/leader-map (kbd "o A") (lambda () (interactive) (find-file "~/org/assignments.org")))
   
   ;; State
   (define-key evil-insert-state-map (kbd "C-g") 'evil-change-to-previous-state)
