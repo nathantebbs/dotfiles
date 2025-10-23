@@ -30,7 +30,6 @@
   (load custom-file))
 
 
-;; Change file backup location
 ;; Create backup and autosave directories if they don't exist
 (let ((backup-dir (expand-file-name "backups/" user-emacs-directory))
       (autosave-dir (expand-file-name "autosaves/" user-emacs-directory)))
@@ -50,10 +49,6 @@
         auto-save-default t
         auto-save-timeout 20        ; save every 20 sec idle
         auto-save-interval 200))    ; or every 200 keystrokes
-
-;; Window Splitting
-(setq split-height-threshold 120)
-(setq split-width-threshold 140)
 
 ;; General Keymaps
 (with-eval-after-load 'dired
@@ -196,6 +191,9 @@
   (setq org-directory "~/org/")
   (setq org-agenda-files (directory-files-recursively "~/org" "\\.org$"))
 
+  ;; Use OS pdf viewer
+  (setq org-file-apps
+      '(("\\.pdf\\'" . "xdg-open %s")))
 
   ;; TODO workflow
   (setq org-todo-keywords
