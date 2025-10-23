@@ -20,14 +20,14 @@
 ;; Mini-buffer completion mode
 (fido-vertical-mode)
 
+
 ;; Misc
 (electric-pair-mode t) ;; Autopairs
 (which-key-mode) ;; which-key
 
 ;; Change file backup location
-(setq make-backup-file nil) ;; No more
-(setq auto-save-default nil) ;; Autosave files
-(setq backup-directory-alist '((".*" . "~/.Trash")))
+(setq backup-directory-alist `((".*" . "~/.Trash")))
+(setq auto-save-file-name-transforms `((".*" . "~/.Trash")))
 
 
 ;; Window Splitting
