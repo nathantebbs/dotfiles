@@ -126,6 +126,7 @@
   (define-key nate/leader-map (kbd "o n") (lambda () (interactive) (find-file "~/org/notes.org")))
   (define-key nate/leader-map (kbd "o P") (lambda () (interactive) (find-file "~/org/projects.org")))
   (define-key nate/leader-map (kbd "o A") (lambda () (interactive) (find-file "~/org/assignments.org")))
+  (define-key nate/leader-map (kbd "o L") (lambda () (interactive) (find-file "~/org/log.org")))
   
   ;; State
   (define-key evil-insert-state-map (kbd "C-g") 'evil-change-to-previous-state)
@@ -231,8 +232,7 @@
           ("LOG" . ?L)
           ("QUIZ" . ?q)
           ("NOTE" . ?n)
-          ("ASSIGNMENT" . ?a)
-          ("OPTIONAL" . ?o)))
+          ("ASSIGNMENT" . ?a)))
 
   ;; Time
   (setq org-log-done 'time
