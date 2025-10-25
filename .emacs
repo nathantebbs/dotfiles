@@ -114,6 +114,9 @@
   (define-key nate/leader-map (kbd "f") #'find-file)
   (define-key nate/leader-map (kbd "e") #'dired-jump)
 
+  ;; Compilation
+  (define-key nate/leader-map (kbd "c c") #'compile)
+
   ;; Magit
   (define-key nate/leader-map (kbd "g s") #'magit)
 
@@ -131,6 +134,7 @@
   ;; State
   (define-key evil-insert-state-map (kbd "C-g") 'evil-change-to-previous-state)
   (define-key evil-visual-state-map (kbd "C-g") 'evil-change-to-previous-state)
+  (define-key evil-replace-state-map (kbd "C-g") 'evil-change-to-previous-state)
 
   ;; Buffers
   (define-key nate/leader-map (kbd "b b") #'switch-to-buffer)
