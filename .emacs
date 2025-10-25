@@ -205,7 +205,9 @@
         '((sequence
            "TODO(t)" "IN-PROGRESS(i)" "BLOCKED(b)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")
           (sequence
-           "ASSIGNED(a)" "WORKING(w)" "|" "SUBMITTED(s)" "GRADED(g)" "CANCELLED(c)")))
+           "ASSIGNED(a)" "WORKING(w)" "|" "SUBMITTED(s)" "GRADED(g)" "CANCELLED(c)")
+          (sequence
+           "BACKLOG(p)" "DEVELOPMENT(d)" "TESTING(t)" "|" "FINISHED(f)")))
 
   ;; Faces for visual distinction
   ;; NOTE: See X11 Colors
@@ -219,7 +221,11 @@
           ("ASSIGNED" . (:foreground "purple" :weight bold))
           ("WORKING" . (:foreground "pink" :weight bold))
           ("SUBMITTED" . (:foreground "light salmon" :weight bold))
-          ("GRADED" . (:foreground "pale green" :weight bold))))
+          ("GRADED" . (:foreground "pale green" :weight bold))
+          ("BACKLOG" . (:foreground "web maroon" :weight bold))
+          ("DEVELOPMENT" . (:foreground "orchid" :weight bold))
+          ("TESTING" . (:foreground "dark cyan" :weight bold))
+          ("FINISHED" . (:foreground "green" :weight bold))))
 
   ;; Tag presets
   (setq org-tag-alist
