@@ -228,6 +228,7 @@
           ("GEOS251" . ?4)
           ("PROJECT" . ?P)
           ("LIFE" . ?l)
+          ("LOG" . ?L)
           ("QUIZ" . ?q)
           ("NOTE" . ?n)
           ("ASSIGNMENT" . ?a)
