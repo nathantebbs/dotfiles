@@ -246,10 +246,6 @@
   :config
   (setq org-superstar-headline-bullets-list '("●" "○" "◆" "◇")))
 
-;; Org pomodoro
-(use-package org-pomodoro
-  :straight t)
-
 ;; Popup Mgmt
 (use-package popper
   :straight t
