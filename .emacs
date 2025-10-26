@@ -222,7 +222,7 @@
           ("WORKING" . (:foreground "red" :weight bold))
           ("SUBMITTED" . (:foreground "dark violet" :weight bold))
           ("GRADED" . (:foreground "x11 green" :weight bold))
-          ("BACKLOG" . (:foreground "web maroon" :weight bold))
+          ("BACKLOG" . (:foreground "maroon" :weight bold))
           ("DEVELOPMENT" . (:foreground "slate blue" :weight bold))
           ("TESTING" . (:foreground "orchid" :weight bold))
           ("FINISHED" . (:foreground "green" :weight bold))))
