@@ -7,6 +7,10 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 
+;; Font
+(add-to-list 'default-frame-alist
+             '(font . "CaskaydiaMono Nerd Font-16"))
+
 ;; Lines
 (global-display-line-numbers-mode t)
 (setq truncate-lines t) ;; No visual wrapping
@@ -15,7 +19,7 @@
 
 ;; Tabs
 (setq-default indent-tabs-mode nil)
-(setq-default tab-width 2)
+(setq-default tab-width 4)
 
 ;; Mini-buffer completion mode
 (fido-vertical-mode)
@@ -242,7 +246,8 @@
           ("LOG" . ?L)
           ("QUIZ" . ?q)
           ("NOTE" . ?n)
-          ("ASSIGNMENT" . ?a)))
+          ("ASSIGNMENT" . ?a)
+          ("RECIPE" . ?r)))
 
   ;; Time
   (setq org-log-done 'time
