@@ -34,3 +34,8 @@ dsync() {
   cd "$cwd" || return
   echo "✅ Done syncing all repositories."
 }
+
+# MISC:
+
+# nvm
+source /usr/share/nvm/init-nvm.sh
