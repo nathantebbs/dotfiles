@@ -21,7 +21,7 @@ ln -s ~/dotfiles/.emacs ~/.emacs
 ```
 
 - Note: before symlinking these files ensure that you have backed up any existing configurations already
-present.
+present. For specific configuration(s) see below.
 
 ## Emacs
 
