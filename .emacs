@@ -20,6 +20,7 @@
 ;; Tabs
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
+(setq c-basic-offset 4)
 
 ;; Mini-buffer completion mode
 (fido-vertical-mode)
@@ -35,6 +36,8 @@
 
 
 ;; Create backup and autosave directories if they don't exist
+;; Disable lockfiles
+(setq create-lockfiles nil)
 (let ((backup-dir (expand-file-name "backups/" user-emacs-directory))
       (autosave-dir (expand-file-name "autosaves/" user-emacs-directory)))
   (make-directory backup-dir t)
