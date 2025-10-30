@@ -50,8 +50,6 @@ mv ~/.emacs.d ~/.emacs.d.back
 into seperate directories. The structure is self explanitory. For future reference, any configuration files
 that have platform specific dependencies or configurations then please refer to the config/ directory.
 
-### Omarchy
-
 ```bash
 # Backup files
 mv ~/.config/alacritty ~/.config/alacritty.back
