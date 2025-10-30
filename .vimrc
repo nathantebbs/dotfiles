@@ -15,7 +15,7 @@ set relativenumber
 set number
 
 " Tabstop bullsplish
-set tabstop=8
+set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set noexpandtab

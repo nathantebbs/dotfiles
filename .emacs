@@ -9,7 +9,7 @@
 
 ;; Font
 (add-to-list 'default-frame-alist
-             '(font . "CaskaydiaMono Nerd Font-16"))
+             '(font . "CaskaydiaCove Nerd Font-16"))
 
 ;; Lines
 (global-display-line-numbers-mode t)
