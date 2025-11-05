@@ -9,13 +9,17 @@
 
 ;; Font
 (add-to-list 'default-frame-alist
-             '(font . "CaskaydiaCove Nerd Font-16"))
+             '(font . "JetBrainsMono Nerd Font-22"))
 
 ;; Lines
 (global-display-line-numbers-mode t)
 (setq truncate-lines t) ;; No visual wrapping
 
 (setq inhibit-startup-screen t) ;; Disable startup screen
+
+;; Color Column
+(setq display-fill-column-indicator-column 80) ; Set the column number
+(set-face-foreground 'fill-column-indicator "purple")
 
 ;; Tabs
 (setq-default indent-tabs-mode nil)
@@ -65,6 +69,15 @@
 (defun connect-lectura ()
   (interactive)
   (dired "/ssh:ntebbs@lec.cs.arizona.edu:/home/ntebbs/"))
+
+(setq org-publish-project-alist
+      '(("my-org-site"
+         :base-directory "~/org/"
+         :base-extension "org"
+         :publishing-directory "~/public_html/"
+         :recursive t
+         :publishing-function org-html-publish-to-html
+         :auto-index t)))
 
 ;; Straight.el bootstrap
 (defvar bootstrap-version)
@@ -116,6 +129,7 @@
 
   ;; Finding Files
   (define-key nate/leader-map (kbd "s n") (lambda () (interactive) (fzf-find-file-in-dir "~/dotfiles/")))
+  (define-key nate/leader-map (kbd "s o") (lambda () (interactive) (fzf-find-file-in-dir "~/org/")))
   (define-key nate/leader-map (kbd "s f") (lambda () (interactive) (fzf-find-file)))
   (define-key nate/leader-map (kbd "s p") (lambda () (interactive) (fzf-find-file-in-dir "~/dev/probe/")))
   (define-key nate/leader-map (kbd "f") #'find-file)
@@ -128,12 +142,11 @@
   (define-key nate/leader-map (kbd "g s") #'magit)
 
   ;; Org Mode
-  (define-key nate/leader-map (kbd "o p") #'org-pomodoro)
   (define-key nate/leader-map (kbd "o a") #'org-agenda)
   (define-key nate/leader-map (kbd "o c") #'org-capture)
-  (define-key nate/leader-map (kbd "o v") #'org-tags-view)
-  (define-key nate/leader-map (kbd "o t") (lambda () (interactive) (find-file "~/org/todo.org")))
-  (define-key nate/leader-map (kbd "o n") (lambda () (interactive) (find-file "~/org/notes.org")))
+  (define-key nate/leader-map (kbd "o r") #'org-refile)
+  (define-key nate/leader-map (kbd "o T") (lambda () (interactive) (find-file "~/org/todo.org")))
+  (define-key nate/leader-map (kbd "o N") (lambda () (interactive) (find-file "~/org/notes.org")))
   (define-key nate/leader-map (kbd "o P") (lambda () (interactive) (find-file "~/org/projects.org")))
   (define-key nate/leader-map (kbd "o A") (lambda () (interactive) (find-file "~/org/assignments.org")))
   (define-key nate/leader-map (kbd "o L") (lambda () (interactive) (find-file "~/org/log.org")))
@@ -163,8 +176,11 @@
 ;; Company
 (use-package company
   :straight t
-  :hook (prog-mode . global-company-mode))
-
+  :hook (prog-mode . global-company-mode)
+  :hook (after-init . global-company-mode)
+  :config
+  (setq company-minimum-prefix-length 1
+        company-idle-delay 0.0))
 ;; Fzf
 (use-package fzf
   :straight t)
@@ -194,7 +210,7 @@
   :config
   ;; Indentation
   (setq org-startup-indented t
-        org-agenda-window-setup 'current-window
+        org-agenda-window-setup 'reorganize-frame
         org-pretty-entities t
         org-return-follows-link t
         org-cycle-separator-lines 0)
@@ -254,7 +270,10 @@
 
   ;; Time
   (setq org-log-done 'time
-        org-log-into-drawer t))
+        org-log-into-drawer t)
+
+  ;; Refile
+  (setq org-refile-targets '((org-agenda-files :maxlevel . 3))))
 
 
 ;; Org Superstar
@@ -287,3 +306,29 @@
   :bind (:map dired-mode-map
               ("RET" . dired-single-buffer)
               ("^"   . dired-single-up-directory)))
+
+;; LSP
+(use-package lsp-mode
+  :straight t
+  :hook ((lsp-mode . lsp-enable-which-key-integration)
+         (java-mode . lsp))
+  :commands lsp)
+
+(use-package lsp-java
+  :straight t
+  :config
+  (add-hook 'java-mode-hook 'lsp))
+
+(use-package lsp-ui
+  :straight t
+  :after lsp-mode
+  :config
+  (setq lsp-ui-doc-enable t
+        lsp-ui-doc-delay 0.5
+        lsp-ui-sideline-show-diagnostics t
+        lsp-ui-sideline-show-hover t))
+
+(use-package gcmh
+  :straight t
+  :config
+  (gcmh-mode 1))
