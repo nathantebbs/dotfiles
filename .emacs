@@ -9,7 +9,7 @@
 
 ;; Font
 (add-to-list 'default-frame-alist
-             '(font . "JetBrainsMono Nerd Font-22"))
+             '(font . "JetBrainsMono Nerd Font-18"))
 
 ;; Lines
 (global-display-line-numbers-mode t)
