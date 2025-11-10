@@ -29,13 +29,9 @@
 
 ;; Lines
 (global-display-line-numbers-mode t)
-(setq truncate-lines t) ;; No visual wrapping
+(setq-default truncate-lines t) ;; No visual wrapping
 
 (setq inhibit-startup-screen t) ;; Disable startup screen
-
-;; Color Column
-(setq display-fill-column-indicator-column 80) ; Set the column number
-(set-face-foreground 'fill-column-indicator "purple")
 
 ;; Tabs
 (setq-default indent-tabs-mode nil)
@@ -85,15 +81,6 @@
 (defun connect-lectura ()
   (interactive)
   (dired "/ssh:ntebbs@lec.cs.arizona.edu:/home/ntebbs/"))
-
-(setq org-publish-project-alist
-      '(("my-org-site"
-         :base-directory "~/org/"
-         :base-extension "org"
-         :publishing-directory "~/public_html/"
-         :recursive t
-         :publishing-function org-html-publish-to-html
-         :auto-index t)))
 
 ;; Straight.el bootstrap
 (defvar bootstrap-version)
@@ -148,6 +135,7 @@
   (define-key nate/leader-map (kbd "s o") (lambda () (interactive) (fzf-find-file-in-dir "~/org/")))
   (define-key nate/leader-map (kbd "s f") (lambda () (interactive) (fzf-find-file)))
   (define-key nate/leader-map (kbd "s p") (lambda () (interactive) (fzf-find-file-in-dir "~/dev/probe/")))
+  (define-key nate/leader-map (kbd "s F") (lambda () (interactive) (fzf-grep)))
   (define-key nate/leader-map (kbd "f") #'find-file)
   (define-key nate/leader-map (kbd "e") #'dired-jump)
 
@@ -155,7 +143,7 @@
   (define-key nate/leader-map (kbd "c c") #'compile)
 
   ;; Magit
-  (define-key nate/leader-map (kbd "g s") #'magit)
+  (define-key nate/leader-map (kbd "g s") #'magit-status)
 
   ;; Org Mode
   (define-key nate/leader-map (kbd "o a") #'org-agenda)
@@ -182,7 +170,9 @@
 
 ;; Magit
 (use-package magit
-  :straight t)
+  :straight t
+  :defer t
+  :commands (magit-status))
 
 ;; Devdocs
 ;; NOTE: use M-x devdocs-install
@@ -349,4 +339,3 @@
   :straight t
   :config
   (gcmh-mode 1))
-
