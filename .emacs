@@ -8,8 +8,24 @@
 (scroll-bar-mode -1)
 
 ;; Font
-(add-to-list 'default-frame-alist
-             '(font . "JetBrainsMono Nerd Font-18"))
+;; --- Font setup: Zenbones Mono ---
+(defun npt/set-zenbones-font ()
+  "Set Zenbones Brainy as the default and fixed-pitch font."
+  (when (member "Zenbones Brainy" (font-family-list))
+    (set-face-attribute 'default nil :family "Zenbones Brainy" :height 160)
+    (set-face-attribute 'fixed-pitch nil :family "Zenbones Brainy" :height 160)
+    (add-to-list 'default-frame-alist
+                 '(font . "Zenbones Brainy:pixelsize=16:foundry=UKWN:weight=regular:slant=normal:width=normal:spacing=90:scalable=true"))))
+
+;; Apply immediately if in a GUI frame
+(when (display-graphic-p)
+  (npt/set-zenbones-font))
+
+;; Also apply *after* frame creation (e.g., when using emacsclient or daemon)
+(add-hook 'after-make-frame-functions
+          (lambda (_frame)
+            (with-selected-frame _frame
+              (npt/set-zenbones-font))))
 
 ;; Lines
 (global-display-line-numbers-mode t)
@@ -103,10 +119,10 @@
 (straight-use-package 'use-package)
 
 ;; Theme
-(use-package gruber-darker-theme
+(use-package ef-themes
   :straight t
   :config
-  (load-theme 'gruber-darker t))
+  (load-theme 'ef-dark t))
 
 ;; Evil mode
 (use-package evil
@@ -328,7 +344,9 @@
         lsp-ui-sideline-show-diagnostics t
         lsp-ui-sideline-show-hover t))
 
+;; TODO: does this help at all?? (e.g. LSP failure(s) resulting in restart of service)
 (use-package gcmh
   :straight t
   :config
   (gcmh-mode 1))
+
