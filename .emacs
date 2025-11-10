@@ -31,20 +31,11 @@
 ;; ===========================
 ;; macOS Modifier Setup
 ;; ===========================
-(defun npt/mac-mods ()
-  "Configure modifier keys for macOS."
-  (setq mac-command-modifier 'meta
+(setq mac-command-modifier 'meta
         mac-option-modifier 'super
         mac-control-modifier 'control
-        ns-function-modifier 'hyper))
+        ns-function-modifier 'hyper)
 
-(with-eval-after-load 'mac-win
-  (npt/mac-mods))
-
-(add-hook 'after-make-frame-functions
-          (lambda (frame)
-            (with-selected-frame frame
-              (npt/mac-mods))))
 ;; Lines
 (global-display-line-numbers-mode t)
 (setq-default truncate-lines t) ;; No visual wrapping
