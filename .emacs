@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; File: .emacs
 ;; Author: Nathan Tebbs
 ;; Purpose: Simple (ish) Emacs Configuration
@@ -27,6 +28,23 @@
             (with-selected-frame _frame
               (npt/set-zenbones-font))))
 
+;; ===========================
+;; macOS Modifier Setup
+;; ===========================
+(defun npt/mac-mods ()
+  "Configure modifier keys for macOS."
+  (setq mac-command-modifier 'meta
+        mac-option-modifier 'super
+        mac-control-modifier 'control
+        ns-function-modifier 'hyper))
+
+(with-eval-after-load 'mac-win
+  (npt/mac-mods))
+
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (with-selected-frame frame
+              (npt/mac-mods))))
 ;; Lines
 (global-display-line-numbers-mode t)
 (setq-default truncate-lines t) ;; No visual wrapping
@@ -170,9 +188,7 @@
 
 ;; Magit
 (use-package magit
-  :straight t
-  :defer t
-  :commands (magit-status))
+  :straight t)
 
 ;; Devdocs
 ;; NOTE: use M-x devdocs-install
@@ -182,7 +198,6 @@
 ;; Company
 (use-package company
   :straight t
-  :hook (prog-mode . global-company-mode)
   :hook (after-init . global-company-mode)
   :config
   (setq company-minimum-prefix-length 1
