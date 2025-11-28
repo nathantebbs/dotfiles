@@ -115,6 +115,10 @@
 (with-eval-after-load 'dired
   (define-key dired-mode-map (kbd "-") #'dired-up-directory))
 
+(with-eval-after-load 'compile
+  (define-key compilation-mode-map (kbd "r") #'recompile)
+  (define-key compilation-mode-map (kbd "g") #'compilation-next-error))
+
 ;; Lectura (Or other commonly used VMs)
 (defun connect-lectura ()
   (interactive)
@@ -386,9 +390,24 @@
         lsp-ui-sideline-show-diagnostics t
         lsp-ui-sideline-show-hover t))
 
+(use-package web-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (setq web-mode-enable-auto-closing t)
+  (setq web-mode-enable-auto-pairing t))
+
 ;; =================
 ;; Garbage Collector Magic Hack
 ;; =================
 (use-package gcmh
   :config
   (gcmh-mode 1))
+
+;; =================
+;; Latex Replacement
+;; =================
+(use-package typst-ts-mode
+  :mode ("\\.typ\\'" . typst-ts-mode)
+  :config
+  (setq typst-ts-watch-options "--root ."
+        typst-ts-mode-indent-offset 2))
