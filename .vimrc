@@ -96,7 +96,7 @@ Plug 'sakshamgupta05/vim-todo-highlight'
 call plug#end()
 
 " COLORSCHEME:
-colorscheme molokai
+colorscheme habamax
 
 " LIGHTLINE:
 " Comment out the `colorscheme`.
