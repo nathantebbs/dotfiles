@@ -1,4 +1,0 @@
-anki
-neovim-nightly-bin
-plex-media-server
-walker-bin
