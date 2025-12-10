@@ -260,11 +260,6 @@
   :after ox)
 
 ;; =================
-;; Terminal
-;; =================
-(use-package vterm)
-
-;; =================
 ;; Org mode
 ;; =================
 (use-package org

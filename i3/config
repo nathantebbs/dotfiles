@@ -1,0 +1,49 @@
+set $mod Mod4
+font pango:Noto Sans 8
+
+gaps inner 5
+gaps outer 10
+
+# Terminal
+bindsym $mod+Return exec alacritty
+# Launcher
+bindsym $mod+space exec dmenu_run
+# Browser
+bindsym $mod+b exec firefox
+# Emacs
+bindsym $mod+e exec emacs
+# Close
+bindsym $mod+w kill
+# Reload
+bindsym $mod+r reload
+# Fullscreen
+bindsym $mod+f fullscreen toggle
+
+# Focus
+bindsym $mod+h focus left
+bindsym $mod+l focus right
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+
+# Splits
+bindsym $mod+Shift+v split v
+bindsym $mod+Shift+h split h
+
+# Workspaces
+workspace 1 output primary
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+
+bar {
+	status_command i3status
+}
+
+exec --no-startup-id picom --experimental-backends --backend glx --vsync
+exec_always --no-startup-id feh --bg-fill ~/Pictures/bgs/bg02.jpg
