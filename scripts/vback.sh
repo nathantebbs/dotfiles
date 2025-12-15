@@ -8,7 +8,7 @@ set -xe
 # Date format safe for file paths
 TODAY_DATE=$(date +"%Y-%m-%d_%H-%M-%S")
 
-BACKUP_DIR="$HOME/dotfiles/backups/void-backup-$TODAY_DATE"
+BACKUP_DIR="$HOME/backups/void-backup-$TODAY_DATE"
 
 mkdir -p "$BACKUP_DIR"
 

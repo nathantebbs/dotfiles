@@ -25,45 +25,51 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 
+(setq inhibit-startup-screen t)
+
+;; ===========================
 ;; Font
-;; --- Font setup: Zenbones Mono ---
-(defun npt/set-zenbones-font ()
-  "Set Zenbones Brainy as the default and fixed-pitch font."
-  (when (member "Zenbones Brainy" (font-family-list))
-    (set-face-attribute 'default nil :family "Zenbones Brainy" :height 160)
-    (set-face-attribute 'fixed-pitch nil :family "Zenbones Brainy" :height 160)
-    (add-to-list 'default-frame-alist
-                 '(font . "Zenbones Brainy:pixelsize=16:foundry=UKWN:weight=regular:slant=normal:width=normal:spacing=90:scalable=true"))))
+;; ===========================
+(defconst npt/font-family "Zenbones Brainy")
+(defconst npt/font-height 160) ;; 160 ~= 16pt-ish
 
-;; Apply immediately if in a GUI frame
-(when (display-graphic-p)
-  (ignore-errors (npt/set-zenbones-font))) ;; ✅ added ignore-errors for robustness
+(defun npt/apply-font (&optional frame)
+  "Apply my preferred font to FRAME (or current frame)."
+  (let ((frame (or frame (selected-frame))))
+    (when (display-graphic-p frame)
+      (when (member npt/font-family (font-family-list))
+        (with-selected-frame frame
+          (set-face-attribute 'default nil
+                              :family npt/font-family
+                              :height npt/font-height)
+          (set-face-attribute 'fixed-pitch nil
+                              :family npt/font-family
+                              :height npt/font-height))))))
 
-;; Also apply *after* frame creation (e.g., when using emacsclient or daemon)
-(add-hook 'after-make-frame-functions
-          (lambda (_frame)
-            (with-selected-frame _frame
-              (ignore-errors (npt/set-zenbones-font)))))
+;; Apply once init completes (theme can override faces)
+(add-hook 'after-init-hook #'npt/apply-font)
+
+;; Apply to new GUI frames (daemon/emacsclient)
+(add-hook 'after-make-frame-functions #'npt/apply-font)
 
 ;; ===========================
 ;; macOS Modifier Setup
+;; (safe on non-mac; variables may be unbound, so guard)
 ;; ===========================
-(setq mac-command-modifier 'meta
+(when (eq system-type 'darwin)
+  (setq mac-command-modifier 'meta
         mac-option-modifier 'super
         mac-control-modifier 'control
-        ns-function-modifier 'hyper)
+        ns-function-modifier 'hyper))
 
-;; ✅ System clipboard integration
 (setq select-enable-clipboard t
       select-enable-primary t)
 
 ;; ===========================
 ;; Lines, Tabs, and Indentation
 ;; ===========================
-;; ✅ Use prog-mode-hook for performance (no line numbers in Org, etc.)
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (setq-default truncate-lines t) ;; No visual wrapping
-(setq inhibit-startup-screen t) ;; Disable startup screen
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
@@ -72,11 +78,8 @@
 ;; ===========================
 ;; Completion & Editing
 ;; ===========================
-(fido-vertical-mode)
-(electric-pair-mode t) ;; Autopairs
-(which-key-mode) ;; which-key
-
-;; ✅ Save place and recent files
+(fido-vertical-mode 1)
+(electric-pair-mode 1)
 (save-place-mode 1)
 (recentf-mode 1)
 (setq recentf-max-saved-items 200)
@@ -95,19 +98,17 @@
   (make-directory backup-dir t)
   (make-directory autosave-dir t)
 
-  ;; Backups (files ending with ~)
   (setq backup-directory-alist `(("." . ,backup-dir))
         make-backup-files t
-        version-control t          ; use versioned backups
+        version-control t
         kept-new-versions 10
         kept-old-versions 2
         delete-old-versions t)
 
-  ;; Autosave files (#foo#)
   (setq auto-save-file-name-transforms `((".*" ,autosave-dir t))
         auto-save-default t
-        auto-save-timeout 20        ; save every 20 sec idle
-        auto-save-interval 200))    ; or every 200 keystrokes
+        auto-save-timeout 20
+        auto-save-interval 200))
 
 ;; ===========================
 ;; General Keymaps
@@ -143,11 +144,7 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-;; =================
-;; Install Packages:
-;; =================
-(setq straight-use-package-by-default t) ;; ✅ New global default
-
+(setq straight-use-package-by-default t)
 (straight-use-package 'use-package)
 
 ;; =================
@@ -155,32 +152,43 @@
 ;; =================
 (use-package ef-themes
   :config
-  (load-theme 'ef-dark t))
+  (load-theme 'ef-dark t)
+  ;; Theme may touch faces; re-apply font deterministically
+  (npt/apply-font))
+
+;; =================
+;; which-key
+;; =================
+(use-package which-key
+  :config
+  (which-key-mode 1))
 
 ;; =================
 ;; Evil mode
 ;; =================
 (use-package evil
   :init
-  (setq evil-want-C-u-scroll t) ;; Fixes C-u scrolling
+  (setq evil-want-C-u-scroll t)
   :config
   (evil-mode 1)
 
-  ;; =================
-  ;; *Evil* Keymaps 
-  ;; =================
-  
   ;; Leader
   (define-prefix-command 'nate/leader-map)
   (define-key evil-normal-state-map (kbd "SPC") 'nate/leader-map)
   (define-key evil-visual-state-map (kbd "SPC") 'nate/leader-map)
 
   ;; Finding Files
-  (define-key nate/leader-map (kbd "s n") (lambda () (interactive) (fzf-find-file-in-dir "~/dotfiles/")))
-  (define-key nate/leader-map (kbd "s o") (lambda () (interactive) (fzf-find-file-in-dir "~/org/")))
-  (define-key nate/leader-map (kbd "s f") (lambda () (interactive) (fzf-find-file)))
-  (define-key nate/leader-map (kbd "s p") (lambda () (interactive) (fzf-find-file-in-dir "~/dev/probe/")))
-  (define-key nate/leader-map (kbd "s F") (lambda () (interactive) (fzf-grep)))
+  (define-key nate/leader-map (kbd "s n")
+    (lambda () (interactive) (fzf-find-file-in-dir "~/dotfiles/")))
+  (define-key nate/leader-map (kbd "s o")
+    (lambda () (interactive) (fzf-find-file-in-dir "~/org/")))
+  (define-key nate/leader-map (kbd "s f")
+    (lambda () (interactive) (fzf-find-file)))
+  (define-key nate/leader-map (kbd "s p")
+    (lambda () (interactive) (fzf-find-file-in-dir "~/dev/probe/")))
+  (define-key nate/leader-map (kbd "s F")
+    (lambda () (interactive) (fzf-grep)))
+
   (define-key nate/leader-map (kbd "f") #'find-file)
   (define-key nate/leader-map (kbd "e") #'dired-jump)
 
@@ -194,24 +202,30 @@
   (define-key nate/leader-map (kbd "o a") #'org-agenda)
   (define-key nate/leader-map (kbd "o c") #'org-capture)
   (define-key nate/leader-map (kbd "o r") #'org-refile)
-  (define-key nate/leader-map (kbd "o T") (lambda () (interactive) (find-file "~/org/todo.org")))
-  (define-key nate/leader-map (kbd "o N") (lambda () (interactive) (find-file "~/org/notes.org")))
-  (define-key nate/leader-map (kbd "o P") (lambda () (interactive) (find-file "~/org/projects.org")))
-  (define-key nate/leader-map (kbd "o A") (lambda () (interactive) (find-file "~/org/assignments.org")))
-  (define-key nate/leader-map (kbd "o L") (lambda () (interactive) (find-file "~/org/log.org")))
-  
+  (define-key nate/leader-map (kbd "o T")
+    (lambda () (interactive) (find-file "~/org/todo.org")))
+  (define-key nate/leader-map (kbd "o N")
+    (lambda () (interactive) (find-file "~/org/notes.org")))
+  (define-key nate/leader-map (kbd "o P")
+    (lambda () (interactive) (find-file "~/org/projects.org")))
+  (define-key nate/leader-map (kbd "o A")
+    (lambda () (interactive) (find-file "~/org/assignments.org")))
+  (define-key nate/leader-map (kbd "o L")
+    (lambda () (interactive) (find-file "~/org/log.org")))
+
   ;; State
-  (define-key evil-insert-state-map (kbd "C-g") 'evil-change-to-previous-state)
-  (define-key evil-visual-state-map (kbd "C-g") 'evil-change-to-previous-state)
-  (define-key evil-replace-state-map (kbd "C-g") 'evil-change-to-previous-state)
+  (define-key evil-insert-state-map (kbd "C-g") #'evil-change-to-previous-state)
+  (define-key evil-visual-state-map (kbd "C-g") #'evil-change-to-previous-state)
+  (define-key evil-replace-state-map (kbd "C-g") #'evil-change-to-previous-state)
 
   ;; Buffers
   (define-key nate/leader-map (kbd "b b") #'switch-to-buffer)
   (define-key nate/leader-map (kbd "b i") #'ibuffer-other-window)
   (define-key nate/leader-map (kbd "b k") #'kill-buffer)
 
-  ;; Config
-  (define-key nate/leader-map (kbd "r r") (lambda () (interactive) (load-file "~/.emacs"))))
+  ;; Config reload
+  (define-key nate/leader-map (kbd "r r")
+    (lambda () (interactive) (load-file "~/.emacs"))))
 
 ;; =================
 ;; Magit
@@ -225,7 +239,6 @@
 ;; =================
 ;; Devdocs
 ;; =================
-;; NOTE: use M-x devdocs-install
 (use-package devdocs
   :defer t)
 
@@ -265,22 +278,18 @@
 (use-package org
   :straight (:type built-in)
   :config
-  ;; Indentation
   (setq org-startup-indented t
         org-agenda-window-setup 'reorganize-frame
         org-pretty-entities t
         org-return-follows-link t
         org-cycle-separator-lines 0)
 
-  ;; Base directories
   (setq org-directory "~/org/")
   (setq org-agenda-files (directory-files-recursively "~/org" "\\.org$"))
 
-  ;; Use OS pdf viewer
   (setq org-file-apps
-      '(("\\.pdf\\'" . "xdg-open %s")))
+        '(("\\.pdf\\'" . "xdg-open %s")))
 
-  ;; TODO workflow
   (setq org-todo-keywords
         '((sequence
            "TODO(t)" "IN-PROGRESS(i)" "BLOCKED(b)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")
@@ -289,8 +298,6 @@
           (sequence
            "BACKLOG(p)" "DEVELOPMENT(d)" "TESTING(t)" "|" "FINISHED(f)")))
 
-  ;; Faces for visual distinction
-  ;; NOTE: See X11 Colors
   (setq org-todo-keyword-faces
         '(("TODO" . (:foreground "deep pink" :weight bold))
           ("IN-PROGRESS" . (:foreground "deep sky blue" :weight bold))
@@ -307,7 +314,6 @@
           ("TESTING" . (:foreground "orchid" :weight bold))
           ("FINISHED" . (:foreground "green" :weight bold))))
 
-  ;; Tag presets
   (setq org-tag-alist
         '((:startgroup)
           ("@school" . ?s)
@@ -325,11 +331,9 @@
           ("ASSIGNMENT" . ?a)
           ("RECIPE" . ?r)))
 
-  ;; Time
   (setq org-log-done 'time
         org-log-into-drawer t)
 
-  ;; Refile
   (setq org-refile-targets '((org-agenda-files :maxlevel . 3))))
 
 ;; =================
@@ -354,11 +358,12 @@
           "\\*compilation\\*"
           help-mode
           compilation-mode))
+  :config
   (popper-mode +1)
-  (popper-echo-mode +1))                ; For echo area hints
+  (popper-echo-mode +1))
 
 ;; =================
-;; Dired Single (No More Messy Buffer)
+;; Dired Single
 ;; =================
 (use-package dired-single
   :bind (:map dired-mode-map
@@ -375,7 +380,7 @@
 
 (use-package lsp-java
   :config
-  (add-hook 'java-mode-hook 'lsp))
+  (add-hook 'java-mode-hook #'lsp))
 
 (use-package lsp-ui
   :after lsp-mode
@@ -385,24 +390,29 @@
         lsp-ui-sideline-show-diagnostics t
         lsp-ui-sideline-show-hover t))
 
+;; =================
+;; Web Dev Stuff
+;; =================
 (use-package web-mode
+  :mode ("\\.html?\\'" . web-mode)
   :config
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (setq web-mode-enable-auto-closing t)
-  (setq web-mode-enable-auto-pairing t))
+  (setq web-mode-enable-auto-closing t
+        web-mode-enable-auto-pairing t))
 
 ;; =================
-;; Garbage Collector Magic Hack
-;; =================
-(use-package gcmh
-  :config
-  (gcmh-mode 1))
-
-;; =================
-;; Latex Replacement
+;; Typst
 ;; =================
 (use-package typst-ts-mode
   :mode ("\\.typ\\'" . typst-ts-mode)
   :config
   (setq typst-ts-watch-options "--root ."
         typst-ts-mode-indent-offset 2))
+
+;; =================
+;; TypeScript
+;; =================
+(use-package typescript-mode
+  :mode ("\\.ts\\'" . typescript-mode)
+  :hook (typescript-mode . lsp)
+  :config
+  (setq typescript-indent-level 2))
