@@ -1,0 +1,7 @@
+alias docker="sudo docker"
+alias emacs="emacsclient -c &disown"
+alias open="xdg-open"
+alias xbps-remove="sudo xbps-remove -Oo"
+alias xbps-install="sudo xbps-install -Su"
+alias xbps-query="xbps-query -Rs"
+export PATH="$HOME/.local/bin:$PATH"
