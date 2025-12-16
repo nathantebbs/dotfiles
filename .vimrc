@@ -1,6 +1,6 @@
 " Author: Nathan Tebbs
 " File: .vimrc
-" Modified: 20250116
+" Modified: 2025-12-14
 
 " BASICS:
 " Force vim not vi
@@ -13,6 +13,9 @@ set nocompatible
 " Relative number
 set relativenumber
 set number
+
+" Clipboard
+set clipboard=unnamedplus
 
 " Tabstop bullsplish
 set tabstop=4
