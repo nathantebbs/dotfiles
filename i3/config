@@ -15,8 +15,8 @@ set $mod Mod4
 font pango:Noto Sans 8
 
 # Gaps
-gaps inner 5
-gaps outer 10
+# gaps inner 5
+# gaps outer 10
 
 # Terminal
 bindsym $mod+Return exec alacritty
