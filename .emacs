@@ -375,7 +375,8 @@
 ;; =================
 (use-package lsp-mode
   :hook ((lsp-mode . lsp-enable-which-key-integration)
-         (java-mode . lsp))
+         (java-mode . lsp)
+         (go-mode . lsp-deferred))
   :commands lsp)
 
 (use-package lsp-java
@@ -408,6 +409,7 @@
   (setq typst-ts-watch-options "--root ."
         typst-ts-mode-indent-offset 2))
 
+<<<<<<< HEAD
 ;; =================
 ;; TypeScript
 ;; =================
@@ -416,3 +418,13 @@
   :hook (typescript-mode . lsp)
   :config
   (setq typescript-indent-level 2))
+=======
+;; --- GO MODE ---
+(use-package go-mode
+  :hook ((go-mode . lsp-deferred)
+         (before-save . gofmt-before-save)))
+(use-package templ-ts-mode
+  :mode "\\.templ\\'"
+  :hook ((templ-ts-mode . lsp-deferred)))
+
+>>>>>>> 8840255 (sync: macos)
