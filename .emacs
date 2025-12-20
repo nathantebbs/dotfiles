@@ -409,7 +409,6 @@
   (setq typst-ts-watch-options "--root ."
         typst-ts-mode-indent-offset 2))
 
-<<<<<<< HEAD
 ;; =================
 ;; TypeScript
 ;; =================
@@ -418,7 +417,7 @@
   :hook (typescript-mode . lsp)
   :config
   (setq typescript-indent-level 2))
-=======
+
 ;; --- GO MODE ---
 (use-package go-mode
   :hook ((go-mode . lsp-deferred)
@@ -426,5 +425,3 @@
 (use-package templ-ts-mode
   :mode "\\.templ\\'"
   :hook ((templ-ts-mode . lsp-deferred)))
-
->>>>>>> 8840255 (sync: macos)
