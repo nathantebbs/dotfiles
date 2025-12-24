@@ -1,0 +1,3 @@
+[submodule "external/.emacs.d"]
+	path = external/.emacs.d
+	url = git@github.com:nathantebbs/minimal-emacs.d.git
