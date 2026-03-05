@@ -2,7 +2,9 @@
 
 set -e
 
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+
+is_wsl() { grep -qi microsoft /proc/version 2>/dev/null; }
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -44,16 +46,28 @@ create_symlink() {
 echo "Setting up dotfiles symlinks..."
 echo ""
 
-# TODO: create symlink for i3 configuration
-
+# Cross-platform configs
 create_symlink "$DOTFILES_DIR/.emacs.d" "$HOME/.emacs.d" "emacs"
 create_symlink "$DOTFILES_DIR/.vimrc" "$HOME/.vimrc" "vim"
 create_symlink "$DOTFILES_DIR/tmux" "$HOME/.config/tmux" "tmux"
 create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim" "nvim"
 create_symlink "$DOTFILES_DIR/kitty" "$HOME/.config/kitty" "kitty"
-create_symlink "$DOTFILES_DIR/waybar" "$HOME/.config/waybar" "waybar"
-create_symlink "$DOTFILES_DIR/rofi" "$HOME/.config/rofi" "rofi"
-create_symlink "$DOTFILES_DIR/hypr" "$HOME/.config/hypr" "hyprland"
+
+# Desktop-only configs (Wayland/Hyprland stack — Linux bare metal only)
+case "$OSTYPE" in
+  linux*)
+    if is_wsl; then
+      echo -e "${YELLOW}[SKIP]${NC} Skipping desktop configs on WSL (waybar, rofi, hyprland)"
+    else
+      create_symlink "$DOTFILES_DIR/waybar" "$HOME/.config/waybar" "waybar"
+      create_symlink "$DOTFILES_DIR/rofi" "$HOME/.config/rofi" "rofi"
+      create_symlink "$DOTFILES_DIR/hypr" "$HOME/.config/hypr" "hyprland"
+    fi
+    ;;
+  darwin*)
+    echo -e "${YELLOW}[SKIP]${NC} Skipping Linux-only configs (waybar, rofi, hyprland)"
+    ;;
+esac
 
 echo ""
 echo -e "${GREEN}[OK]${NC} Symlink deployment complete!"
