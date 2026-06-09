@@ -1,7 +1,0 @@
-configuration {
-  modi: "drun,run,window";
-  show-icons: true;
-  drun-display-format: "{name}";
-  font: "monospace 12";
-}
-@theme "solarized"

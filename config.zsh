@@ -1,11 +1,6 @@
-alias docker="sudo docker"
-# alias emacs="emacsclient -c &disown"
-# alias emacs-status='emacsclient -e "(emacs-version)"'
-alias emacs-kill='emacsclient -e "(kill-emacs)"'
-alias reboot="sudo shutdown -r now"
+alias emacs="emacsclient -c &disown"
 alias vim="nvim"
 alias keys="alias | fzf"
-alias spotify="flatpak run com.spotify.Client"
 
 emacsctl() {
   case "$1" in
@@ -30,6 +25,3 @@ case "$OSTYPE" in
   darwin*) EDITOR=/opt/homebrew/bin/nvim ;;
   linux*) EDITOR=/usr/bin/nvim ;;
 esac
-
-export PATH="$HOME/.ghcup/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
