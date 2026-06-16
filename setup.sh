@@ -22,21 +22,23 @@ echo ""
 echo "--- Dependencies ---"
 echo ""
 
-# package name -> command to check
-declare -A DEPS=(
-  [neovim]=nvim
-  [emacs]=emacs
-  [ripgrep]=rg
-  [fzf]=fzf
-  [make]=make
-  [zsh]=zsh
-  [curl]=curl
-  [git]=git
+# package name : command to check
+DEPS=(
+  "neovim:nvim"
+  "emacs:emacs"
+  "ripgrep:rg"
+  "fzf:fzf"
+  "make:make"
+  "zsh:zsh"
+  "curl:curl"
+  "git:git"
 )
 
 missing=()
-for pkg in "${!DEPS[@]}"; do
-  command -v "${DEPS[$pkg]}" >/dev/null 2>&1 || missing+=("$pkg")
+for entry in "${DEPS[@]}"; do
+  pkg="${entry%%:*}"
+  cmd="${entry##*:}"
+  command -v "$cmd" >/dev/null 2>&1 || missing+=("$pkg")
 done
 
 if [ ${#missing[@]} -gt 0 ]; then

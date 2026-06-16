@@ -381,6 +381,31 @@
    :preview-key '(:debounce 0.4 any))
   (setq consult-narrow-key "<"))
 
+;; (use-package helm
+;;   :ensure t
+;;   :demand t
+;;   :bind (("M-x"     . helm-M-x)
+;;          ("C-x C-f" . helm-find-files)
+;;          ("C-x b"   . helm-mini)
+;;          ("C-x r b" . helm-filtered-bookmarks)
+;;          ("M-y"     . helm-show-kill-ring)
+;;          ("M-g i"   . helm-imenu)
+;;          ("M-g I"   . helm-imenu-in-all-buffers)
+;;          ("M-s g"   . helm-do-grep-ag)
+;;          ("M-s r"   . helm-do-grep-ag)
+;;          ("C-c h"   . helm-command-prefix)
+;;          :map helm-map
+;;          ("<tab>"   . helm-execute-persistent-action)
+;;          ("C-z"     . helm-select-action))
+;;   :custom
+;;   (helm-split-window-in-side-p t)
+;;   (helm-move-to-line-cycle-in-source t)
+;;   (helm-autoresize-max-height 40)
+;;   (helm-autoresize-min-height 20)
+;;   :config
+;;   (helm-mode 1)
+;;   (helm-autoresize-mode 1))
+
 ;; The built-in outline-minor-mode provides structured code folding in modes
 ;; such as Emacs Lisp and Python, allowing users to collapse and expand sections
 ;; based on headings or indentation levels. This feature enhances navigation and
