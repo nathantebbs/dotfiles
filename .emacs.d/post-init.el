@@ -12,7 +12,9 @@
   :custom
   ;; Set `compile-angel-verbose` to nil to suppress output from compile-angel.
   ;; Drawback: The minibuffer will not display compile-angel's actions.
-  (compile-angel-verbose t)
+  ;; NOTE: largely redundant with Elpaca's own byte/native compilation of
+  ;; builds/ -- consider removing this package entirely if startup stays slow.
+  (compile-angel-verbose nil)
 
   :config
   ;; The following directive prevents compile-angel from compiling your init
@@ -39,7 +41,7 @@
 
 ;; Set the default font to Zenbones Brainy with specific size and weight
 (set-face-attribute 'default nil
-                    :height 130 :weight 'normal :family "Zenbones Brainy")
+                    :height 170 :weight 'normal :family "Zenbones Brainy")
 
 ;; Theme
 (use-package gruber-darker-theme
@@ -63,8 +65,8 @@
 ;; Show column number in mode line
 (column-number-mode 1)
 
-;; Delete trailing whitespace on save
-(add-hook 'before-save-hook #'delete-trailing-whitespace)
+;; Trailing whitespace on save is handled by the `stripspace' package below,
+;; which also restores the cursor column and trims trailing blank lines.
 
 ;; Electric pair mode - auto-close brackets
 (electric-pair-mode 1)
@@ -82,10 +84,15 @@
 ;; Remember window configurations (C-c left/right to undo/redo)
 (winner-mode 1)
 
-;; Make sure GUI Emacs gets PATH (macOS)
+;; Make sure GUI Emacs gets PATH (macOS). Only needed for GUI frames; a
+;; terminal Emacs (-nw) already inherits the shell's environment. Spawning an
+;; interactive login shell (the default "-l -i") is a notable startup cost, so
+;; use a non-interactive login shell instead.
 (use-package exec-path-from-shell
   :ensure t
+  :if (memq window-system '(mac ns x))
   :config
+  (setq exec-path-from-shell-arguments '("-l"))
   (exec-path-from-shell-initialize))
 
 ;; Auto-revert in Emacs is a feature that automatically updates the
@@ -643,7 +650,8 @@
 
 ;; Haskell Support
 (use-package haskell-mode
-  :ensure t)
+  :ensure t
+  :mode ("\\.hs\\'" . haskell-mode))
 
 ;; Ormolu auto-formatting (optional)
 (use-package ormolu
@@ -653,12 +661,14 @@
 ;; Python venv support
 (use-package pyvenv
   :ensure t
-  :config
-  (pyvenv-mode 1))
+  :commands (pyvenv-mode pyvenv-activate pyvenv-workon)
+  :init
+  (add-hook 'python-base-mode-hook #'pyvenv-mode))
 
 ;; Zig Support
 (use-package zig-mode
-  :ensure t)
+  :ensure t
+  :mode ("\\.zig\\'" . zig-mode))
 
 ;; Odin Support
 (use-package odin-mode
@@ -670,17 +680,18 @@
               ("C-c C-c" . 'odin-build-project)
               ("C-c C-t" . 'odin-test-project)))
 
-;; K&R style auto-formatting for C/C++ (astyle)
+;; K&R auto-formatting for C/C++ (astyle), 4-space indentation.
 (defun astyle-buffer (&optional justify)
   (interactive)
   (let ((saved-line-number (line-number-at-pos)))
     (shell-command-on-region
      (point-min)
      (point-max)
-     "astyle --style=kr"
+     "astyle --style=kr --indent=spaces=4"
      nil
      t)
-    (goto-line saved-line-number)))
+    (goto-char (point-min))
+    (forward-line (1- saved-line-number))))
 
 (with-eval-after-load "cc-mode"
   (define-key c-mode-map (kbd "C-c C-f") 'astyle-buffer)
@@ -703,7 +714,8 @@
   (org-adapt-indentation nil)
   (org-edit-src-content-indentation 0)
   :config
-  (setq org-agenda-files '("~/dev/ua/Agenda"))
+  (when (file-directory-p "~/dev/ua/Agenda")
+    (setq org-agenda-files '("~/dev/ua/Agenda")))
   (setq org-todo-keywords '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
   (setq org-todo-keyword-faces
         '(("TODO" . (:foreground "red" :weight bold)) ("IN-PROGRESS" . (:foreground "yellow" :weight bold))
@@ -711,7 +723,10 @@
 
 ;; PDF Stuff
 (use-package pdf-tools
-  :ensure t)
+  :ensure t
+  :mode ("\\.pdf\\'" . pdf-view-mode)
+  :config
+  (pdf-tools-install :no-query))
 
 ;; The markdown-mode package provides a major mode for Emacs for syntax
 ;; highlighting, editing commands, and preview support for Markdown documents.
@@ -752,41 +767,10 @@
 ;;   (treesit-auto-add-to-auto-mode-alist 'all)
 ;;   (global-treesit-auto-mode))
 
-;; This automates the process of updating installed packages
-(use-package auto-package-update
-  :ensure t
-  :custom
-  ;; Set the number of days between automatic updates.
-  ;; Here, packages will only be updated if at least 7 days have passed
-  ;; since the last successful update.
-  (auto-package-update-interval 7)
-
-  ;; Suppress display of the *auto-package-update results* buffer after updates.
-  ;; This keeps the user interface clean and avoids unnecessary interruptions.
-  (auto-package-update-hide-results t)
-
-  ;; Automatically delete old package versions after updates to reduce disk
-  ;; usage and keep the package directory clean. This prevents the accumulation
-  ;; of outdated files in Emacs’s package directory, which consume
-  ;; unnecessary disk space over time.
-  (auto-package-update-delete-old-versions t)
-
-  ;; Uncomment the following line to enable a confirmation prompt
-  ;; before applying updates. This can be useful if you want manual control.
-  ;; (auto-package-update-prompt-before-update t)
-
-  :config
-  ;; Run package updates automatically at startup, but only if the configured
-  ;; interval has elapsed.
-  (auto-package-update-maybe)
-
-  ;; Schedule a background update attempt daily at 10:00 AM.
-  ;; This uses Emacs' internal timer system. If Emacs is running at that time,
-  ;; the update will be triggered. Otherwise, the update is skipped for that
-  ;; day. Note that this scheduled update is independent of
-  ;; `auto-package-update-maybe` and can be used as a complementary or
-  ;; alternative mechanism.
-  (auto-package-update-at-time "10:00"))
+;; Package updates are handled by Elpaca, not `auto-package-update' (a
+;; package.el tool that does nothing useful here and scans archives at startup).
+;; To update packages, run: M-x elpaca-fetch-all then M-x elpaca-merge-all
+;; (or M-x elpaca-update-all), then restart Emacs.
 
 (use-package buffer-terminator
   :ensure t
@@ -967,11 +951,13 @@
   :ensure t
   :init (doom-modeline-mode 1))
 
-;; Magit Dependency: transient
-(use-package transient :ensure t)
 ;; Magit is like lazyvim but within emacs so you can do most git/github
-;; actions without having to leave emacs.
-(use-package magit :ensure t)
+;; actions without having to leave emacs. Magit pulls in `transient' itself,
+;; so no separate declaration is needed. Deferred until first invoked.
+(use-package magit
+  :ensure t
+  :defer t
+  :bind ("C-x g" . magit-status))
 
 ;; The easysession Emacs package is a session manager for Emacs that can persist
 ;; and restore file editing buffers, indirect buffers/clones, Dired buffers,

@@ -1,17 +1,25 @@
 ;;; pre-early-init.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
 ;; DEBUG MODE
-(setq debug-on-error t)
+;; Uncomment when actively debugging; leaving this on pops a backtrace on every
+;; error during normal use.
+;; (setq debug-on-error t)
 
-;; Display startup time
-(defun display-startup-time ()
-  "Display the startup time and number of garbage collections."
-  (message "Emacs init loaded in %.2f seconds (Full emacs-startup: %.2fs) with %d garbage collections."
-           (float-time (time-subtract after-init-time before-init-time))
-           (time-to-seconds (time-since before-init-time))
-           gcs-done))
+;; Write startup time and package count as comments atop the *scratch* buffer.
+;; The scratch buffer defaults to `fundamental-mode' (see `initial-major-mode'
+;; in early-init.el), which has no font-locking; switch it to
+;; `lisp-interaction-mode' so the comment lines are highlighted.
+(defun my-display-startup-time ()
+  "Write startup time and package count as comments atop *scratch*."
+  (with-current-buffer (get-buffer-create "*scratch*")
+    (unless (derived-mode-p 'lisp-interaction-mode)
+      (lisp-interaction-mode))
+    (goto-char (point-min))
+    (insert (format ";; Startup Time: %.2fs\n;; Packages: %d\n\n"
+                    (float-time (time-subtract after-init-time before-init-time))
+                    (if (fboundp 'elpaca--queued) (length (elpaca--queued)) 0)))))
 
-(add-hook 'emacs-startup-hook #'display-startup-time 100)
+(add-hook 'emacs-startup-hook #'my-display-startup-time 100)
 
 ;; By default, minimal-emacs-package-initialize-and-refresh is set to t, which
 ;; makes minimal-emacs.d call the built-in package manager. Since Elpaca will
