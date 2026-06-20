@@ -25,3 +25,5 @@ case "$OSTYPE" in
   darwin*) EDITOR=/opt/homebrew/bin/nvim ;;
   linux*) EDITOR=/usr/bin/nvim ;;
 esac
+
+source ~/.local/bin
