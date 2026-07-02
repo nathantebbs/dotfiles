@@ -44,11 +44,10 @@
                     :height 170 :weight 'normal :family "Zenbones Brainy")
 
 ;; Theme
-(use-package gruber-darker-theme
+(use-package modus-themes
   :ensure t
   :config
-  (mapc #'disable-theme custom-enabled-themes)
-  (load-theme 'gruber-darker t))
+  (modus-load-theme 'modus-vivendi))
 
 ;; Basic UI Improvements
 
