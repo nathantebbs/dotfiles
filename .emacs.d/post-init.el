@@ -1010,3 +1010,13 @@
   ;; Handy keybinds
   (global-set-key (kbd "C-c e r") #'org-reveal-export-to-html)
   (global-set-key (kbd "C-c e R") #'org-reveal-export-as-html))
+
+;; Ghostel is a terminal emulator powered by libghostty-vt, the VT engine
+;; behind the Ghostty terminal. It supports synchronized output, true color,
+;; the Kitty keyboard and graphics protocols, hyperlinks, and more. The native
+;; module is a prebuilt binary that auto-downloads on first use, so no
+;; toolchain or build step is required.
+(use-package ghostel
+  :ensure t
+  :commands ghostel
+  :bind ("C-c t" . ghostel))
