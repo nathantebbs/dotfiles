@@ -46,8 +46,11 @@
 ;; Theme
 (use-package modus-themes
   :ensure t
+  :custom
+  ;; Pair used by `modus-themes-toggle' (M-x) to flip dark <-> light
+  (modus-themes-to-toggle '(modus-vivendi modus-operandi))
   :config
-  (modus-load-theme 'modus-vivendi))
+  (modus-themes-load-theme 'modus-vivendi))
 
 ;; Basic UI Improvements
 
@@ -1019,4 +1022,21 @@
 (use-package ghostel
   :ensure t
   :commands ghostel
-  :bind ("C-c t" . ghostel))
+  ;; `C-c t' opens/reuses the default *ghostel* terminal. `C-c T' always spawns
+  ;; a fresh, independent terminal. A numeric prefix also works, e.g. `M-2 C-c
+  ;; t' jumps to (or creates) *ghostel*<2>, giving tmux-window-style addressing.
+  :bind (("C-c t" . ghostel)
+         ("C-c T" . my/ghostel-new))
+  :config
+  (defun my/ghostel-new ()
+    "Spawn a new, independent ghostel terminal buffer."
+    (interactive)
+    (ghostel '(4))))
+
+;; Evil integration for ghostel. Syncs the terminal cursor with Emacs point
+;; across evil state transitions so normal-mode navigation (hjkl, etc.) works
+;; correctly inside a ghostel buffer.
+(use-package evil-ghostel
+  :ensure t
+  :after (ghostel evil)
+  :hook (ghostel-mode . evil-ghostel-mode))
