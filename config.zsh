@@ -1,6 +1,7 @@
 alias emacs="emacsclient -c &disown"
 alias vim="nvim"
 alias keys="alias | fzf"
+alias cc="claude"
 
 emacsctl() {
   case "$1" in
