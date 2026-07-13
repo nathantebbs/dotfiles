@@ -51,7 +51,7 @@ create_symlink "$DOTFILES_DIR/.emacs.d" "$HOME/.emacs.d" "emacs"
 create_symlink "$DOTFILES_DIR/.vimrc" "$HOME/.vimrc" "vim"
 create_symlink "$DOTFILES_DIR/tmux" "$HOME/.config/tmux" "tmux"
 create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim" "nvim"
-create_symlink "$DOTFILES_DIR/kitty" "$HOME/.config/kitty" "kitty"
+create_symlink "$DOTFILES_DIR/wezterm" "$HOME/.config/wezterm" "wezterm"
 
 # Desktop-only configs (Wayland/Hyprland stack — Linux bare metal only)
 case "$OSTYPE" in

@@ -24,7 +24,7 @@ Desktop Linux (bare metal only — skipped on WSL/macOS):
 | `hyprland` | Wayland compositor |
 | `waybar` | Status bar |
 | `rofi` | App launcher |
-| `kitty` | Terminal emulator |
+| `wezterm` | Terminal emulator |
 | `hypridle` + `hyprlock` | Idle / lock screen |
 
 ## Usage
@@ -69,7 +69,7 @@ Cross-platform:
 | `.vimrc` | `~/.vimrc` |
 | `tmux/` | `~/.config/tmux` |
 | `nvim/` | `~/.config/nvim` |
-| `kitty/` | `~/.config/kitty` |
+| `wezterm/` | `~/.config/wezterm` |
 
 Linux only (Wayland/Hyprland stack — skipped on macOS):
 
@@ -136,13 +136,14 @@ Font: Zenbones Brainy — see [font installation](#font).
 
 ## Terminal
 
-### Kitty
+### WezTerm
 
-`kitty/kitty.conf` configures the [Kitty](https://sw.kovidgoyal.net/kitty/) terminal emulator.
+`wezterm/wezterm.lua` configures the [WezTerm](https://wezterm.org/) terminal emulator.
 
 - Font: Zenbones Brainy, 16pt
 - Background opacity: 0.92
 - Cursor: block
+- Tab bar hidden when only one tab is open
 
 ## zsh
 
@@ -193,4 +194,4 @@ Recommended font: [JetbrainsMono Nerd Font](https://github.com/ryanoasis/nerd-fo
 
 ## Font
 
-Several configs (Kitty, Emacs) use **Zenbones Brainy**. Place the font files (`.ttf`/`.otf`) in `fonts/` at the repo root and run `util/scripts/install-fonts.sh` to install them automatically.
+Several configs (WezTerm, Emacs) use **Zenbones Brainy**. Place the font files (`.ttf`/`.otf`) in `fonts/` at the repo root and run `util/scripts/install-fonts.sh` to install them automatically.
