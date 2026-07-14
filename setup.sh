@@ -66,6 +66,23 @@ fi
 
 echo ""
 
+# ── 1b. Brewfile ─────────────────────────────────────────────────────────────
+# The dependency list above is the bare minimum needed to get a usable shell.
+# The Brewfile is the full package set; it is macOS-only.
+case "$OSTYPE" in
+  darwin*)
+    echo "--- Brewfile ---"
+    echo ""
+    if [ -f "$DOTFILES_DIR/Brewfile" ]; then
+      brew bundle install --file="$DOTFILES_DIR/Brewfile"
+      info "Brewfile applied"
+    else
+      warn "No Brewfile found, skipping"
+    fi
+    echo ""
+    ;;
+esac
+
 # ── 2. Fonts ─────────────────────────────────────────────────────────────────
 echo "--- Fonts ---"
 echo ""

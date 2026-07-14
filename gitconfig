@@ -1,0 +1,9 @@
+[user]
+	email = nathan.tebbs2004@gmail.com
+	name = Nathan Tebbs
+[credential "https://github.com"]
+	helper = 
+	helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !gh auth git-credential

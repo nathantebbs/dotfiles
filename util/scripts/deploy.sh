@@ -49,6 +49,8 @@ create_symlink "$DOTFILES_DIR/.vimrc" "$HOME/.vimrc" "vim"
 create_symlink "$DOTFILES_DIR/tmux" "$HOME/.config/tmux" "tmux"
 create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim" "nvim"
 create_symlink "$DOTFILES_DIR/wezterm" "$HOME/.config/wezterm" "wezterm"
+create_symlink "$DOTFILES_DIR/zshrc" "$HOME/.zshrc" "zsh"
+create_symlink "$DOTFILES_DIR/gitconfig" "$HOME/.gitconfig" "git"
 
 echo ""
 echo -e "${GREEN}[OK]${NC} Symlink deployment complete!"
