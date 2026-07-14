@@ -716,8 +716,8 @@
   (org-adapt-indentation nil)
   (org-edit-src-content-indentation 0)
   :config
-  (when (file-directory-p "~/dev/ua/Agenda")
-    (setq org-agenda-files '("~/dev/ua/Agenda")))
+  (setq org-agenda-files
+        (seq-filter #'file-directory-p '("~/source/org")))
   (setq org-todo-keywords '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
   (setq org-todo-keyword-faces
         '(("TODO" . (:foreground "red" :weight bold)) ("IN-PROGRESS" . (:foreground "yellow" :weight bold))
