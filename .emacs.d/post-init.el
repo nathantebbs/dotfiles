@@ -625,30 +625,31 @@
 
 
 ;; ---------------------------------------------------------------------------
-;; LSP (disabled)
+;; LSP via Eglot (built-in)
 ;; ---------------------------------------------------------------------------
-;; Set up the Language Server Protocol (LSP) servers using Eglot.
-;; (use-package eglot
-;;   :ensure nil
-;;   :commands (eglot-ensure
-;;              eglot-rename
-;;              eglot-format-buffer)
-;;   :hook
-;;   (java-mode . eglot-ensure)
-;;   (java-ts-mode . eglot-ensure)
-;;   (ruby-mode . eglot-ensure)
-;;   (ruby-ts-mode . eglot-ensure)
-;;   (haskell-mode . eglot-ensure)
-;;   (haskell-literate-mode . eglot-ensure)
-;;   :config
-;;   (dolist (entry '((java-mode    . ("jdtls"))
-;;                    (java-ts-mode . ("jdtls"))
-;;                    (ruby-mode    . ("solargraph" "stdio"))
-;;                    (ruby-ts-mode . ("solargraph" "stdio"))
-;;                    (haskell-mode . ("haskell-language-server-wrapper" "--lsp"))
-;;                    (haskell-literate-mode . ("haskell-language-server-wrapper" "--lsp"))))
-;;     (add-to-list 'eglot-server-programs entry))
-;;   (setq eglot-autoshutdown t))
+;; C/C++ language support through clangd. Completion flows into Corfu;
+;; diagnostics into Flymake (M-g f). clangd reads compile_commands.json at the
+;; project root for include paths; generate it with
+;; `cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON' or `bear -- make'.
+(use-package eglot
+  :ensure nil
+  :commands (eglot eglot-ensure eglot-rename eglot-format-buffer)
+  :hook ((c-mode   . eglot-ensure)
+         (c++-mode . eglot-ensure))
+  :config
+  (setq eglot-autoshutdown t)
+  (add-to-list 'eglot-server-programs
+               '((c-mode c++-mode)
+                 . ("clangd" "--header-insertion=never" "--clang-tidy"))))
+
+;; K&R braces with 4-space indentation and no tabs. Applied live by cc-mode as
+;; you type, so newlines land at the right column without waiting for a format.
+;; Matches the ~/.clang-format apheleia runs on save.
+(defun my/c-indent-style ()
+  (c-set-style "k&r")
+  (setq c-basic-offset 4
+        indent-tabs-mode nil))
+(add-hook 'c-mode-common-hook #'my/c-indent-style)
 
 ;; Haskell Support
 (use-package haskell-mode
@@ -681,23 +682,6 @@
               ("C-c C-r" . 'odin-run-project)
               ("C-c C-c" . 'odin-build-project)
               ("C-c C-t" . 'odin-test-project)))
-
-;; K&R auto-formatting for C/C++ (astyle), 4-space indentation.
-(defun astyle-buffer (&optional justify)
-  (interactive)
-  (let ((saved-line-number (line-number-at-pos)))
-    (shell-command-on-region
-     (point-min)
-     (point-max)
-     "astyle --style=kr --indent=spaces=4"
-     nil
-     t)
-    (goto-char (point-min))
-    (forward-line (1- saved-line-number))))
-
-(with-eval-after-load "cc-mode"
-  (define-key c-mode-map (kbd "C-c C-f") 'astyle-buffer)
-  (define-key c++-mode-map (kbd "C-c C-f") 'astyle-buffer))
 
 ;; Org mode is a major mode designed for organizing notes, planning, task
 ;; management, and authoring documents using plain text with a simple and
