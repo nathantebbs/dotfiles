@@ -61,6 +61,7 @@ Located at `util/scripts/deploy.sh`, this script creates symlinks for all config
 | `tmux/` | `~/.config/tmux` |
 | `nvim/` | `~/.config/nvim` |
 | `wezterm/` | `~/.config/wezterm` |
+| `clang-format` | `~/.clang-format` |
 
 ### install-fonts.sh
 

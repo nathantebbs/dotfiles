@@ -51,6 +51,7 @@ create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim" "nvim"
 create_symlink "$DOTFILES_DIR/wezterm" "$HOME/.config/wezterm" "wezterm"
 create_symlink "$DOTFILES_DIR/zshrc" "$HOME/.zshrc" "zsh"
 create_symlink "$DOTFILES_DIR/gitconfig" "$HOME/.gitconfig" "git"
+create_symlink "$DOTFILES_DIR/clang-format" "$HOME/.clang-format" "clang-format"
 
 echo ""
 echo -e "${GREEN}[OK]${NC} Symlink deployment complete!"
