@@ -624,24 +624,6 @@
   (evil-define-key 'normal 'global (kbd "gc") 'my-evil-comment-or-uncomment))
 
 
-;; ---------------------------------------------------------------------------
-;; LSP via Eglot (built-in)
-;; ---------------------------------------------------------------------------
-;; C/C++ language support through clangd. Completion flows into Corfu;
-;; diagnostics into Flymake (M-g f). clangd reads compile_commands.json at the
-;; project root for include paths; generate it with
-;; `cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON' or `bear -- make'.
-(use-package eglot
-  :ensure nil
-  :commands (eglot eglot-ensure eglot-rename eglot-format-buffer)
-  :hook ((c-mode   . eglot-ensure)
-         (c++-mode . eglot-ensure))
-  :config
-  (setq eglot-autoshutdown t)
-  (add-to-list 'eglot-server-programs
-               '((c-mode c++-mode)
-                 . ("clangd" "--header-insertion=never" "--clang-tidy"))))
-
 ;; K&R braces with 4-space indentation and no tabs. Applied live by cc-mode as
 ;; you type, so newlines land at the right column without waiting for a format.
 ;; Matches the ~/.clang-format apheleia runs on save.
