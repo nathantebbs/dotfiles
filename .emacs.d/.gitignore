@@ -2,6 +2,10 @@
 *.elc
 *.eln
 
+# Emacs package state, written as .eld and .json; none of it is config
+*.eld
+*.json
+
 # Other
 elpaca/
 custom.el
