@@ -52,6 +52,11 @@ create_symlink "$DOTFILES_DIR/wezterm" "$HOME/.config/wezterm" "wezterm"
 create_symlink "$DOTFILES_DIR/zshrc" "$HOME/.zshrc" "zsh"
 create_symlink "$DOTFILES_DIR/gitconfig" "$HOME/.gitconfig" "git"
 create_symlink "$DOTFILES_DIR/clang-format" "$HOME/.clang-format" "clang-format"
+create_symlink "$DOTFILES_DIR/aerospace.toml" "$HOME/.aerospace.toml" "aerospace"
+
+# Karabiner owns its config dir; link only the file, not the whole directory.
+mkdir -p "$HOME/.config/karabiner"
+create_symlink "$DOTFILES_DIR/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json" "karabiner"
 
 echo ""
 echo -e "${GREEN}[OK]${NC} Symlink deployment complete!"

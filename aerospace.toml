@@ -1,0 +1,183 @@
+# AeroSpace config. i3-like setup for the HHKB Pro 2.
+# Mod is the RIGHT diamond key, remapped by Karabiner to Cmd+Ctrl+Opt.
+# Add physical Shift for the i3 "move" variants. Tapping the right diamond
+# alone still sends a normal Cmd, and the LEFT diamond is untouched.
+# Reload after edits with: aerospace reload-config
+
+start-at-login = true
+
+# Normalize the tree so focus/move stay predictable.
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+# i3 tiles by splitting. Accordion is the fallback layout.
+accordion-padding = 30
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+
+# Send apps to a home workspace on launch (i3 assign). Delete any you don't use.
+# Find an app's id with: aerospace list-apps
+
+# 1 Browsers
+[[on-window-detected]]
+if.app-id = 'app.zen-browser.zen'
+run = 'move-node-to-workspace 1'
+[[on-window-detected]]
+if.app-id = 'com.brave.Browser'
+run = 'move-node-to-workspace 1'
+[[on-window-detected]]
+if.app-id = 'org.mozilla.firefox'
+run = 'move-node-to-workspace 1'
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+run = 'move-node-to-workspace 1'
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari'
+run = 'move-node-to-workspace 1'
+
+# 2 Terminals
+[[on-window-detected]]
+if.app-id = 'com.github.wez.wezterm'
+run = 'move-node-to-workspace 2'
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+run = 'move-node-to-workspace 2'
+[[on-window-detected]]
+if.app-id = 'org.alacritty'
+run = 'move-node-to-workspace 2'
+
+# 3 Code
+[[on-window-detected]]
+if.app-id = 'org.gnu.Emacs'
+run = 'move-node-to-workspace 3'
+[[on-window-detected]]
+if.app-id = 'com.apple.dt.Xcode'
+run = 'move-node-to-workspace 3'
+
+# 4 Comms
+[[on-window-detected]]
+if.app-id = 'org.mozilla.thunderbird'
+run = 'move-node-to-workspace 4'
+
+# 5 AI
+[[on-window-detected]]
+if.app-id = 'com.anthropic.claudefordesktop'
+run = 'move-node-to-workspace 5'
+[[on-window-detected]]
+if.app-id = 'com.openai.codex'
+run = 'move-node-to-workspace 5'
+
+# 6 Docs / Notes
+[[on-window-detected]]
+if.app-id = 'com.zettlr.app'
+run = 'move-node-to-workspace 6'
+[[on-window-detected]]
+if.app-id = 'com.uranusjr.macdown'
+run = 'move-node-to-workspace 6'
+[[on-window-detected]]
+if.app-id = 'org.libreoffice.script'
+run = 'move-node-to-workspace 6'
+[[on-window-detected]]
+if.app-id = 'com.pwmt.zathura'
+run = 'move-node-to-workspace 6'
+
+# 7 Media
+[[on-window-detected]]
+if.app-id = 'org.videolan.vlc'
+run = 'move-node-to-workspace 7'
+[[on-window-detected]]
+if.app-id = 'org.audacityteam.audacity'
+run = 'move-node-to-workspace 7'
+[[on-window-detected]]
+if.app-id = 'com.apple.logic10'
+run = 'move-node-to-workspace 7'
+[[on-window-detected]]
+if.app-id = 'org.gimp.gimp'
+run = 'move-node-to-workspace 7'
+
+# 8 Virtualization
+[[on-window-detected]]
+if.app-id = 'com.utmapp.UTM'
+run = 'move-node-to-workspace 8'
+[[on-window-detected]]
+if.app-id = 'com.vmware.fusion'
+run = 'move-node-to-workspace 8'
+
+# 9 Games
+[[on-window-detected]]
+if.app-id = 'com.valvesoftware.steam'
+run = 'move-node-to-workspace 9'
+[[on-window-detected]]
+if.app-id = 'com.mojang.minecraftlauncher'
+run = 'move-node-to-workspace 9'
+
+# Keep Finder windows floating instead of tiled.
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+run = 'layout floating'
+
+# i3-style gaps.
+[gaps]
+inner.horizontal = 8
+inner.vertical = 8
+outer.left = 8
+outer.bottom = 8
+outer.top = 8
+outer.right = 8
+
+# "mod" below means: hold the right diamond. "mod+shift" means diamond + Shift.
+[mode.main.binding]
+
+# --- Switch workspace (i3: mod+number). ---
+cmd-ctrl-alt-1 = 'workspace 1'
+cmd-ctrl-alt-2 = 'workspace 2'
+cmd-ctrl-alt-3 = 'workspace 3'
+cmd-ctrl-alt-4 = 'workspace 4'
+cmd-ctrl-alt-5 = 'workspace 5'
+cmd-ctrl-alt-6 = 'workspace 6'
+cmd-ctrl-alt-7 = 'workspace 7'
+cmd-ctrl-alt-8 = 'workspace 8'
+cmd-ctrl-alt-9 = 'workspace 9'
+
+# --- Move focused window to a workspace (i3: mod+shift+number). ---
+cmd-ctrl-alt-shift-1 = 'move-node-to-workspace 1'
+cmd-ctrl-alt-shift-2 = 'move-node-to-workspace 2'
+cmd-ctrl-alt-shift-3 = 'move-node-to-workspace 3'
+cmd-ctrl-alt-shift-4 = 'move-node-to-workspace 4'
+cmd-ctrl-alt-shift-5 = 'move-node-to-workspace 5'
+cmd-ctrl-alt-shift-6 = 'move-node-to-workspace 6'
+cmd-ctrl-alt-shift-7 = 'move-node-to-workspace 7'
+cmd-ctrl-alt-shift-8 = 'move-node-to-workspace 8'
+cmd-ctrl-alt-shift-9 = 'move-node-to-workspace 9'
+
+# --- Focus a window (i3: mod+hjkl). ---
+cmd-ctrl-alt-h = 'focus left'
+cmd-ctrl-alt-j = 'focus down'
+cmd-ctrl-alt-k = 'focus up'
+cmd-ctrl-alt-l = 'focus right'
+
+# --- Move a window in the tree (i3: mod+shift+hjkl). ---
+cmd-ctrl-alt-shift-h = 'move left'
+cmd-ctrl-alt-shift-j = 'move down'
+cmd-ctrl-alt-shift-k = 'move up'
+cmd-ctrl-alt-shift-l = 'move right'
+
+# --- Layouts (i3: mod+e split, mod+s stacking, mod+f fullscreen). ---
+cmd-ctrl-alt-e = 'layout tiles horizontal vertical'
+cmd-ctrl-alt-s = 'layout accordion'
+cmd-ctrl-alt-f = 'fullscreen'
+
+# --- Resize the focused window. ---
+cmd-ctrl-alt-minus = 'resize smart -50'
+cmd-ctrl-alt-equal = 'resize smart +50'
+
+# --- Back-and-forth between the two most recent workspaces (i3 mod+tab). ---
+cmd-ctrl-alt-tab = 'workspace-back-and-forth'
+
+# --- Service submode for housekeeping. ---
+cmd-ctrl-alt-semicolon = 'mode service'
+
+[mode.service.binding]
+esc = ['reload-config', 'mode main']
+r = ['flatten-workspace-tree', 'mode main']       # reset the split layout
+backspace = ['close-all-windows-but-current', 'mode main']

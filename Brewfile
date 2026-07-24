@@ -146,6 +146,8 @@ brew "wimlib"
 brew "xinput"
 # Programming language designed for robustness, optimality, and clarity
 brew "zig"
+# i3-like tiling window manager for macOS
+cask "aerospace"
 # Compact TeX distribution as alternative to the full TeX Live / MacTeX
 cask "basictex"
 # Desktop password and login vault
@@ -156,6 +158,8 @@ cask "claude-code"
 cask "docker-desktop"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
+# Keyboard customizer; provides the Hyper key for AeroSpace
+cask "karabiner-elements"
 # Link-Layer MAC spoofing GUI for macOS
 cask "linkliar"
 # Open-source firewall to block unknown outgoing connections

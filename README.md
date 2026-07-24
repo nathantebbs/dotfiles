@@ -62,6 +62,8 @@ Located at `util/scripts/deploy.sh`, this script creates symlinks for all config
 | `nvim/` | `~/.config/nvim` |
 | `wezterm/` | `~/.config/wezterm` |
 | `clang-format` | `~/.clang-format` |
+| `aerospace.toml` | `~/.aerospace.toml` |
+| `karabiner/karabiner.json` | `~/.config/karabiner/karabiner.json` |
 
 ### install-fonts.sh
 
@@ -151,6 +153,37 @@ Theme: modus-themes. Font: Zenbones Brainy at 17pt — see [Fonts](#fonts).
 - Cursor: steady block
 - Tab bar hidden when only one tab is open
 - No confirmation prompt on window close
+
+## Window manager
+
+macOS-only. [AeroSpace](https://github.com/nikitabobko/AeroSpace) is an i3-like tiling window manager, configured in `aerospace.toml` (linked to `~/.aerospace.toml`). [Karabiner-Elements](https://karabiner-elements.pqrs.org/) supplies the modifier key it binds to. Both install from the Brewfile.
+
+### Mod key
+
+The setup is tuned for a HHKB Pro 2, which has no dedicated arrow or super key. Karabiner remaps the **right diamond (Cmd)** key: held, it emits `Cmd+Ctrl+Opt`, a combination no app claims, so it acts as a free i3-style super. Tapped alone it still sends a normal Cmd, and the left diamond is untouched, so native macOS shortcuts keep working. "mod" below means holding the right diamond.
+
+### Key bindings
+
+| Binding | Action |
+|---------|--------|
+| `mod + 1..9` | Switch to workspace 1-9 |
+| `mod + Shift + 1..9` | Move focused window to workspace |
+| `mod + h/j/k/l` | Focus left/down/up/right |
+| `mod + Shift + h/j/k/l` | Move window in the tree |
+| `mod + e` | Toggle split orientation |
+| `mod + s` | Accordion layout |
+| `mod + f` | Fullscreen |
+| `mod + -` / `mod + =` | Shrink / grow window |
+| `mod + Tab` | Last workspace |
+| `mod + ;` | Service mode (`esc` reload, `r` reset layout, `backspace` close others) |
+
+### Workspace assignments
+
+Apps open on a fixed workspace via `on-window-detected` rules: browsers on 1, terminals on 2, editors on 3, comms on 4, AI on 5, docs on 6, media on 7, VMs on 8, games on 9. Finder floats instead of tiling. Edit the rules in `aerospace.toml` to taste.
+
+### Karabiner
+
+`karabiner/karabiner.json` holds the Hyper remap plus HHKB-specific fixes. Karabiner owns this file and rewrites it when settings change in its GUI, so expect it to reformat on edit. Do not run a second window manager such as Rectangle or yabai alongside AeroSpace; they fight over window placement.
 
 ## zsh
 
