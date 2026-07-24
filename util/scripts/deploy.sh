@@ -46,6 +46,9 @@ echo ""
 
 create_symlink "$DOTFILES_DIR/.emacs.d" "$HOME/.emacs.d" "emacs"
 create_symlink "$DOTFILES_DIR/.vimrc" "$HOME/.vimrc" "vim"
+
+# A fresh macOS account has no ~/.config; create it before linking into it.
+mkdir -p "$HOME/.config"
 create_symlink "$DOTFILES_DIR/tmux" "$HOME/.config/tmux" "tmux"
 create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim" "nvim"
 create_symlink "$DOTFILES_DIR/wezterm" "$HOME/.config/wezterm" "wezterm"
