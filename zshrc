@@ -104,7 +104,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 
-source "/Users/nathantebbs/source/repos/dotfiles/config.zsh"
-export PATH="/Users/nathantebbs/.local/bin:$PATH"
-export PATH="/Users/nathantebbs/.ghcup/bin:$PATH"
-export PATH="/Applications/Emacs.app/Contents/MacOS/bin:$PATH"
+# Resolve this file's real directory so config.zsh loads no matter where the
+# repo is cloned. ~/.zshrc is a symlink into the repo; :A follows it.
+DOTFILES_DIR="${${(%):-%x}:A:h}"
+source "$DOTFILES_DIR/config.zsh"
