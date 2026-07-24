@@ -61,6 +61,8 @@ Located at `util/scripts/deploy.sh`, this script creates symlinks for all config
 | `tmux/` | `~/.config/tmux` |
 | `nvim/` | `~/.config/nvim` |
 | `wezterm/` | `~/.config/wezterm` |
+| `zshrc` | `~/.zshrc` |
+| `gitconfig` | `~/.gitconfig` |
 | `clang-format` | `~/.clang-format` |
 | `aerospace.toml` | `~/.aerospace.toml` |
 | `karabiner/karabiner.json` | `~/.config/karabiner/karabiner.json` |
@@ -206,8 +208,7 @@ This installs oh-my-zsh and appends a `source` line for `config.zsh` to `~/.zshr
   emacsctl status   # check if running
   ```
 - OS-specific `$EDITOR` (nvim path varies between macOS and Linux)
-- PATH additions, each guarded so a machine missing the toolchain still gets a working shell: `~/.local/bin`, `~/.cargo/bin`, `~/go/bin`, and Bun
-- asdf, sourced from Homebrew on macOS or `~/.asdf` on Linux
+- PATH additions, each guarded so a machine missing the toolchain still gets a working shell: `~/.local/bin`, `~/.cargo/bin`, `~/go/bin`, `~/.ghcup/bin`, Emacs.app, and Bun
 
 ## tmux
 

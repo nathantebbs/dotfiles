@@ -40,10 +40,3 @@ if [ -d "$HOME/.bun" ]; then
   export PATH="$BUN_INSTALL/bin:$PATH"
   [ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
 fi
-
-# asdf ships as a brew formula on macOS and a git checkout on Linux.
-if command -v brew >/dev/null 2>&1 && [ -f "$(brew --prefix asdf 2>/dev/null)/libexec/asdf.sh" ]; then
-  source "$(brew --prefix asdf)/libexec/asdf.sh"
-elif [ -f "$HOME/.asdf/asdf.sh" ]; then
-  source "$HOME/.asdf/asdf.sh"
-fi
