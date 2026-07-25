@@ -13,9 +13,11 @@
 
 ;;; Shell environment
 
-;; A GUI Emacs inherits none of the shell's PATH. A login shell is enough; the
-;; default "-l -i" pays for an interactive rc file at every startup.
-(when (memq window-system '(mac ns x))
+;; A GUI Emacs inherits none of the shell's PATH, and a launchd daemon gets an
+;; even barer environment while reporting `window-system' as nil.
+(when (or (daemonp) (memq window-system '(mac ns x)))
+  ;; A login shell is enough; the default "-l -i" pays for an interactive rc
+  ;; file at every startup.
   (setopt exec-path-from-shell-arguments '("-l"))
   (exec-path-from-shell-initialize))
 
@@ -70,6 +72,10 @@
 (add-hook 'after-init-hook #'save-place-mode)
 
 ;;; Dired
+
+;; macOS ships BSD ls, which has no --dired; without this Dired complains on
+;; every listing. GNU ls via coreutils would be the alternative.
+(setopt dired-use-ls-dired nil)
 
 (with-eval-after-load 'dired
   (require 'dired-x)

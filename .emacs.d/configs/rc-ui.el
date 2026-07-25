@@ -12,17 +12,23 @@
 
 ;;; Code:
 
-(set-face-attribute 'default nil
-                    :height 170 :weight 'normal :family "Zenbones Brainy")
-
-;;; Theme
-
 (require 'modus-themes)
 
 ;; The pair `modus-themes-toggle' flips between.
 (setopt modus-themes-to-toggle '(modus-vivendi modus-operandi))
 
-(modus-themes-load-theme 'modus-vivendi)
+(defun rc-ui-apply-appearance (&rest _)
+  "Apply the default font and theme.  Idempotent, so safe on every frame."
+  (set-face-attribute 'default nil
+                      :height 170 :weight 'normal :family "Zenbones Brainy")
+  (unless (memq 'modus-vivendi custom-enabled-themes)
+    (modus-themes-load-theme 'modus-vivendi)))
+
+;; A daemon starts with no frame, so a font set now would have nothing to
+;; attach to and client frames would come up with the wrong one.
+(if (daemonp)
+    (add-hook 'server-after-make-frame-hook #'rc-ui-apply-appearance)
+  (rc-ui-apply-appearance))
 
 ;;; Mode line
 

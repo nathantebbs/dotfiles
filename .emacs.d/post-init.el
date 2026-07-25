@@ -668,29 +668,18 @@
 ;; persist and restore frames.
 (use-package easysession
   :ensure t
-  :commands (easysession-switch-to
-             easysession-save-as
-             easysession-save-mode
-             easysession-load-including-geometry)
-
   :custom
   (easysession-mode-line-misc-info t)  ; Display the session in the modeline
   (easysession-save-interval (* 10 60))  ; Save every 10 minutes
 
   :init
-  ;; Key mappings:
-  ;; C-c l for switching sessions
-  ;; and C-c s for saving the current session
   (global-set-key (kbd "C-c l") 'easysession-switch-to)
   (global-set-key (kbd "C-c s") 'easysession-save-as)
   (global-set-key (kbd "C-c r") 'easysession-reset)
 
-  ;; The depth 102 and 103 have been added to to `add-hook' to ensure that the
-  ;; session is loaded after all other packages. (Using 103/102 is particularly
-  ;; useful for those using minimal-emacs.d, where some optimizations restore
-  ;; `file-name-handler-alist` at depth 101 during `emacs-startup-hook`.)
-  (add-hook 'emacs-startup-hook #'easysession-load-including-geometry 102)
-  (add-hook 'emacs-startup-hook #'easysession-save-mode 103))
+  ;; Picks `server-after-make-frame-hook' under a daemon and
+  ;; `emacs-startup-hook' otherwise, at the depth 102 this used to hardcode.
+  (easysession-setup))
 
 ;; Ghostel is a terminal emulator powered by libghostty-vt, the VT engine
 ;; behind the Ghostty terminal. It supports synchronized output, true color,
