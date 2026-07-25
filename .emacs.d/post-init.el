@@ -17,6 +17,13 @@
 (package-vc-install-selected-packages)
 (package-install-selected-packages :no-confirm)
 
+;; early-init.el points `custom-file' here but nothing loads it, so anything
+;; set through M-x customize was written and then ignored on the next start.
+;; Loaded before the modules so hand-written config still wins on a conflict.
+;; The file is gitignored: these are per-machine settings.
+(when (file-exists-p custom-file)
+  (load custom-file nil :nomessage))
+
 (require 'rc-defaults)
 (require 'rc-ui)
 (require 'rc-completion)
