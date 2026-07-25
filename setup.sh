@@ -25,7 +25,6 @@ echo ""
 # package name : command to check
 DEPS=(
   "neovim:nvim"
-  "emacs:emacs"
   "ripgrep:rg"
   "fzf:fzf"
   "make:make"
@@ -63,6 +62,26 @@ if [ ${#missing[@]} -gt 0 ]; then
 else
   info "All dependencies already installed"
 fi
+
+echo ""
+
+# Emacs is built from source via github.com/jimeh/build-emacs-for-macos, not
+# installed by brew. Installing a Homebrew Emacs alongside it leaves two
+# binaries and two launchd agents fighting over the same daemon socket.
+case "$OSTYPE" in
+  darwin*)
+    if [ -d "/Applications/Emacs.app" ]; then
+      info "Emacs.app found"
+    else
+      warn "Emacs.app not found. Build it with:"
+      warn "  https://github.com/jimeh/build-emacs-for-macos"
+      warn "Do not 'brew install emacs'; it conflicts with the daemon agent."
+    fi
+    ;;
+  linux*)
+    command -v emacs >/dev/null 2>&1 || warn "Emacs not found; install it with your package manager"
+    ;;
+esac
 
 echo ""
 

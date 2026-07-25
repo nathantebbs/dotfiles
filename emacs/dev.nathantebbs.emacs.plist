@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>dev.nathantebbs.emacs</string>
+
+  <!-- --fg-daemon, not --daemon: launchd needs the process to stay in the
+       foreground so it can supervise it. -->
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Applications/Emacs.app/Contents/MacOS/Emacs</string>
+    <string>--fg-daemon</string>
+  </array>
+
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+
+  <!-- launchd hands agents a bare PATH. exec-path-from-shell repairs the rest
+       from a login shell; this is enough for Emacs to start. -->
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/Users/nathantebbs/Library/Logs/emacs-daemon.out</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/nathantebbs/Library/Logs/emacs-daemon.err</string>
+
+  <key>ProcessType</key>
+  <string>Interactive</string>
+</dict>
+</plist>

@@ -66,6 +66,7 @@ Located at `util/scripts/deploy.sh`, this script creates symlinks for all config
 | `clang-format` | `~/.clang-format` |
 | `aerospace.toml` | `~/.aerospace.toml` |
 | `karabiner/karabiner.json` | `~/.config/karabiner/karabiner.json` |
+| `emacs/dev.nathantebbs.emacs.plist` | `~/Library/LaunchAgents/` (macOS only) |
 
 ### install-fonts.sh
 
@@ -133,16 +134,32 @@ Theme: `modus` (dark background), lightline with the `one` colorscheme.
 
 ### Emacs
 
-`.emacs.d/` is built on [minimal-emacs.d](https://github.com/jamescherti/minimal-emacs.d) and uses [Elpaca](https://github.com/progfolio/elpaca) as the package manager.
+`.emacs.d/` is built on [minimal-emacs.d](https://github.com/jamescherti/minimal-emacs.d) and uses the built-in `package.el`. No third-party package manager, and no `use-package`: the configuration is plain Elisp split into `configs/rc-*.el` modules that `post-init.el` requires. See [`.emacs.d/README.md`](.emacs.d/README.md).
+
+Emacs itself is built with [build-emacs-for-macos](https://github.com/jimeh/build-emacs-for-macos), not Homebrew.
 
 Notable packages:
 
 - **Editing:** Evil, evil-collection, evil-surround, evil-mc, undo-fu (+ session), paredit, move-text, aggressive-indent, stripspace
 - **Completion / navigation:** Vertico, Consult, Marginalia, Embark, Orderless, Corfu + Cape
-- **Languages:** Haskell (+ ormolu), Zig, Odin, Python (pyvenv), Markdown, Org (+ ox-reveal for Reveal.js export)
+- **Languages:** Haskell (+ ormolu), Zig, Odin, Python (pyvenv), Markdown, Org
 - **Tooling:** Magit, Apheleia (formatting), YASnippet, easysession, pdf-tools, helpful, doom-modeline, ghostel
 
-Theme: modus-themes. Font: Zenbones Brainy at 17pt — see [Fonts](#fonts).
+No LSP is configured. Theme: modus-themes. Font: Zenbones Brainy at 17pt — see [Fonts](#fonts).
+
+### Emacs daemon
+
+Emacs runs as a launchd agent started at login, so `emacsclient` always has a server to attach to. The `emacs` alias is `emacsclient -c`.
+
+```sh
+emacsctl status    # is the daemon answering?
+emacsctl restart   # after rebuilding Emacs, or editing the plist
+emacsctl stop      # unload the job (KeepAlive will not resurrect it)
+emacsctl start     # load it again
+emacsctl logs      # tail the daemon's stderr
+```
+
+The agent is `emacs/dev.nathantebbs.emacs.plist`, linked into `~/Library/LaunchAgents` by `deploy.sh`. launchd reads it when the job loads, so changes need an `emacsctl restart`. Logs go to `~/Library/Logs/emacs-daemon.{out,err}`.
 
 ## Terminal
 

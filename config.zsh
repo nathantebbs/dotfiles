@@ -3,21 +3,30 @@ alias vim="nvim"
 alias keys="alias | fzf"
 alias cc="claude"
 
+# The daemon is a launchd job, so it has to be driven through launchctl.
+# Killing it directly would just make KeepAlive start it again.
 emacsctl() {
+  local label="dev.nathantebbs.emacs"
+  local target="gui/$(id -u)/$label"
   case "$1" in
     start)
-      command emacs --daemon ;;
+      # stop boots the job out entirely, so start has to load it again;
+      # kickstart alone only works on a job launchd already knows about.
+      launchctl bootstrap "gui/$(id -u)" \
+        "$HOME/Library/LaunchAgents/$label.plist" 2>/dev/null \
+        || launchctl kickstart "$target" ;;
     stop)
-      command emacsclient -e "(kill-emacs)" >/dev/null 2>&1 ;;
+      launchctl bootout "$target" ;;
     restart)
-      command emacsclient -e "(kill-emacs)" >/dev/null 2>&1 || true
-      command emacs --daemon ;;
+      launchctl kickstart -k "$target" ;;
     status)
       command emacsclient -e "(emacs-version)" >/dev/null 2>&1 \
         && echo "Emacs daemon: running" \
         || echo "Emacs daemon: stopped" ;;
+    logs)
+      tail -n 40 "$HOME/Library/Logs/emacs-daemon.err" ;;
     *)
-      echo "Usage: emacsctl {start|stop|restart|status}" ;;
+      echo "Usage: emacsctl {start|stop|restart|status|logs}" ;;
   esac
 }
 
