@@ -1,44 +1,5 @@
 ;;; post-init.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
-;; Native compilation enhances Emacs performance by converting Elisp code into
-;; native machine code, resulting in faster execution and improved
-;; responsiveness.
-;;
-;; Ensure adding the following compile-angel code at the very beginning
-;; of your `~/.emacs.d/post-init.el` file, before all other packages.
-(use-package compile-angel
-  :demand t
-  :ensure t
-  :custom
-  ;; Set `compile-angel-verbose` to nil to suppress output from compile-angel.
-  ;; Drawback: The minibuffer will not display compile-angel's actions.
-  ;; NOTE: largely redundant with Elpaca's own byte/native compilation of
-  ;; builds/ -- consider removing this package entirely if startup stays slow.
-  (compile-angel-verbose nil)
-
-  :config
-  ;; The following directive prevents compile-angel from compiling your init
-  ;; files. If you choose to remove this push to `compile-angel-excluded-files'
-  ;; and compile your pre/post-init files, ensure you understand the
-  ;; implications and thoroughly test your code. For example, if you're using
-  ;; the `use-package' macro, you'll need to explicitly add:
-  ;; (eval-when-compile (require 'use-package))
-  ;; at the top of your init file.
-  (push "/init.el" compile-angel-excluded-files)
-  (push "/early-init.el" compile-angel-excluded-files)
-  (push "/pre-init.el" compile-angel-excluded-files)
-  (push "/post-init.el" compile-angel-excluded-files)
-  (push "/pre-early-init.el" compile-angel-excluded-files)
-  (push "/post-early-init.el" compile-angel-excluded-files)
-
-  ;; A local mode that compiles .el files whenever the user saves them.
-  (add-hook 'emacs-lisp-mode-hook #'compile-angel-on-save-local-mode)
-
-  ;; A global mode that compiles .el files prior to loading them via `load' or
-  ;; `require'. Additionally, it compiles all packages that were loaded before
-  ;; the mode `compile-angel-on-load-mode' was activated.
-  (compile-angel-on-load-mode 1))
-
 ;; Set the default font to Zenbones Brainy with specific size and weight
 (set-face-attribute 'default nil
                     :height 170 :weight 'normal :family "Zenbones Brainy")
@@ -390,31 +351,6 @@
    :preview-key '(:debounce 0.4 any))
   (setq consult-narrow-key "<"))
 
-;; (use-package helm
-;;   :ensure t
-;;   :demand t
-;;   :bind (("M-x"     . helm-M-x)
-;;          ("C-x C-f" . helm-find-files)
-;;          ("C-x b"   . helm-mini)
-;;          ("C-x r b" . helm-filtered-bookmarks)
-;;          ("M-y"     . helm-show-kill-ring)
-;;          ("M-g i"   . helm-imenu)
-;;          ("M-g I"   . helm-imenu-in-all-buffers)
-;;          ("M-s g"   . helm-do-grep-ag)
-;;          ("M-s r"   . helm-do-grep-ag)
-;;          ("C-c h"   . helm-command-prefix)
-;;          :map helm-map
-;;          ("<tab>"   . helm-execute-persistent-action)
-;;          ("C-z"     . helm-select-action))
-;;   :custom
-;;   (helm-split-window-in-side-p t)
-;;   (helm-move-to-line-cycle-in-source t)
-;;   (helm-autoresize-max-height 40)
-;;   (helm-autoresize-min-height 20)
-;;   :config
-;;   (helm-mode 1)
-;;   (helm-autoresize-mode 1))
-
 ;; The built-in outline-minor-mode provides structured code folding in modes
 ;; such as Emacs Lisp and Python, allowing users to collapse and expand sections
 ;; based on headings or indentation levels. This feature enhances navigation and
@@ -510,7 +446,6 @@
 (setq evil-undo-system 'undo-fu)
 
 ;; Vim emulation
-(defvar evil-mode-buffers nil)
 (use-package evil
   :ensure t
   :demand t  ; Load immediately to avoid post-command-hook errors
@@ -701,6 +636,7 @@
 ;; It supports core Markdown syntax as well as extensions like GitHub Flavored
 ;; Markdown (GFM).
 (use-package markdown-mode
+  :ensure t
   :commands (gfm-mode
              gfm-view-mode
              markdown-mode
@@ -721,24 +657,6 @@
              markdown-toc--toc-already-present-p)
   :custom
   (markdown-toc-header-toc-title "**Table of Contents**"))
-
-;; ;; Tree-sitter in Emacs is an incremental parsing system introduced in Emacs 29
-;; ;; that provides precise, high-performance syntax highlighting. It supports a
-;; ;; broad set of programming languages, including Bash, C, C++, C#, CMake, CSS,
-;; ;; Dockerfile, Go, Java, JavaScript, JSON, Python, Rust, TOML, TypeScript, YAML,
-;; ;; Elisp, Lua, Markdown, and many others.
-;; (use-package treesit-auto
-;;   :ensure t
-;;   :custom
-;;   (treesit-auto-install 'prompt)
-;;   :config
-;;   (treesit-auto-add-to-auto-mode-alist 'all)
-;;   (global-treesit-auto-mode))
-
-;; Package updates are handled by Elpaca, not `auto-package-update' (a
-;; package.el tool that does nothing useful here and scans archives at startup).
-;; To update packages, run: M-x elpaca-fetch-all then M-x elpaca-merge-all
-;; (or M-x elpaca-update-all), then restart Emacs.
 
 (use-package buffer-terminator
   :ensure t
