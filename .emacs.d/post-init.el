@@ -300,6 +300,12 @@
 (setq evil-undo-system 'undo-fu)
 
 ;; Vim emulation
+
+;; evil-core.el declares this with no value and `evil-initializing-p' reads it,
+;; but nothing in evil 1.15.0 ever sets it. Without this every command in
+;; normal state signals a void-variable from `post-command-hook'.
+(defvar evil-mode-buffers nil)
+
 (use-package evil
   :ensure t
   :demand t  ; Load immediately to avoid post-command-hook errors
