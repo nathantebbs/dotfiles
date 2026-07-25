@@ -1,4 +1,3 @@
-tap "d12frosted/emacs-plus", trusted: true
 tap "homebrew-zathura/zathura"
 tap "nikitabobko/tap"
 tap "sikarugir-app/sikarugir", "https://github.com/Sikarugir-App/homebrew-sikarugir"
