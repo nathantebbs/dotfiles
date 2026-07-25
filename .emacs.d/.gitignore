@@ -2,9 +2,11 @@
 *.elc
 *.eln
 
-# Emacs package state, written as .eld and .json; none of it is config
+# Emacs package state, written as .eld; none of it is config
 *.eld
-*.json
+
+# Claude Code's per-machine overrides; the shared settings.json is tracked
+.claude/settings.local.json
 
 # Other
 elpaca/
@@ -38,9 +40,6 @@ transient/
 
 # Custom file (optional - uncomment if you want to track it)
 # custom.el
-
-# Tree-sitter grammars
-tree-sitter/
 
 # Misc caches and state
 .cache/
