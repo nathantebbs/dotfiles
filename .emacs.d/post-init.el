@@ -74,7 +74,6 @@
   (after-init . global-auto-revert-mode)
   :custom
   (auto-revert-interval 3)
-  (auto-revert-remote-files nil)
   (auto-revert-use-notify t)
   (auto-revert-avoid-polling nil)
   (auto-revert-verbose t))
@@ -139,11 +138,10 @@
   :config
   (require 'dired-x)
   (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$"))
-  (setq-default dired-dwim-target t)
   (setq dired-listing-switches "-alh"))
 
-;; Enable `auto-save-mode' to prevent data loss. Use `recover-file' or
-;; `recover-session' to restore unsaved changes.
+;; Emacs defaults this to t, but minimal-emacs.d set it to nil as recently as
+;; 1.3.1, so state it rather than inherit it.
 (setq auto-save-default t)
 
 (setq auto-save-interval 300)
