@@ -17,11 +17,6 @@
     (goto-char (point-min))
     (insert (format ";; Startup Time: %.2fs\n;; Packages: %d\n\n"
                     (float-time (time-subtract after-init-time before-init-time))
-                    (if (fboundp 'elpaca--queued) (length (elpaca--queued)) 0)))))
+                    (length package-activated-list)))))
 
 (add-hook 'emacs-startup-hook #'my-display-startup-time 100)
-
-;; By default, minimal-emacs-package-initialize-and-refresh is set to t, which
-;; makes minimal-emacs.d call the built-in package manager. Since Elpaca will
-;; replace the package manager, there is no need to call it.
-(setq minimal-emacs-package-initialize-and-refresh nil)

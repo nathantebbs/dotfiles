@@ -1,5 +1,11 @@
 ;;; post-init.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
+;; Install whatever pre-init.el declared and this machine does not have yet.
+;; The repository packages go first: package-install-selected-packages would
+;; otherwise go looking for them in the archives and fail.
+(package-vc-install-selected-packages)
+(package-install-selected-packages :no-confirm)
+
 ;; Set the default font to Zenbones Brainy with specific size and weight
 (set-face-attribute 'default nil
                     :height 170 :weight 'normal :family "Zenbones Brainy")
@@ -591,10 +597,9 @@
   :mode ("\\.zig\\'" . zig-mode))
 
 ;; Odin Support
+;; Installed by package-vc from pre-init.el, so nothing to ensure here.
 (use-package odin-mode
-  :ensure (odin-mode
-           :host github
-           :repo "mattt-b/odin-mode")
+  :ensure nil
   :bind (:map odin-mode-map
               ("C-c C-r" . 'odin-run-project)
               ("C-c C-c" . 'odin-build-project)
@@ -605,8 +610,9 @@
 ;; expressive markup syntax. It supports hierarchical outlines, TODO lists,
 ;; scheduling, deadlines, time tracking, and exporting to multiple formats
 ;; including HTML, LaTeX, PDF, and Markdown.
+;; The Org that ships with Emacs, not a second copy from ELPA.
 (use-package org
-  :ensure t
+  :ensure nil
   :commands (org-mode org-version)
   :mode
   ("\\.org\\'" . org-mode)

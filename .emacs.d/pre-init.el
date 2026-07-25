@@ -1,48 +1,75 @@
-;;; pre-init.el -*- no-byte-compile: t; lexical-binding: t; -*-
-;; Elpaca bootstrap
-(defvar elpaca-installer-version 0.11)
-(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
-(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
-(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
-(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
-                              :ref nil :depth 1 :inherit ignore
-                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
-                              :build (:not elpaca--activate-package)))
-(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
-       (build (expand-file-name "elpaca/" elpaca-builds-directory))
-       (order (cdr elpaca-order))
-       (default-directory repo))
-  (add-to-list 'load-path (if (file-exists-p build) build repo))
-  (unless (file-exists-p repo)
-    (make-directory repo t)
-    (when (<= emacs-major-version 28) (require 'subr-x))
-    (condition-case-unless-debug err
-        (if-let* ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
-                  ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
-                                                  ,@(when-let* ((depth (plist-get order :depth)))
-                                                      (list (format "--depth=%d" depth) "--no-single-branch"))
-                                                  ,(plist-get order :repo) ,repo))))
-                  ((zerop (call-process "git" nil buffer t "checkout"
-                                        (or (plist-get order :ref) "--"))))
-                  (emacs (concat invocation-directory invocation-name))
-                  ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
-                                        "--eval" "(byte-recompile-directory \".\" 0 'force)")))
-                  ((require 'elpaca))
-                  ((elpaca-generate-autoloads "elpaca" repo)))
-            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
-          (error "%s" (with-current-buffer buffer (buffer-string))))
-      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
-  (unless (require 'elpaca-autoloads nil t)
-    (require 'elpaca)
-    (elpaca-generate-autoloads "elpaca" repo)
-    (let ((load-source-file-function nil)) (load "./elpaca-autoloads"))))
-(add-hook 'after-init-hook #'elpaca-process-queues)
-(elpaca `(,@elpaca-order))
+;;; pre-init.el --- Package manifest -*- no-byte-compile: t; lexical-binding: t; -*-
 
-;; Optional: Install use-package support
-;; If you enable elpaca-use-package, some use-package definitions, such as
-;; Vertico's, may need modifications. See the following discussion for details:
-;; https://github.com/jamescherti/minimal-emacs.d/issues/54
+;;; Commentary:
+
+;; init.el loads this file immediately before it calls `package-initialize',
+;; which is the last point at which `package-selected-packages' still decides
+;; what gets activated. The archives and their priorities are already set by
+;; early-init.el, upstream, in the order GNU > NonGNU > MELPA > MELPA stable.
 ;;
-(elpaca elpaca-use-package
-  (elpaca-use-package-mode))
+;; Org is deliberately absent: Emacs ships a current one, and pulling a second
+;; copy from ELPA only invites a version mismatch against the built-in that
+;; loads first.
+
+;;; Code:
+
+(setq package-selected-packages
+      '(;; Completion and navigation
+        cape
+        consult
+        corfu
+        embark
+        embark-consult
+        marginalia
+        orderless
+        vertico
+
+        ;; Modal editing
+        evil
+        evil-collection
+        evil-mc
+        evil-surround
+        move-text
+        undo-fu
+        undo-fu-session
+
+        ;; Editing
+        apheleia
+        outline-indent
+        stripspace
+        yasnippet
+        yasnippet-snippets
+
+        ;; Emacs Lisp
+        aggressive-indent
+        enhanced-evil-paredit
+        helpful
+        highlight-defined
+        paredit
+
+        ;; Languages
+        haskell-mode
+        markdown-mode
+        ormolu
+        pyvenv
+        zig-mode
+
+        ;; Documents
+        pdf-tools
+
+        ;; Interface
+        doom-modeline
+        modus-themes
+
+        ;; Everything else
+        easysession
+        evil-ghostel
+        exec-path-from-shell
+        ghostel
+        magit))
+
+;; odin-mode has no ELPA recipe, so it comes straight from its repository.
+(setq package-vc-selected-packages
+      '((odin-mode :url "https://github.com/mattt-b/odin-mode")))
+
+;;; pre-init.el ends here
