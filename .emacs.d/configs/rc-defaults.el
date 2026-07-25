@@ -16,9 +16,10 @@
 ;; A GUI Emacs inherits none of the shell's PATH, and a launchd daemon gets an
 ;; even barer environment while reporting `window-system' as nil.
 (when (or (daemonp) (memq window-system '(mac ns x)))
-  ;; A login shell is enough; the default "-l -i" pays for an interactive rc
-  ;; file at every startup.
-  (setopt exec-path-from-shell-arguments '("-l"))
+  ;; Interactive, not just login. Every PATH entry this config needs is
+  ;; exported from config.zsh, which only .zshrc sources, so a plain "-l"
+  ;; shell returns a PATH without cargo, go, ghcup or bun on it.
+  (setopt exec-path-from-shell-arguments '("-l" "-i"))
   (exec-path-from-shell-initialize))
 
 ;;; Auto revert
