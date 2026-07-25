@@ -1,5 +1,10 @@
 ;;; pre-early-init.el -*- no-byte-compile: t; lexical-binding: t; -*-
 
+;; The rc-*.el modules that post-init.el requires. This has to happen here,
+;; before anything on the load path is looked up.
+(add-to-list 'load-path
+             (expand-file-name "configs/" user-emacs-directory))
+
 ;; DEBUG MODE
 ;; Uncomment when actively debugging; leaving this on pops a backtrace on every
 ;; error during normal use.
