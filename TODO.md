@@ -13,12 +13,18 @@
       aborted the script on bare-metal Linux)
 - [x] Remove stale `external/.emacs.d` submodule declaration from `.gitmodules`
 - [x] Update README to match the current configs
+- [x] `.gitignore` no longer ignores `*.json`; `nvim/lazy-lock.json` is tracked and
+      the Emacs tree ignores only Claude's `settings.local.json`
+- [x] `deploy.sh` creates `~/.config` before symlinking into it
+- [x] Emacs: Elpaca -> `package.el`, and `use-package` dropped for plain Elisp
+      modules under `.emacs.d/configs/`
+- [x] Emacs: update vendored minimal-emacs.d 1.3.1 -> 1.5.1
+- [x] Emacs: run the daemon under launchd instead of starting it by hand, and
+      remove the two orphaned Homebrew agents that failed on every login
 
 ## Open
 
-- [ ] `.gitignore` ignores `*.json` repo-wide, which silently excludes
-      `nvim/lazy-lock.json` — decide whether to commit the lockfile and narrow the
-      pattern to the Emacs files it was meant for
-- [ ] `deploy.sh` assumes `~/.config` exists; `mkdir -p` it before symlinking
 - [ ] Neovim: no LSP config yet (bare `TODO` above the language support block in
       `nvim/init.lua`)
+- [ ] `pdf-tools` has no built `epdfinfo` on this machine, so opening a PDF will
+      prompt to build the server
