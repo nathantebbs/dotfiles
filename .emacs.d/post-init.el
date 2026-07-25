@@ -648,33 +648,6 @@
   (:map markdown-mode-map
         ("C-c C-e" . markdown-do)))
 
-;; Automatically generate a table of contents when editing Markdown files
-(use-package markdown-toc
-  :ensure t
-  :commands (markdown-toc-generate-toc
-             markdown-toc-generate-or-refresh-toc
-             markdown-toc-delete-toc
-             markdown-toc--toc-already-present-p)
-  :custom
-  (markdown-toc-header-toc-title "**Table of Contents**"))
-
-(use-package buffer-terminator
-  :ensure t
-  :custom
-  ;; Enable/Disable verbose mode to log buffer cleanup events
-  (buffer-terminator-verbose nil)
-
-  ;; Set the inactivity timeout (in seconds) after which buffers are considered
-  ;; inactive (default is 30 minutes):
-  (buffer-terminator-inactivity-timeout (* 30 60)) ; 30 minutes
-
-  ;; Define how frequently the cleanup process should run (default is every 10
-  ;; minutes):
-  (buffer-terminator-interval (* 10 60)) ; 10 minutes
-
-  :config
-  (buffer-terminator-mode 1))
-
 ;; The flyspell package is a built-in Emacs minor mode that provides
 ;; on-the-fly spell checking. It highlights misspelled words as you type,
 ;; offering interactive corrections. In text modes, it checks the entire buffer,
@@ -813,24 +786,6 @@
   :hook
   (paredit-mode . enhanced-evil-paredit-mode))
 
-;; Displays visible indicators for page breaks
-(use-package page-break-lines
-  :ensure t
-  :commands (page-break-lines-mode
-             global-page-break-lines-mode)
-  :hook
-  (emacs-lisp-mode . page-break-lines-mode))
-
-;; Provides functions to find references to functions, macros, variables,
-;; special forms, and symbols in Emacs Lisp
-(use-package elisp-refs
-  :ensure t
-  :commands (elisp-refs-function
-             elisp-refs-macro
-             elisp-refs-variable
-             elisp-refs-special
-             elisp-refs-symbol))
-
 ;; Trying to make the modeline look pretty and also cut down on the amount of
 ;; modes being displayed on the modeline.
 (use-package doom-modeline
@@ -876,27 +831,6 @@
   ;; `file-name-handler-alist` at depth 101 during `emacs-startup-hook`.)
   (add-hook 'emacs-startup-hook #'easysession-load-including-geometry 102)
   (add-hook 'emacs-startup-hook #'easysession-save-mode 103))
-
-;; Reveal.js slide export for Org
-(use-package ox-reveal
-  :ensure t
-  :after org
-  :commands (org-reveal-export-to-html org-reveal-export-as-html)
-  :init
-  ;; Pick ONE of these:
-
-  ;; ;; Option A: Local reveal.js (recommended)
-  ;; ;; 1) git clone https://github.com/hakimel/reveal.js ~/.emacs.d/reveal.js
-  ;; ;; 2) set the path:
-  ;; (setq org-reveal-root (concat "file://" (expand-file-name "~/.emacs.d/reveal.js")))
-
-  ;; Option B: CDN (easy, but depends on network)
-  (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
-
-  :config
-  ;; Handy keybinds
-  (global-set-key (kbd "C-c e r") #'org-reveal-export-to-html)
-  (global-set-key (kbd "C-c e R") #'org-reveal-export-as-html))
 
 ;; Ghostel is a terminal emulator powered by libghostty-vt, the VT engine
 ;; behind the Ghostty terminal. It supports synchronized output, true color,
