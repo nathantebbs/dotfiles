@@ -7,7 +7,7 @@
 
 ;;; Code:
 
-(defun my/ghostel-new ()
+(defun rc-terminal-ghostel-new ()
   "Spawn a new, independent ghostel terminal buffer."
   (interactive)
   (ghostel '(4)))
@@ -15,7 +15,7 @@
 ;; `C-c t' reuses the default *ghostel*, `C-c T' always spawns a fresh one. A
 ;; numeric prefix addresses them like tmux windows, e.g. `M-2 C-c t'.
 (keymap-global-set "C-c t" #'ghostel)
-(keymap-global-set "C-c T" #'my/ghostel-new)
+(keymap-global-set "C-c T" #'rc-terminal-ghostel-new)
 
 ;; Keeps the terminal cursor in step with point across Evil state changes, so
 ;; hjkl navigation works inside a ghostel buffer.

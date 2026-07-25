@@ -14,7 +14,7 @@
 ;; The scratch buffer defaults to `fundamental-mode' (see `initial-major-mode'
 ;; in early-init.el), which has no font-locking; switch it to
 ;; `lisp-interaction-mode' so the comment lines are highlighted.
-(defun my-display-startup-time ()
+(defun rc-display-startup-time ()
   "Write startup time and package count as comments atop *scratch*."
   (with-current-buffer (get-buffer-create "*scratch*")
     (unless (derived-mode-p 'lisp-interaction-mode)
@@ -24,4 +24,4 @@
                     (float-time (time-subtract after-init-time before-init-time))
                     (length package-activated-list)))))
 
-(add-hook 'emacs-startup-hook #'my-display-startup-time 100)
+(add-hook 'emacs-startup-hook #'rc-display-startup-time 100)

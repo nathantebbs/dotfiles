@@ -14,12 +14,12 @@
 
 ;; K&R with four spaces and no tabs, applied live by cc-mode so newlines land
 ;; at the right column without waiting for a format. Matches ~/.clang-format.
-(defun my/c-indent-style ()
+(defun rc-programming-c-indent-style ()
   (c-set-style "k&r")
   (setq c-basic-offset 4
         indent-tabs-mode nil))
 
-(add-hook 'c-mode-common-hook #'my/c-indent-style)
+(add-hook 'c-mode-common-hook #'rc-programming-c-indent-style)
 
 ;;; Haskell
 
