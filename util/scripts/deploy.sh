@@ -61,5 +61,15 @@ create_symlink "$DOTFILES_DIR/aerospace.toml" "$HOME/.aerospace.toml" "aerospace
 mkdir -p "$HOME/.config/karabiner"
 create_symlink "$DOTFILES_DIR/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json" "karabiner"
 
+# The Emacs daemon agent is macOS-only. launchd reads the plist at load time,
+# so it has to be reloaded after this changes: emacsctl restart.
+case "$OSTYPE" in
+  darwin*)
+    mkdir -p "$HOME/Library/LaunchAgents" "$HOME/Library/Logs"
+    create_symlink "$DOTFILES_DIR/emacs/dev.nathantebbs.emacs.plist" \
+      "$HOME/Library/LaunchAgents/dev.nathantebbs.emacs.plist" "emacs daemon"
+    ;;
+esac
+
 echo ""
 echo -e "${GREEN}[OK]${NC} Symlink deployment complete!"
