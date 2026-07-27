@@ -93,8 +93,6 @@ require("lazy").setup({
 
     { "windwp/nvim-autopairs" },
 
-    { "sheerun/vim-polyglot" },
-
     {
       "folke/todo-comments.nvim",
       dependencies = { "nvim-lua/plenary.nvim" },
@@ -122,17 +120,6 @@ require("lazy").setup({
     -- Language Support
     { "kaarmu/typst.vim", ft = 'typst', lazy=false },
   })
-
--- =====================
--- Filetype fixes
--- =====================
--- vim-polyglot claims *.typ for SQL in two places, beating Neovim's own
--- content-sniffing typst detection. Registered after lazy.setup so this
--- autocmd runs last; setf would defer to the filetype polyglot already set.
-vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
-  pattern = "*.typ",
-  command = "setlocal filetype=typst",
-})
 
 -- =====================
 -- LSP

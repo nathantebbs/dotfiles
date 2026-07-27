@@ -115,7 +115,9 @@ Then from within vim:
 
 `nvim/init.lua` is a desktop-only Neovim config using [lazy.nvim](https://github.com/folke/lazy.nvim). lazy.nvim is bootstrapped automatically on first launch — no manual install needed.
 
-**Plugins:** Telescope (+ telescope-fzf-native), vim-surround, lightline, nvim-autopairs, vim-polyglot, todo-comments, presenting.nvim, undotree, vim-colors-modus, typst.vim
+**Plugins:** Telescope (+ telescope-fzf-native), vim-surround, lightline, nvim-autopairs, todo-comments, presenting.nvim, undotree, vim-colors-modus, typst.vim
+
+No vim-polyglot here, unlike `.vimrc`. Neovim 0.12 ships filetype detection, syntax and indent for every language in use, including odin, zig and typst. typst.vim stays for its compiler integration, not its syntax.
 
 **LSP:** Neovim's built-in client, so there is no lspconfig plugin. Each server's table is a file in `nvim/lsp/`, picked up off the runtimepath by name. A server whose binary is missing is skipped, so a machine without the toolchain still starts clean.
 
@@ -126,8 +128,6 @@ Then from within vim:
 | `pyright` | Python | Brewfile |
 | `tinymist` | Typst | Brewfile |
 | `ols` | Odin | Homebrew |
-
-vim-polyglot claims `*.typ` for SQL in two places and beats Neovim's own content-sniffing typst detection, so `init.lua` forces the filetype back after lazy.nvim loads.
 
 **Key bindings:**
 
