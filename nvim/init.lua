@@ -125,6 +125,17 @@ require("lazy").setup({
   })
 
 -- =====================
+-- Filetype fixes
+-- =====================
+-- vim-polyglot claims *.typ for SQL in two places, beating Neovim's own
+-- content-sniffing typst detection. Registered after lazy.setup so this
+-- autocmd runs last; setf would defer to the filetype polyglot already set.
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+  pattern = "*.typ",
+  command = "setlocal filetype=typst",
+})
+
+-- =====================
 -- UI / Theme
 -- =====================
 vim.opt.background = "dark"
