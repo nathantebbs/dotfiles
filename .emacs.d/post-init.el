@@ -11,9 +11,7 @@
 
 ;;; Code:
 
-;; Install what this machine is missing. The vc call comes first: with a vc
-;; package declared, the archive pass would otherwise look for it and fail.
-(package-vc-install-selected-packages)
+;; Install what this machine is missing.
 (package-install-selected-packages :no-confirm)
 
 ;; early-init.el points `custom-file' here but never loads it, so anything set
