@@ -5,6 +5,9 @@
 ;; Major modes and per-language settings. No LSP: formatting is handled by
 ;; apheleia in rc-editing, and cc-mode indents C and C++ as you type.
 ;;
+;; Odin lives in rc-odin, since its major mode is written here rather than
+;; installed and takes a file of its own.
+;;
 ;; Bindings that live in a mode's own keymap go behind with-eval-after-load,
 ;; since the map does not exist until the mode's package loads.
 
@@ -34,14 +37,6 @@
 ;;; Zig
 
 (add-to-list 'auto-mode-alist '("\\.zig\\'" . zig-mode))
-
-;;; Odin
-
-;; Installed by package-vc from pre-init.el.
-(with-eval-after-load 'odin-mode
-  (keymap-set odin-mode-map "C-c C-r" #'odin-run-project)
-  (keymap-set odin-mode-map "C-c C-c" #'odin-build-project)
-  (keymap-set odin-mode-map "C-c C-t" #'odin-test-project))
 
 ;;; Markdown
 

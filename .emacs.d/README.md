@@ -28,7 +28,8 @@ because it repairs `PATH`, which everything shelling out depends on.
 | `rc-evil` | Evil, evil-collection, evil-mc, evil-surround, undo-fu, move-text |
 | `rc-editing` | Outline folding, stripspace, apheleia, YASnippet, spelling |
 | `rc-elisp` | paredit, aggressive-indent, highlight-defined, helpful |
-| `rc-programming` | C/C++ style, Haskell, Python, Zig, Odin, Markdown |
+| `rc-programming` | C/C++ style, Haskell, Python, Zig, Markdown |
+| `rc-odin` | `odin-ts-mode`, written here rather than installed |
 | `rc-org` | Org, agenda, pdf-tools |
 | `rc-git` | Magit |
 | `rc-session` | easysession |
@@ -37,8 +38,7 @@ because it repairs `PATH`, which everything shelling out depends on.
 ## Packages
 
 Declared in `pre-init.el` as `package-selected-packages` and installed on
-first start. `odin-mode` has no ELPA recipe and comes from its repository via
-`package-vc-selected-packages`.
+first start. Everything comes from ELPA; nothing is pulled from a repository.
 
 Org is deliberately **not** in the manifest: Emacs ships a current one, and a
 second copy from ELPA races the built-in for load order.
@@ -48,6 +48,22 @@ To update everything:
 ```
 M-x package-upgrade-all
 ```
+
+## Odin
+
+`odin-mode` was a regex mode that never matched procedure calls or field
+access, which left most of a buffer unfontified, so `configs/rc-odin.el`
+replaces it with a tree-sitter mode written here. It covers font lock,
+indentation, imenu and the compilation error format `odin build` emits.
+
+The grammar is not vendored. On a new machine:
+
+```
+M-x rc-odin-install-grammar
+```
+
+That compiles [tree-sitter-odin](https://github.com/tree-sitter-grammars/tree-sitter-odin)
+into `.emacs.d/tree-sitter/`, which is gitignored.
 
 ## Emacs itself
 

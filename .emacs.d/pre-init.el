@@ -68,8 +68,4 @@
         ghostel
         magit))
 
-;; odin-mode has no ELPA recipe, so it comes straight from its repository.
-(setq package-vc-selected-packages
-      '((odin-mode :url "https://github.com/mattt-b/odin-mode")))
-
 ;;; pre-init.el ends here
