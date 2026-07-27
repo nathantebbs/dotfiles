@@ -22,9 +22,16 @@
 - [x] Emacs: run the daemon under launchd instead of starting it by hand, and
       remove the two orphaned Homebrew agents that failed on every login
 
+- [x] Neovim: LSP via the built-in client (0.11+), no lspconfig plugin. Server
+      tables live in `nvim/lsp/`; clangd, gopls, pyright, tinymist and ols are
+      enabled, each skipped when its binary is absent
+- [x] Neovim: force `*.typ` to typst. vim-polyglot claims the extension for SQL
+      in two places and beats Neovim's own content-sniffing detection
+
 ## Open
 
-- [ ] Neovim: no LSP config yet (bare `TODO` above the language support block in
-      `nvim/init.lua`)
 - [ ] `pdf-tools` has no built `epdfinfo` on this machine, so opening a PDF will
       prompt to build the server
+- [ ] vim-polyglot is largely redundant on Neovim 0.12, which ships filetype
+      detection and treesitter for nearly everything it covers. It is now
+      actively wrong about `*.typ`. Consider dropping it
