@@ -28,7 +28,7 @@ because it repairs `PATH`, which everything shelling out depends on.
 | `rc-evil` | Evil, evil-collection, evil-mc, evil-surround, undo-fu, move-text |
 | `rc-editing` | Outline folding, stripspace, apheleia, YASnippet, spelling |
 | `rc-elisp` | paredit, aggressive-indent, highlight-defined, helpful |
-| `rc-programming` | C/C++ style, Haskell, Python, Markdown |
+| `rc-programming` | C/C++ style, Python, Markdown |
 | `rc-odin` | `odin-ts-mode`, written here rather than installed |
 | `rc-org` | Org, agenda, pdf-tools |
 | `rc-git` | Magit |

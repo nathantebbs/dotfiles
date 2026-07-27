@@ -5,8 +5,7 @@
 ;; Major modes and per-language settings. No LSP: formatting is handled by
 ;; apheleia in rc-editing, and cc-mode indents C and C++ while typing.
 ;;
-;; Only languages that need something beyond their package appear here. Zig is
-;; absent because zig-mode does the whole job on its own.
+;; Only languages that need something beyond their package appear here.
 ;;
 ;; Odin is the exception the other way and lives in rc-odin, since its major
 ;; mode is written here rather than installed and takes a file of its own.
@@ -27,10 +26,6 @@
         indent-tabs-mode nil))
 
 (add-hook 'c-mode-common-hook #'rc-programming-c-indent-style)
-
-;;; Haskell
-
-(add-hook 'haskell-mode-hook #'ormolu-format-on-save-mode)
 
 ;;; Python
 

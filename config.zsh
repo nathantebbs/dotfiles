@@ -47,7 +47,6 @@ esac
 [ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
 [ -d "$HOME/.cargo/bin" ] && export PATH="$HOME/.cargo/bin:$PATH"
 [ -d "$HOME/go/bin" ]     && export PATH="$HOME/go/bin:$PATH"
-[ -d "$HOME/.ghcup/bin" ] && export PATH="$HOME/.ghcup/bin:$PATH"
 [ -d "/Applications/Emacs.app/Contents/MacOS/bin" ] && export PATH="/Applications/Emacs.app/Contents/MacOS/bin:$PATH"
 
 if [ -d "$HOME/.bun" ]; then

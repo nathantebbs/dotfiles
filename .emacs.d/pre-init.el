@@ -48,11 +48,8 @@
         paredit
 
         ;; Languages
-        haskell-mode
         markdown-mode
-        ormolu
         pyvenv
-        zig-mode
 
         ;; Documents
         pdf-tools

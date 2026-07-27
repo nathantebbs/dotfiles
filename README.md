@@ -117,7 +117,7 @@ Then from within vim:
 
 **Plugins:** Telescope (+ telescope-fzf-native), vim-surround, lightline, nvim-autopairs, todo-comments, presenting.nvim, undotree, vim-colors-modus, typst.vim
 
-No vim-polyglot here, unlike `.vimrc`. Neovim 0.12 ships filetype detection, syntax and indent for every language in use, including odin, zig and typst. typst.vim stays for its compiler integration, not its syntax.
+No vim-polyglot here, unlike `.vimrc`. Neovim 0.12 ships filetype detection, syntax and indent for every language in use, including odin and typst. typst.vim stays for its compiler integration, not its syntax.
 
 **LSP:** Neovim's built-in client, so there is no lspconfig plugin. Each server's table is a file in `nvim/lsp/`, picked up off the runtimepath by name. A server whose binary is missing is skipped, so a machine without the toolchain still starts clean.
 
@@ -160,7 +160,7 @@ Notable packages:
 
 - **Editing:** Evil, evil-collection, evil-surround, evil-mc, undo-fu (+ session), paredit, move-text, aggressive-indent, stripspace
 - **Completion / navigation:** Vertico, Consult, Marginalia, Embark, Orderless, Corfu + Cape
-- **Languages:** Haskell (+ ormolu), Zig, Odin, Python (pyvenv), Markdown, Org
+- **Languages:** Odin, Python (pyvenv), Markdown, Org
 - **Tooling:** Magit, Apheleia (formatting), YASnippet, easysession, pdf-tools, helpful, doom-modeline, ghostel
 
 No LSP is configured here, unlike Neovim: formatting is apheleia's job and cc-mode indents C and C++ as you type. `pdf-tools` has its `epdfinfo` server built, so PDFs open without a build prompt.
@@ -260,7 +260,7 @@ This installs oh-my-zsh and appends a `source` line for `config.zsh` to `~/.zshr
   emacsctl status   # check if running
   ```
 - OS-specific `$EDITOR` (nvim path varies between macOS and Linux)
-- PATH additions, each guarded so a machine missing the toolchain still gets a working shell: `~/.local/bin`, `~/.cargo/bin`, `~/go/bin`, `~/.ghcup/bin`, Emacs.app, and Bun
+- PATH additions, each guarded so a machine missing the toolchain still gets a working shell: `~/.local/bin`, `~/.cargo/bin`, `~/go/bin`, Emacs.app, and Bun
 
 ## tmux
 

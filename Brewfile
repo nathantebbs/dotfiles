@@ -37,8 +37,6 @@ brew "mpfr"
 brew "gcc"
 # GitHub command-line tool
 brew "gh"
-# Installer for the general purpose language Haskell
-brew "ghcup"
 # Quickly rewrite git repository history
 brew "git-filter-repo"
 # OpenGL and OpenGL ES reference compiler for shading languages
@@ -91,8 +89,6 @@ brew "raylib"
 brew "odin"
 # Language server for The Odin Programming Language
 brew "ols"
-# Formatter for Haskell source code
-brew "ormolu"
 # Swiss-army knife of markup format conversion
 brew "pandoc"
 # Parallel gzip
@@ -145,8 +141,6 @@ brew "wget"
 brew "wimlib"
 # Utility to configure and test X input devices
 brew "xinput"
-# Programming language designed for robustness, optimality, and clarity
-brew "zig"
 # i3-like tiling window manager for macOS
 cask "aerospace"
 # Compact TeX distribution as alternative to the full TeX Live / MacTeX

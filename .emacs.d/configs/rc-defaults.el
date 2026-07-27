@@ -17,7 +17,7 @@
 ;; even barer environment while reporting `window-system' as nil.
 (when (or (daemonp) (memq window-system '(mac ns x)))
   ;; Interactive, not just login: config.zsh exports the PATH entries and only
-  ;; .zshrc sources it, so a plain "-l" shell drops cargo, go, ghcup and bun.
+  ;; .zshrc sources it, so a plain "-l" shell drops cargo, go and bun.
   (setopt exec-path-from-shell-arguments '("-l" "-i"))
   (exec-path-from-shell-initialize))
 

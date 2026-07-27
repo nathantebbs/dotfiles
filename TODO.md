@@ -36,6 +36,14 @@
       `Emacs-2026-02-19.app.bak` rollback copy
 - [x] Kept `~/source/repos/build-emacs-for-macos/sources` (599M). Deleting it
       only saves space until the next rebuild, and a rebuild is expected
+- [x] Emacs: replaced `odin-mode` with a tree-sitter mode in
+      `.emacs.d/configs/rc-odin.el`. The old one matched no procedure calls or
+      field access, so most of a buffer went unfontified. The grammar is built
+      per machine by `rc-odin-install-grammar`, not vendored
+- [x] Dropped Haskell and Zig. Neither language is in use: `ghcup` and `ormolu`
+      uninstalled from Homebrew, `~/.ghcup` and `~/.local/state/cabal` deleted
+      (3.6G), and `haskell-mode`, `ormolu` and `zig-mode` removed from the Emacs
+      manifest. `zig` was in the Brewfile but had never been installed
 
 ## Open
 
