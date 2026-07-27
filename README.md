@@ -48,6 +48,7 @@ bash util/scripts/deploy.sh        # symlinks only
 bash util/scripts/install-fonts.sh # fonts only
 bash util/scripts/install-omz.sh   # oh-my-zsh + config.zsh
 bash util/scripts/install-vimplug.sh
+bash util/scripts/make-emacsclient-app.sh  # Emacsclient.app launcher (macOS)
 ```
 
 ### deploy.sh
@@ -166,7 +167,7 @@ No LSP is configured. Theme: modus-themes. Font: Zenbones Brainy at 17pt — see
 
 ### Emacs daemon
 
-Emacs runs as a launchd agent started at login, so `emacsclient` always has a server to attach to. The `emacs` alias is `emacsclient -c`.
+Emacs runs as a launchd agent started at login, so `emacsclient` always has a server to attach to.
 
 ```sh
 emacsctl status    # is the daemon answering?
@@ -177,6 +178,21 @@ emacsctl logs      # tail the daemon's stderr
 ```
 
 The agent is `emacs/dev.nathantebbs.emacs.plist`, linked into `~/Library/LaunchAgents` by `deploy.sh`. launchd reads it when the job loads, so changes need an `emacsctl restart`. Logs go to `~/Library/Logs/emacs-daemon.{out,err}`.
+
+**Reaching the daemon:**
+
+| Command | Result |
+|---------|--------|
+| `emacs` | New GUI frame, terminal free immediately (`emacsclient -c -n`) |
+| `e file` | Open a file in an existing frame (`emacsclient -n`) |
+| `et` | Frame inside the current terminal (`emacsclient -t`) |
+| Emacsclient.app | Same as `emacs`, from Spotlight, the Dock or Aerospace |
+
+None of these pass `-a ""`. That flag would start a daemon outside launchd, which `emacsctl` could then neither stop nor restart. When there is no socket the fix is `emacsctl start`.
+
+`Emacsclient.app` is generated into `/Applications` by `util/scripts/make-emacsclient-app.sh` and rebuilt on every `setup.sh` run. It is a build product, not a symlink, so it is not in this repo. If the daemon is down it kickstarts the launchd job rather than spawning its own.
+
+`open -a Emacs` does **not** use the daemon; it launches a second independent Emacs.
 
 ## Terminal
 
@@ -233,7 +249,7 @@ This installs oh-my-zsh and appends a `source` line for `config.zsh` to `~/.zshr
 
 **`config.zsh` provides:**
 
-- Aliases: `emacs` (open a frame via `emacsclient`), `vim` → `nvim`, `keys` (fzf alias search), `cc` → `claude`
+- Aliases: `emacs` (new GUI frame on the daemon), `e` (open a file in an existing frame), `et` (frame in this terminal), `vim` → `nvim`, `keys` (fzf alias search), `cc` → `claude`
 - `emacsctl` — manage the Emacs daemon:
   ```sh
   emacsctl start    # launch daemon

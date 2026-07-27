@@ -1,4 +1,10 @@
-alias emacs="emacsclient -c &disown"
+# -n is what frees the terminal. The old "&disown" backgrounded the alias
+# itself, which also threw away emacsclient's errors when the daemon was down.
+# No -a "": that would start a daemon outside launchd, which emacsctl could
+# not then stop. If these say no socket, the answer is emacsctl start.
+alias emacs='emacsclient -c -n'
+alias e='emacsclient -n'
+alias et='emacsclient -t'
 alias vim="nvim"
 alias keys="alias | fzf"
 alias cc="claude"
