@@ -120,9 +120,55 @@ require("lazy").setup({
     { "c9rgreen/vim-colors-modus" },
 
     -- Language Support
-    -- TODO: 
     { "kaarmu/typst.vim", ft = 'typst', lazy=false },
   })
+
+-- =====================
+-- Filetype fixes
+-- =====================
+-- vim-polyglot claims *.typ for SQL in two places, beating Neovim's own
+-- content-sniffing typst detection. Registered after lazy.setup so this
+-- autocmd runs last; setf would defer to the filetype polyglot already set.
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+  pattern = "*.typ",
+  command = "setlocal filetype=typst",
+})
+
+-- =====================
+-- LSP
+-- =====================
+-- Neovim 0.11 moved the client into core, so there is no lspconfig plugin.
+-- Each server's table lives in lsp/<name>.lua, found on the runtimepath.
+
+-- Indexing vim.lsp.config resolves those files; require() only searches lua/.
+-- Absent binary means skip, like the PATH guards in config.zsh.
+local servers = { "clangd", "gopls", "pyright", "tinymist", "ols" }
+for _, name in ipairs(servers) do
+  local cmd = vim.lsp.config[name].cmd
+  if vim.fn.executable(cmd[1]) == 1 then
+    vim.lsp.enable(name)
+  end
+end
+
+vim.diagnostic.config({
+  virtual_text = { prefix = "*" },
+  severity_sort = true,
+  float = { border = "single", source = true },
+})
+
+-- Core already binds grn, gra, grr, gri, gO and K. These are the gaps.
+vim.api.nvim_create_autocmd("LspAttach", {
+  desc = "LSP keymaps, bound per buffer so they exist only where a server ran",
+  callback = function(ev)
+    local opts = function(desc) return { buffer = ev.buf, desc = desc } end
+    map("n", "gd", vim.lsp.buf.definition, opts("LSP: definition"))
+    map("n", "gD", vim.lsp.buf.declaration, opts("LSP: declaration"))
+    map("n", "gy", vim.lsp.buf.type_definition, opts("LSP: type definition"))
+    map("n", "<C-c><C-d>", vim.diagnostic.open_float, opts("LSP: line diagnostics"))
+    map("n", "<C-c><C-f>", function() vim.lsp.buf.format({ async = true }) end,
+      opts("LSP: format buffer"))
+  end,
+})
 
 -- =====================
 -- UI / Theme

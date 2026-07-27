@@ -89,6 +89,8 @@ brew "neovim"
 brew "raylib"
 # Programming language with focus on simplicity, performance and modern systems
 brew "odin"
+# Language server for The Odin Programming Language
+brew "ols"
 # Formatter for Haskell source code
 brew "ormolu"
 # Swiss-army knife of markup format conversion

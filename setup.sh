@@ -72,6 +72,9 @@ case "$OSTYPE" in
   darwin*)
     if [ -d "/Applications/Emacs.app" ]; then
       info "Emacs.app found"
+      # Spotlight/Dock launcher for the daemon. Regenerated every run so it
+      # tracks the script; it is a build product, not a symlink.
+      bash "$DOTFILES_DIR/util/scripts/make-emacsclient-app.sh"
     else
       warn "Emacs.app not found. Build it with:"
       warn "  https://github.com/jimeh/build-emacs-for-macos"

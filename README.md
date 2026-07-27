@@ -48,6 +48,7 @@ bash util/scripts/deploy.sh        # symlinks only
 bash util/scripts/install-fonts.sh # fonts only
 bash util/scripts/install-omz.sh   # oh-my-zsh + config.zsh
 bash util/scripts/install-vimplug.sh
+bash util/scripts/make-emacsclient-app.sh  # Emacsclient.app launcher (macOS)
 ```
 
 ### deploy.sh
@@ -116,6 +117,18 @@ Then from within vim:
 
 **Plugins:** Telescope (+ telescope-fzf-native), vim-surround, lightline, nvim-autopairs, vim-polyglot, todo-comments, presenting.nvim, undotree, vim-colors-modus, typst.vim
 
+**LSP:** Neovim's built-in client, so there is no lspconfig plugin. Each server's table is a file in `nvim/lsp/`, picked up off the runtimepath by name. A server whose binary is missing is skipped, so a machine without the toolchain still starts clean.
+
+| Server | Languages | Installed by |
+|--------|-----------|--------------|
+| `clangd` | C, C++, Obj-C, CUDA | Xcode CommandLineTools |
+| `gopls` | Go | Brewfile (`go install`) |
+| `pyright` | Python | Brewfile |
+| `tinymist` | Typst | Brewfile |
+| `ols` | Odin | Homebrew |
+
+vim-polyglot claims `*.typ` for SQL in two places and beats Neovim's own content-sniffing typst detection, so `init.lua` forces the filetype back after lazy.nvim loads.
+
 **Key bindings:**
 
 | Binding | Action |
@@ -129,6 +142,11 @@ Then from within vim:
 | `C-c C-e` | Open netrw |
 | `C-c C-p i` | Lazy sync |
 | `C-c C-p c` | Lazy clean |
+| `gd` / `gD` / `gy` | LSP definition / declaration / type definition |
+| `C-c C-d` | LSP diagnostics for the line |
+| `C-c C-f` | LSP format buffer |
+
+Neovim already binds `grn`, `gra`, `grr`, `gri`, `gO` and `K` for rename, code action, references, implementation, symbols and hover, so those are not rebound.
 
 Theme: `modus` (dark background), lightline with the `one` colorscheme.
 
@@ -145,11 +163,13 @@ Notable packages:
 - **Languages:** Haskell (+ ormolu), Zig, Odin, Python (pyvenv), Markdown, Org
 - **Tooling:** Magit, Apheleia (formatting), YASnippet, easysession, pdf-tools, helpful, doom-modeline, ghostel
 
-No LSP is configured. Theme: modus-themes. Font: Zenbones Brainy at 17pt — see [Fonts](#fonts).
+No LSP is configured here, unlike Neovim: formatting is apheleia's job and cc-mode indents C and C++ as you type. `pdf-tools` has its `epdfinfo` server built, so PDFs open without a build prompt.
+
+Theme: modus-themes. Font: Zenbones Brainy at 17pt — see [Fonts](#fonts).
 
 ### Emacs daemon
 
-Emacs runs as a launchd agent started at login, so `emacsclient` always has a server to attach to. The `emacs` alias is `emacsclient -c`.
+Emacs runs as a launchd agent started at login, so `emacsclient` always has a server to attach to.
 
 ```sh
 emacsctl status    # is the daemon answering?
@@ -160,6 +180,21 @@ emacsctl logs      # tail the daemon's stderr
 ```
 
 The agent is `emacs/dev.nathantebbs.emacs.plist`, linked into `~/Library/LaunchAgents` by `deploy.sh`. launchd reads it when the job loads, so changes need an `emacsctl restart`. Logs go to `~/Library/Logs/emacs-daemon.{out,err}`.
+
+**Reaching the daemon:**
+
+| Command | Result |
+|---------|--------|
+| `emacs` | New GUI frame, terminal free immediately (`emacsclient -c -n`) |
+| `e file` | Open a file in an existing frame (`emacsclient -n`) |
+| `et` | Frame inside the current terminal (`emacsclient -t`) |
+| Emacsclient.app | Same as `emacs`, from Spotlight, the Dock or Aerospace |
+
+None of these pass `-a ""`. That flag would start a daemon outside launchd, which `emacsctl` could then neither stop nor restart. When there is no socket the fix is `emacsctl start`.
+
+`Emacsclient.app` is generated into `/Applications` by `util/scripts/make-emacsclient-app.sh` and rebuilt on every `setup.sh` run. It is a build product, not a symlink, so it is not in this repo. If the daemon is down it kickstarts the launchd job rather than spawning its own.
+
+`open -a Emacs` does **not** use the daemon; it launches a second independent Emacs.
 
 ## Terminal
 
@@ -216,7 +251,7 @@ This installs oh-my-zsh and appends a `source` line for `config.zsh` to `~/.zshr
 
 **`config.zsh` provides:**
 
-- Aliases: `emacs` (open a frame via `emacsclient`), `vim` → `nvim`, `keys` (fzf alias search), `cc` → `claude`
+- Aliases: `emacs` (new GUI frame on the daemon), `e` (open a file in an existing frame), `et` (frame in this terminal), `vim` → `nvim`, `keys` (fzf alias search), `cc` → `claude`
 - `emacsctl` — manage the Emacs daemon:
   ```sh
   emacsctl start    # launch daemon
