@@ -16,9 +16,8 @@
 ;; A GUI Emacs inherits none of the shell's PATH, and a launchd daemon gets an
 ;; even barer environment while reporting `window-system' as nil.
 (when (or (daemonp) (memq window-system '(mac ns x)))
-  ;; Interactive, not just login. Every PATH entry this config needs is
-  ;; exported from config.zsh, which only .zshrc sources, so a plain "-l"
-  ;; shell returns a PATH without cargo, go, ghcup or bun on it.
+  ;; Interactive, not just login: config.zsh exports the PATH entries and only
+  ;; .zshrc sources it, so a plain "-l" shell drops cargo, go, ghcup and bun.
   (setopt exec-path-from-shell-arguments '("-l" "-i"))
   (exec-path-from-shell-initialize))
 
@@ -46,9 +45,8 @@
 
 (add-hook 'after-init-hook #'recentf-mode)
 
-;; Depth -90 puts the cleanup ahead of the `recentf-save-list' that
-;; `recentf-mode' adds to `kill-emacs-hook', so stale entries never get saved.
-;; Registered only once recentf is loaded, or the hook calls a void function.
+;; Depth -90 beats the `recentf-save-list' that recentf-mode puts on
+;; `kill-emacs-hook'. Behind eval-after-load, or the hook is a void function.
 (with-eval-after-load 'recentf
   (add-hook 'kill-emacs-hook #'recentf-cleanup -90))
 
@@ -56,8 +54,8 @@
 
 (setopt savehist-autosave-interval 600)
 
-;; Upstream's list without kill-ring; carrying the clipboard across restarts
-;; is the point of enabling this at all.
+;; Upstream's list plus kill-ring; carrying the clipboard across restarts is
+;; the point of enabling this at all.
 (setopt savehist-additional-variables
         '(kill-ring                        ; clipboard
           register-alist                   ; macros

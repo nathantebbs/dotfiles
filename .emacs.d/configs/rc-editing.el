@@ -66,7 +66,7 @@
         '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)))
 
 ;; --sug-mode=ultra is markedly slower, since Flyspell round-trips every word
-;; through the Aspell process as you type.
+;; through the Aspell process while typing.
 (setopt ispell-extra-args '("--lang=en_US"))
 
 (with-eval-after-load 'flyspell

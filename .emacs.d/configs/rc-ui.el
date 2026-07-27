@@ -41,8 +41,8 @@
 (add-hook 'text-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'hl-line-mode)
 
+;; show-paren-mode has been on by default since Emacs 28, so it is not here.
 (electric-pair-mode 1)
-(show-paren-mode 1)
 
 ;;; Scrolling
 
@@ -53,6 +53,8 @@
 
 ;; `C-c left' and `C-c right' undo and redo window layouts.
 (winner-mode 1)
+
+;;; Compilation
 
 (keymap-global-set "C-c c" #'compile)
 

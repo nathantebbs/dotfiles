@@ -11,16 +11,13 @@
 
 ;;; Code:
 
-;; Install what this machine does not have yet. The repository packages go
-;; first: package-install-selected-packages would otherwise go looking for
-;; them in the archives and fail.
+;; Install what this machine is missing. The vc call comes first: with a vc
+;; package declared, the archive pass would otherwise look for it and fail.
 (package-vc-install-selected-packages)
 (package-install-selected-packages :no-confirm)
 
-;; early-init.el points `custom-file' here but nothing loads it, so anything
-;; set through M-x customize was written and then ignored on the next start.
-;; Loaded before the modules so hand-written config still wins on a conflict.
-;; The file is gitignored: these are per-machine settings.
+;; early-init.el points `custom-file' here but never loads it, so anything set
+;; through customize was written and ignored. Before the modules, so they win.
 (when (file-exists-p custom-file)
   (load custom-file nil :nomessage))
 

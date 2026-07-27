@@ -1,19 +1,17 @@
-;;; pre-early-init.el -*- no-byte-compile: t; lexical-binding: t; -*-
+;;; pre-early-init.el --- Load path and startup report -*- no-byte-compile: t; lexical-binding: t; -*-
 
-;; The rc-*.el modules that post-init.el requires. This has to happen here,
-;; before anything on the load path is looked up.
+;;; Commentary:
+
+;; The first file minimal-emacs.d loads. Nothing in configs/ is reachable until
+;; that directory is on the load path, so it goes in before anything else runs.
+
+;;; Code:
+
 (add-to-list 'load-path
              (expand-file-name "configs/" user-emacs-directory))
 
-;; DEBUG MODE
-;; Uncomment when actively debugging; leaving this on pops a backtrace on every
-;; error during normal use.
-;; (setq debug-on-error t)
-
-;; Write startup time and package count as comments atop the *scratch* buffer.
-;; The scratch buffer defaults to `fundamental-mode' (see `initial-major-mode'
-;; in early-init.el), which has no font-locking; switch it to
-;; `lisp-interaction-mode' so the comment lines are highlighted.
+;; *scratch* comes up in `fundamental-mode' (see `initial-major-mode' in
+;; early-init.el), which does no font locking, hence the mode switch.
 (defun rc-display-startup-time ()
   "Write startup time and package count as comments atop *scratch*."
   (with-current-buffer (get-buffer-create "*scratch*")
@@ -25,3 +23,5 @@
                     (length package-activated-list)))))
 
 (add-hook 'emacs-startup-hook #'rc-display-startup-time 100)
+
+;;; pre-early-init.el ends here

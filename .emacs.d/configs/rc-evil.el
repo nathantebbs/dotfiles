@@ -22,9 +22,8 @@
 
 ;;; Evil
 
-;; evil-core.el declares this with no value and `evil-initializing-p' reads it,
-;; but nothing in evil 1.15.0 ever sets it. Without this every command in
-;; normal state signals a void-variable from `post-command-hook'.
+;; evil-core.el declares this with no value and nothing in 1.15.0 sets it, so
+;; without the binding every normal state command signals a void-variable.
 (defvar evil-mode-buffers nil)
 
 ;; All three are consumed while Evil loads, so they precede the require.
