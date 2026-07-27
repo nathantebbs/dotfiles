@@ -34,8 +34,9 @@
 - [x] `pdf-tools`: built and installed `epdfinfo`, so PDFs open without a prompt
 - [x] Reclaimed 689M: three stale Emacs 31 `eln-cache` dirs and the
       `Emacs-2026-02-19.app.bak` rollback copy
+- [x] Kept `~/source/repos/build-emacs-for-macos/sources` (599M). Deleting it
+      only saves space until the next rebuild, and a rebuild is expected
 
 ## Open
 
-- [ ] `~/source/repos/build-emacs-for-macos/sources` is 599M of Emacs source
-      trees. Kept deliberately so a rebuild does not have to refetch them
+Nothing open.
