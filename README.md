@@ -95,7 +95,7 @@ Then from within vim:
 :PlugInstall
 ```
 
-**Plugins:** fzf + fzf.vim, vim-surround, lightline, vim-polyglot, vim-todo-highlight, undotree
+**Plugins:** fzf + fzf.vim, vim-surround, vim-todo-highlight, undotree
 
 **Key bindings:**
 
@@ -106,10 +106,13 @@ Then from within vim:
 | `C-x l` | Lines in buffer (fzf `BLines`) |
 | `C-x m` | Maps (fzf) |
 | `C-x k` | Delete buffer |
-| `C-c C-u` | Toggle undotree |
-| `C-c C-e` | Open netrw |
-| `C-c C-p i` | `:PlugInstall` |
-| `C-c C-p c` | `:PlugClean` |
+| `C-l` | Clear search highlight |
+| `<leader> u` | Toggle undotree |
+| `<leader> e` | Open netrw |
+| `<leader> p i` | `:PlugInstall` |
+| `<leader> p c` | `:PlugClean` |
+
+The leader is `<Space>`.
 
 ### Neovim
 
@@ -117,7 +120,7 @@ Then from within vim:
 
 **Plugins:** Telescope (+ telescope-fzf-native), vim-surround, lightline, nvim-autopairs, todo-comments, presenting.nvim, undotree, vim-colors-modus, typst.vim
 
-No vim-polyglot here, unlike `.vimrc`. Neovim 0.12 ships filetype detection, syntax and indent for every language in use, including odin and typst. typst.vim stays for its compiler integration, not its syntax.
+No vim-polyglot here, and none in `.vimrc` either. Neovim 0.12 and Vim 9.1 both ship filetype detection, syntax and indent for every language in use, including odin, zig and typst. typst.vim stays for its compiler integration, not its syntax.
 
 **LSP:** Neovim's built-in client, so there is no lspconfig plugin. Each server's table is a file in `nvim/lsp/`, picked up off the runtimepath by name. A server whose binary is missing is skipped, so a machine without the toolchain still starts clean.
 

@@ -1,15 +1,32 @@
 " Author: Nathan Tebbs
 " File: .vimrc
 " Modified: 2026-07-30
+"
+" A .vimrc suppresses vim's defaults.vim, so anything that file would have
+" given us has to be spelled out here. Everything below is stock vim; the
+" plugin block at the bottom is optional and guarded.
 
 " BASICS:
 
 " Force vim not vi
 set nocompatible
-set clipboard=unnamedplus
+
+set encoding=utf-8
+set fileformats=unix,dos
+
+" macOS vim is built without +X11, where unnamedplus is silently ignored
+set clipboard=unnamed
+if has('unnamedplus')
+  set clipboard=unnamedplus,unnamed
+endif
 
 " Color
-set termguicolors
+if has('termguicolors')
+  " Truecolor sequences, needed when vim runs inside tmux
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
 
 " Relative number
 set relativenumber
@@ -26,7 +43,71 @@ set autoindent
 
 " netrw (":edit")
 filetype plugin indent on
-syntax on
+syntax enable
+
+" BEHAVIOR:
+
+" Let modified buffers go to the background instead of blocking :bdelete
+set hidden
+set confirm
+
+set backspace=indent,eol,start
+set autoread
+set history=1000
+set display=truncate
+
+" Interrupt vim before it walks every #include for a keyword completion
+set complete-=i
+
+" Otherwise <C-a> reads 007 as octal
+set nrformats-=octal
+
+" Terminal escape sequences resolve fast; mappings still get a full second
+set ttimeout
+set ttimeoutlen=50
+
+set laststatus=2
+set ruler
+set showcmd
+set splitbelow
+set splitright
+
+" FILES:
+
+" Undo, swap, and backups belong in ~/.vim, not next to the file being edited
+let s:vimdir = expand('~/.vim')
+for s:sub in ['undo', 'swap', 'backup']
+  if !isdirectory(s:vimdir . '/' . s:sub)
+    call mkdir(s:vimdir . '/' . s:sub, 'p', 0700)
+  endif
+endfor
+
+" Trailing slash encodes the full path, so same-named files cannot collide
+let &directory = s:vimdir . '/swap//'
+let &backupdir = s:vimdir . '/backup//'
+if has('persistent_undo')
+  let &undodir = s:vimdir . '/undo//'
+  set undofile
+  set undolevels=10000
+endif
+
+augroup vimrc_files
+  autocmd!
+  " Pick up changes made outside vim
+  autocmd FocusGained,BufEnter * silent! checktime
+  " Reopen a file where it was left, except for commit messages
+  autocmd BufReadPost *
+        \ if line("'\"") >= 1 && line("'\"") <= line("$") && &filetype !~# 'commit'
+        \ |   execute "normal! g`\""
+        \ | endif
+augroup END
+
+" SEARCH:
+
+set incsearch
+set hlsearch
+set ignorecase
+set smartcase
 
 " OTHER:
 
@@ -42,6 +123,12 @@ set colorcolumn=+1
 " Search down into every subdirectory, tab-completion
 set path+=**
 set wildmenu
+set wildmode=longest:full,full
+set wildignorecase
+
+" Keeps ":find" and path=** usable in a repo with vendored dependencies
+set wildignore+=*.o,*.obj,*.a,*.so,*.dylib,*.pyc,*.class
+set wildignore+=.git/**,node_modules/**,target/**,build/**,dist/**
 
 " NETRW:
 
@@ -53,33 +140,41 @@ let g:netrw_liststyle=3
 
 " BASIC REMAPS:
 
-nnoremap <C-c><C-p>i :PlugInstall<cr>
-nnoremap <C-c><C-p>c :PlugClean<cr>
-nnoremap <C-c><C-e> :Ex<cr>
+" Must precede every mapping that uses it; <Space> is unmapped so it cannot
+" both move the cursor and open a prefix
+let mapleader = ' '
+nnoremap <Space> <Nop>
+
+nnoremap <silent> <leader>pi :PlugInstall<cr>
+nnoremap <silent> <leader>pc :PlugClean<cr>
+nnoremap <silent> <leader>e :Ex<cr>
 
 " FZF
-nnoremap <C-x>l :BLines<cr>
-nnoremap <C-x>b :Buffers<cr>
-nnoremap <C-x>f :Files<cr>
-nnoremap <C-x>m :Maps<cr>
+nnoremap <silent> <C-x>l :BLines<cr>
+nnoremap <silent> <C-x>b :Buffers<cr>
+nnoremap <silent> <C-x>f :Files<cr>
+nnoremap <silent> <C-x>m :Maps<cr>
 
 " Undotree
-nnoremap <C-c><C-u> :UndotreeToggle<cr>
+nnoremap <silent> <leader>u :UndotreeToggle<cr>
 
 " Buffer MGMT
-nnoremap <C-x>k :bdelete<cr>
+nnoremap <silent> <C-x>k :bdelete<cr>
+
+" Redraw and drop the search highlight
+nnoremap <silent> <C-l> :nohlsearch<cr><C-l>
 
 " PLUGINS:
 
-call plug#begin()
+" Nothing above depends on these, so a missing vim-plug is not an error
+if filereadable(expand('~/.vim/autoload/plug.vim'))
+  call plug#begin('~/.vim/plugged')
 
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'tpope/vim-surround'
-Plug 'sheerun/vim-polyglot'
-Plug 'sakshamgupta05/vim-todo-highlight'
-Plug 'mbbill/undotree'
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'junegunn/fzf.vim'
+  Plug 'tpope/vim-surround'
+  Plug 'sakshamgupta05/vim-todo-highlight'
+  Plug 'mbbill/undotree'
 
-call plug#end()
-
-colorscheme industry
+  call plug#end()
+endif
