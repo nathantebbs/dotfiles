@@ -138,31 +138,37 @@ let g:netrw_browse_split=2
 let g:netrw_altv=1
 let g:netrw_liststyle=3
 
-" BASIC REMAPS:
+" REMAPS:
 
-" Must precede every mapping that uses it; <Space> is unmapped so it cannot
-" both move the cursor and open a prefix
+" Everything of mine hangs off the leader, so vim keeps its own Ctrl keys.
+" Must precede every mapping that uses it.
 let mapleader = ' '
 nnoremap <Space> <Nop>
 
-nnoremap <silent> <leader>pi :PlugInstall<cr>
-nnoremap <silent> <leader>pc :PlugClean<cr>
-nnoremap <silent> <leader>e :Ex<cr>
+" Finding things (fzf)
+nnoremap <silent> <leader>f :Files<cr>
+nnoremap <silent> <leader>b :Buffers<cr>
+nnoremap <silent> <leader>l :BLines<cr>
+nnoremap <silent> <leader>/ :Rg<cr>
+nnoremap <silent> <leader>m :Maps<cr>
 
-" FZF
-nnoremap <silent> <C-x>l :BLines<cr>
-nnoremap <silent> <C-x>b :Buffers<cr>
-nnoremap <silent> <C-x>f :Files<cr>
-nnoremap <silent> <C-x>m :Maps<cr>
+" Files and buffers
+nnoremap <silent> <leader>e :Explore<cr>
+nnoremap <silent> <leader>k :bdelete<cr>
+nnoremap <silent> <leader>w :write<cr>
 
 " Undotree
 nnoremap <silent> <leader>u :UndotreeToggle<cr>
 
-" Buffer MGMT
-nnoremap <silent> <C-x>k :bdelete<cr>
-
 " Redraw and drop the search highlight
 nnoremap <silent> <C-l> :nohlsearch<cr><C-l>
+
+" D and C act to end of line; Y should not be an exception
+nnoremap Y y$
+
+" Keep the selection after shifting it
+xnoremap < <gv
+xnoremap > >gv
 
 " PLUGINS:
 

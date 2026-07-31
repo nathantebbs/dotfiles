@@ -99,20 +99,23 @@ Then from within vim:
 
 **Key bindings:**
 
+The leader is `<Space>`. Every binding of mine hangs off it, so Vim keeps its own Ctrl keys.
+
 | Binding | Action |
 |---------|--------|
-| `C-x f` | Files (fzf) |
-| `C-x b` | Buffers (fzf) |
-| `C-x l` | Lines in buffer (fzf `BLines`) |
-| `C-x m` | Maps (fzf) |
-| `C-x k` | Delete buffer |
-| `C-l` | Clear search highlight |
-| `<leader> u` | Toggle undotree |
+| `<leader> f` | Files (fzf) |
+| `<leader> b` | Buffers (fzf) |
+| `<leader> l` | Lines in buffer (fzf `BLines`) |
+| `<leader> /` | Grep the project (fzf `Rg`) |
+| `<leader> m` | Maps (fzf) |
 | `<leader> e` | Open netrw |
-| `<leader> p i` | `:PlugInstall` |
-| `<leader> p c` | `:PlugClean` |
+| `<leader> k` | Delete buffer |
+| `<leader> w` | Write |
+| `<leader> u` | Toggle undotree |
+| `C-l` | Redraw and clear search highlight |
+| `Y` | Yank to end of line, matching `D` and `C` |
 
-The leader is `<Space>`.
+`:PlugInstall` and `:PlugClean` have no binding. They run a few times a year, which is not often enough to spend a key on.
 
 ### Neovim
 
