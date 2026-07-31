@@ -6,7 +6,6 @@ alias emacs='emacsclient -c -n'
 alias e='emacsclient -n'
 alias et='emacsclient -t'
 alias keys="alias | fzf"
-alias cc="claude"
 
 # The daemon is a launchd job, so it has to be driven through launchctl.
 # Killing it directly would just make KeepAlive start it again.
