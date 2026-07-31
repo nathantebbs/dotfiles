@@ -114,9 +114,8 @@ set smartcase
 " Scrolloff
 set scrolloff=10
 
-" Color column + textwidth (formatting)
+" textwidth (formatting)
 set textwidth=79
-set colorcolumn=+1
 
 " FINDING FILES:
 
