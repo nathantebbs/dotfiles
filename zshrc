@@ -108,3 +108,6 @@ source $ZSH/oh-my-zsh.sh
 # repo is cloned. ~/.zshrc is a symlink into the repo; :A follows it.
 DOTFILES_DIR="${${(%):-%x}:A:h}"
 source "$DOTFILES_DIR/config.zsh"
+
+# bun completions
+[ -s "/Users/nathantebbs/.bun/_bun" ] && source "/Users/nathantebbs/.bun/_bun"

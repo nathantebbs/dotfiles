@@ -1,6 +1,6 @@
 " Author: Nathan Tebbs
 " File: .vimrc
-" Modified: 2026-01-24
+" Modified: 2026-07-30
 
 " BASICS:
 
@@ -76,7 +76,6 @@ call plug#begin()
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
-Plug 'itchyny/lightline.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'sakshamgupta05/vim-todo-highlight'
 Plug 'mbbill/undotree'
@@ -84,11 +83,3 @@ Plug 'mbbill/undotree'
 call plug#end()
 
 colorscheme industry
-
-" Enable lightline
-set laststatus=2
-
-" lightline colorscheme
-let g:lightline = {
-      \ 'colorscheme': 'one',
-      \ }

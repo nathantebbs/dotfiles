@@ -5,7 +5,6 @@
 alias emacs='emacsclient -c -n'
 alias e='emacsclient -n'
 alias et='emacsclient -t'
-alias vim="nvim"
 alias keys="alias | fzf"
 alias cc="claude"
 
