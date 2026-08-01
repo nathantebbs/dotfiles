@@ -36,8 +36,20 @@ emacsctl() {
 
 # OS Specific customizations
 case "$OSTYPE" in
-  darwin*) EDITOR=/opt/homebrew/bin/nvim ;;
-  linux*) EDITOR=/usr/bin/nvim ;;
+  darwin*)
+    EDITOR=/opt/homebrew/bin/nvim
+    # BSD ls. CLICOLOR rather than an ls -G alias, so anything invoking ls
+    # gets the colors. LSCOLORS is 11 foreground/background letter pairs, in
+    # the order ls documents; cyan directories match the starship prompt.
+    export CLICOLOR=1
+    export LSCOLORS="GxFxBxdxCxDxdxabagacad"
+    ;;
+  linux*)
+    EDITOR=/usr/bin/nvim
+    # GNU ls ignores LSCOLORS and needs the flag. Its built-in LS_COLORS is
+    # already reasonable, so there is nothing to set.
+    alias ls='ls --color=auto'
+    ;;
 esac
 
 # PATH. Each entry is guarded so a machine missing the toolchain doesn't break
