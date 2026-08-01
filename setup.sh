@@ -26,7 +26,6 @@ DEPS=(
   "ripgrep:rg"
   "fzf:fzf"
   "make:make"
-  "zsh:zsh"
   "curl:curl"
   "git:git"
 )
@@ -115,25 +114,19 @@ echo ""
 bash "$DOTFILES_DIR/util/scripts/deploy.sh"
 echo ""
 
-# ── 4. Oh-my-zsh + config.zsh ────────────────────────────────────────────────
-echo "--- zsh ---"
-echo ""
-bash "$DOTFILES_DIR/util/scripts/install-omz.sh"
-echo ""
-
-# ── 5. vim-plug ───────────────────────────────────────────────────────────────
+# ── 4. vim-plug ───────────────────────────────────────────────────────────────
 echo "--- vim-plug ---"
 echo ""
 bash "$DOTFILES_DIR/util/scripts/install-vimplug.sh"
 echo ""
 
-# ── 6. starship ──────────────────────────────────────────────────────────────
+# ── 5. starship ──────────────────────────────────────────────────────────────
 echo "--- starship ---"
 echo ""
 bash "$DOTFILES_DIR/util/scripts/install-starship.sh"
 echo ""
 
-# ── 7. Default shell ─────────────────────────────────────────────────────────
+# ── 6. Default shell ─────────────────────────────────────────────────────────
 echo "--- bash ---"
 echo ""
 bash "$DOTFILES_DIR/util/scripts/install-bash.sh"
