@@ -262,8 +262,12 @@ bash util/scripts/install-bash.sh
 That installs `bash` from Homebrew, adds it to `/etc/shells` (needs sudo) and
 runs `chsh`. It is idempotent, so re-running it is a no-op.
 
-`bash_profile` exists only because macOS terminals open login shells, which read
-it instead of `~/.bashrc`. It sources `~/.bashrc` and stops.
+`bash_profile` exists because macOS terminals open login shells, which read it
+instead of `~/.bashrc`. It runs `brew shellenv` and then sources `~/.bashrc`,
+in that order, so the guarded prepends in `config.bash` land in front of
+Homebrew. This is what `~/.zprofile` used to do for zsh; bash never reads that
+file, and without the call `/opt/homebrew/bin` arrives last via `path_helper`
+and `/opt/homebrew/sbin` never arrives at all.
 
 **`bashrc` provides** the parts that are bash's own:
 
