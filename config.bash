@@ -34,10 +34,11 @@ emacsctl() {
   esac
 }
 
-# OS Specific customizations
+# OS Specific customizations. EDITOR is exported: git, crontab and anything
+# else spawning an editor read it from the environment, not from the shell.
 case "$OSTYPE" in
   darwin*)
-    EDITOR=/opt/homebrew/bin/nvim
+    export EDITOR=/opt/homebrew/bin/nvim
     # BSD ls. CLICOLOR rather than an ls -G alias, so anything invoking ls
     # gets the colors. LSCOLORS is 11 foreground/background letter pairs, in
     # the order ls documents; cyan directories match the starship prompt.
@@ -45,7 +46,7 @@ case "$OSTYPE" in
     export LSCOLORS="GxFxBxdxCxDxdxabagacad"
     ;;
   linux*)
-    EDITOR=/usr/bin/nvim
+    export EDITOR=/usr/bin/nvim
     # GNU ls ignores LSCOLORS and needs the flag. Its built-in LS_COLORS is
     # already reasonable, so there is nothing to set.
     alias ls='ls --color=auto'
