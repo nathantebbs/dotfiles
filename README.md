@@ -317,6 +317,20 @@ One trap worth writing down: starship's color names are not ANSI's. There is no
 `magenta`, only `purple`, and an unrecognized name renders unstyled with no
 warning.
 
+## C style
+
+`clang-format` is [MaJerle/c-code-style](https://github.com/MaJerle/c-code-style)
+vendored verbatim, linked to `~/.clang-format`. The short version: 4-space
+indent, 120 columns, braces attached, pointers bound to the type (`char* p`),
+return type on its own line for definitions, and mandatory braces on control
+statements. Re-sync by overwriting the file with that repo's `.clang-format`,
+keeping the three provenance lines at the top.
+
+Emacs formats through apheleia, which shells out to `clang-format` itself.
+clang-format walks up from the file being formatted looking for a
+`.clang-format`, so this one applies to anything under `$HOME` that does not
+ship its own. A project with its own file still wins, which is the point.
+
 ## tmux
 
 `tmux/tmux.conf` is linked to `~/.config/tmux` by the deploy script.
