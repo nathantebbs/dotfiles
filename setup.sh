@@ -127,7 +127,13 @@ echo ""
 bash "$DOTFILES_DIR/util/scripts/install-vimplug.sh"
 echo ""
 
-# ── 6. Default shell ─────────────────────────────────────────────────────────
+# ── 6. starship ──────────────────────────────────────────────────────────────
+echo "--- starship ---"
+echo ""
+bash "$DOTFILES_DIR/util/scripts/install-starship.sh"
+echo ""
+
+# ── 7. Default shell ─────────────────────────────────────────────────────────
 echo "--- bash ---"
 echo ""
 bash "$DOTFILES_DIR/util/scripts/install-bash.sh"
