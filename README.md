@@ -318,9 +318,17 @@ goes red when the last command failed. The directory is one component, since
 the full path is what `pwd` is for. starship enables roughly forty modules by
 default and several of them shell out on every prompt.
 
-One trap worth writing down: starship's color names are not ANSI's. There is no
-`magenta`, only `purple`, and an unrecognized name renders unstyled with no
-warning.
+Colors come from a named palette, `modus-vivendi`, holding the same accents
+Emacs and Neovim use here. Retheming is that one block; the modules refer to
+colors by name and never carry a hex value themselves.
+
+One trap worth writing down: starship's own color names are not ANSI's. There
+is no `magenta`, only `purple`, and an unrecognized name renders unstyled with
+no warning. The palette uses hex, which sidesteps the whole question.
+
+The prompt is styled through `starship.toml` and nothing else. `PS1` is
+regenerated on every prompt by `starship_precmd`, so anything assigned to it
+directly is discarded.
 
 ## C style
 
