@@ -313,9 +313,10 @@ upstream tested rather than whatever resolves that day. Re-running it updates
 to current upstream.
 
 `starship.toml` sets an explicit `format`, so only the modules named in it
-render: directory, git branch, git status, command duration over two seconds,
-and the prompt character. starship enables roughly forty modules by default and
-several of them shell out on every prompt.
+render: the current directory, the git branch, and the prompt character, which
+goes red when the last command failed. The directory is one component, since
+the full path is what `pwd` is for. starship enables roughly forty modules by
+default and several of them shell out on every prompt.
 
 One trap worth writing down: starship's color names are not ANSI's. There is no
 `magenta`, only `purple`, and an unrecognized name renders unstyled with no

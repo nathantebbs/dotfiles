@@ -3,20 +3,20 @@
 # `format` is explicit, so only the modules named below ever render. That is
 # the point: starship enables about forty modules by default, and every one
 # of them is a subprocess or a stat() on some prompts.
+#
+# Colors are starship's names, not ANSI's. There is no "magenta", only
+# "purple", and an unrecognized name renders unstyled without a warning.
 
 add_newline = false
 
 format = """
-$username\
-$hostname\
 $directory\
 $git_branch\
-$git_status\
-$cmd_duration\
 $character"""
 
+# One component. The full path is what `pwd` is for.
 [directory]
-truncation_length = 3
+truncation_length = 1
 truncate_to_repo = false
 style = "bold cyan"
 
@@ -24,16 +24,6 @@ style = "bold cyan"
 symbol = ""
 format = "[$branch]($style) "
 style = "bold purple"
-
-[git_status]
-format = "([$all_status$ahead_behind]($style) )"
-style = "bold yellow"
-
-# Under two seconds the number is noise.
-[cmd_duration]
-min_time = 2000
-format = "[$duration]($style) "
-style = "yellow"
 
 [character]
 success_symbol = "[❯](bold green)"
