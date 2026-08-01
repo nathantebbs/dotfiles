@@ -46,6 +46,14 @@
       (3.6G), and `haskell-mode`, `ormolu` and `zig-mode` removed from the Emacs
       manifest. `zig` was in the Brewfile but had never been installed
 
+- [x] zsh + oh-my-zsh -> bash + starship. macOS bash 3.2 is not worth
+      configuring, so the shell is the Homebrew build, added to `/etc/shells`
+      and set as the login shell by `util/scripts/install-bash.sh`. starship is
+      built from source into `~/source/third_party/starship` and installed to
+      `~/.local/bin`. omz was down to a theme and the git plugin; starship
+      covers the first and bash's own completion covers the second. WezTerm
+      names the shell explicitly rather than reading the password database
+
 ## Open
 
 Nothing open.
