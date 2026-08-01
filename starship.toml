@@ -1,0 +1,44 @@
+# Single line, like the zsh "mh" theme this replaces.
+#
+# `format` is explicit, so only the modules named below ever render. That is
+# the point: starship enables about forty modules by default, and every one
+# of them is a subprocess or a stat() on some prompts.
+
+add_newline = false
+
+format = """
+$directory\
+$git_branch\
+$character"""
+
+# Modus Vivendi, the same accents Emacs and Neovim use here. Named colors go
+# through the palette rather than into the modules, so retheming is this
+# block and nothing else. Note starship's own color names are not ANSI's --
+# there is no "magenta", only "purple" -- and an unrecognized name renders
+# unstyled with no warning. Hex sidesteps that entirely.
+palette = "modus-vivendi"
+
+[palettes.modus-vivendi]
+cyan = "#00d3d0"
+purple = "#b6a0ff"
+green = "#44bc44"
+red = "#ff5f59"
+
+# One component. The full path is what `pwd` is for.
+[directory]
+truncation_length = 1
+truncate_to_repo = false
+style = "bold fg:cyan"
+# The module's format concatenates this straight onto the path, so the
+# separating space has to live in the symbol.
+read_only = " \U0001F512"
+read_only_style = "fg:red"
+
+[git_branch]
+symbol = ""
+format = "[$branch]($style) "
+style = "bold fg:purple"
+
+[character]
+success_symbol = "[\u276F](bold fg:green)"
+error_symbol = "[\u276F](bold fg:red)"

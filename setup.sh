@@ -13,8 +13,6 @@ info() { echo -e "${GREEN}[OK]${NC} $*"; }
 warn() { echo -e "${YELLOW}[INFO]${NC} $*"; }
 err()  { echo -e "${RED}[ERROR]${NC} $*"; }
 
-is_wsl() { grep -qi microsoft /proc/version 2>/dev/null; }
-
 echo "=== dotfiles setup ==="
 echo ""
 
@@ -28,7 +26,6 @@ DEPS=(
   "ripgrep:rg"
   "fzf:fzf"
   "make:make"
-  "zsh:zsh"
   "curl:curl"
   "git:git"
 )
@@ -117,36 +114,23 @@ echo ""
 bash "$DOTFILES_DIR/util/scripts/deploy.sh"
 echo ""
 
-# ── 4. Oh-my-zsh + config.zsh ────────────────────────────────────────────────
-echo "--- zsh ---"
-echo ""
-bash "$DOTFILES_DIR/util/scripts/install-omz.sh"
-echo ""
-
-# ── 5. vim-plug ───────────────────────────────────────────────────────────────
+# ── 4. vim-plug ───────────────────────────────────────────────────────────────
 echo "--- vim-plug ---"
 echo ""
 bash "$DOTFILES_DIR/util/scripts/install-vimplug.sh"
 echo ""
 
-# ── 6. Default shell ─────────────────────────────────────────────────────────
-ZSH_PATH="$(which zsh)"
-if [ "$SHELL" = "$ZSH_PATH" ]; then
-  info "Default shell is already zsh"
-elif is_wsl; then
-  # WSL terminals often ignore chsh and launch bash directly;
-  # exec zsh from .bashrc is more reliable
-  if grep -qxF 'exec zsh' "$HOME/.bashrc" 2>/dev/null; then
-    info "~/.bashrc already launches zsh"
-  else
-    echo 'exec zsh' >> "$HOME/.bashrc"
-    info "Added 'exec zsh' to ~/.bashrc"
-  fi
-else
-  chsh -s "$ZSH_PATH"
-  info "Default shell set to zsh"
-fi
-
+# ── 5. starship ──────────────────────────────────────────────────────────────
+echo "--- starship ---"
 echo ""
+bash "$DOTFILES_DIR/util/scripts/install-starship.sh"
+echo ""
+
+# ── 6. Default shell ─────────────────────────────────────────────────────────
+echo "--- bash ---"
+echo ""
+bash "$DOTFILES_DIR/util/scripts/install-bash.sh"
+echo ""
+
 echo -e "${GREEN}=== Setup complete! ===${NC}"
-echo "Open a new terminal to start using zsh."
+echo "Open a new terminal to start using bash."

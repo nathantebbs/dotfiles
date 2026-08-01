@@ -128,7 +128,7 @@ require("lazy").setup({
 -- Each server's table lives in lsp/<name>.lua, found on the runtimepath.
 
 -- Indexing vim.lsp.config resolves those files; require() only searches lua/.
--- Absent binary means skip, like the PATH guards in config.zsh.
+-- Absent binary means skip, like the PATH guards in config.bash.
 local servers = { "clangd", "gopls", "pyright", "tinymist", "ols" }
 for _, name in ipairs(servers) do
   local cmd = vim.lsp.config[name].cmd

@@ -11,7 +11,7 @@ The purpose of this repository is to store all configuration of any essential de
 |---------|---------|
 | `git` | Version control |
 | `curl` | Script downloads |
-| `zsh` | Shell |
+| `bash` | Shell (Homebrew; macOS ships 3.2) |
 | `neovim` | Primary editor (desktop/server) |
 | `emacs` | Secondary editor |
 | `ripgrep` | Telescope live grep |
@@ -31,7 +31,7 @@ git clone --depth=1 https://github.com/nathantebbs/dotfiles
 cd dotfiles
 ```
 
-2. Run setup (installs dependencies, fonts, symlinks, zsh)
+2. Run setup (installs dependencies, fonts, symlinks, starship, bash)
 
 ```sh
 bash setup.sh
@@ -44,11 +44,12 @@ bash setup.sh
 If you only need part of the setup:
 
 ```sh
-bash util/scripts/deploy.sh        # symlinks only
-bash util/scripts/install-fonts.sh # fonts only
-bash util/scripts/install-omz.sh   # oh-my-zsh + config.zsh
+bash util/scripts/deploy.sh               # symlinks only
+bash util/scripts/install-fonts.sh        # fonts only
+bash util/scripts/install-starship.sh     # build starship from source
+bash util/scripts/install-bash.sh         # Homebrew bash + login shell
 bash util/scripts/install-vimplug.sh
-bash util/scripts/make-emacsclient-app.sh  # Emacsclient.app launcher (macOS)
+bash util/scripts/make-emacsclient-app.sh # Emacsclient.app launcher (macOS)
 ```
 
 ### deploy.sh
@@ -62,7 +63,9 @@ Located at `util/scripts/deploy.sh`, this script creates symlinks for all config
 | `tmux/` | `~/.config/tmux` |
 | `nvim/` | `~/.config/nvim` |
 | `wezterm/` | `~/.config/wezterm` |
-| `zshrc` | `~/.zshrc` |
+| `bashrc` | `~/.bashrc` |
+| `bash_profile` | `~/.bash_profile` |
+| `starship.toml` | `~/.config/starship.toml` |
 | `gitconfig` | `~/.gitconfig` |
 | `clang-format` | `~/.clang-format` |
 | `aerospace.toml` | `~/.aerospace.toml` |
@@ -208,6 +211,7 @@ None of these pass `-a ""`. That flag would start a daemon outside launchd, whic
 
 `wezterm/wezterm.lua` configures the [WezTerm](https://wezterm.org/) terminal emulator.
 
+- Shell: the Homebrew bash, as a login shell. Named explicitly rather than taken from the password database, so a machine where `chsh` has not run still opens bash and not the macOS 3.2
 - Font: Zenbones Brainy, 14pt, with Symbols Nerd Font Mono as fallback for icon glyphs
 - Background opacity: 0.92
 - Cursor: steady block
@@ -245,19 +249,39 @@ Apps open on a fixed workspace via `on-window-detected` rules: browsers on 1, te
 
 `karabiner/karabiner.json` holds the Hyper remap plus HHKB-specific fixes. Karabiner owns this file and rewrites it when settings change in its GUI, so expect it to reformat on edit. Do not run a second window manager such as Rectangle or yabai alongside AeroSpace; they fight over window placement.
 
-## zsh
+## bash
 
-I use zsh with [oh-my-zsh](https://ohmyz.sh/) for theme and plugins. To automate installation:
+macOS ships bash 3.2 and never will ship a newer one, so the shell here is the
+Homebrew build. `chsh` only accepts a shell listed in `/etc/shells`, so that
+file has to be edited first:
 
 ```sh
-bash util/scripts/install-omz.sh
+bash util/scripts/install-bash.sh
 ```
 
-This installs oh-my-zsh and appends a `source` line for `config.zsh` to `~/.zshrc`.
+That installs `bash` from Homebrew, adds it to `/etc/shells` (needs sudo) and
+runs `chsh`. It is idempotent, so re-running it is a no-op.
 
-**`config.zsh` provides:**
+`bash_profile` exists because macOS terminals open login shells, which read it
+instead of `~/.bashrc`. It runs `brew shellenv` and then sources `~/.bashrc`,
+in that order, so the guarded prepends in `config.bash` land in front of
+Homebrew. This is what `~/.zprofile` used to do for zsh; bash never reads that
+file, and without the call `/opt/homebrew/bin` arrives last via `path_helper`
+and `/opt/homebrew/sbin` never arrives at all.
 
-- Aliases: `emacs` (new GUI frame on the daemon), `e` (open a file in an existing frame), `et` (frame in this terminal), `vim` → `nvim`, `keys` (fzf alias search), `cc` → `claude`
+**`bashrc` provides** the parts that are bash's own:
+
+- History worth having: 100k lines, deduplicated, appended per prompt so two
+  terminals do not overwrite each other. bash defaults to 500 lines and
+  last-window-wins
+- `shopt`: `globstar`, `autocd`, `cdspell`, `dirspell`, `checkwinsize`
+- `set -o vi`, matching vim, evil and tmux copy-mode
+- The starship prompt, initialised last because it owns `PS1`
+
+**`config.bash` provides** everything portable, which is the whole of the old
+`config.zsh` bar the bun completions:
+
+- Aliases: `emacs` (new GUI frame on the daemon), `e` (open a file in an existing frame), `et` (frame in this terminal), `keys` (fzf alias search)
 - `emacsctl` — manage the Emacs daemon:
   ```sh
   emacsctl start    # launch daemon
@@ -266,7 +290,59 @@ This installs oh-my-zsh and appends a `source` line for `config.zsh` to `~/.zshr
   emacsctl status   # check if running
   ```
 - OS-specific `$EDITOR` (nvim path varies between macOS and Linux)
+- `ls` colors. macOS gets `CLICOLOR` plus an `LSCOLORS` palette with cyan directories, matching the prompt; Linux gets `ls --color=auto`, since GNU ls ignores `LSCOLORS` entirely. oh-my-zsh used to supply an `ls -G` alias, so without this the switch would have lost colors outright
 - PATH additions, each guarded so a machine missing the toolchain still gets a working shell: `~/.local/bin`, `~/.cargo/bin`, `~/go/bin`, Emacs.app, and Bun
+
+`~/.bun/_bun` did not come across. It is a zsh `compdef` file with no bash
+equivalent, so bun contributes only its binary now.
+
+## starship
+
+[starship](https://starship.rs/) replaces the oh-my-zsh theme, which was the
+last thing omz was doing. It is built from source into
+`~/source/third_party/starship`, matching how Emacs and the other hand-built
+tools on this machine are handled:
+
+```sh
+bash util/scripts/install-starship.sh
+```
+
+The script clones or updates the checkout and runs `cargo install --root
+~/.local`, which is already on PATH. `--locked` builds the dependency set
+upstream tested rather than whatever resolves that day. Re-running it updates
+to current upstream.
+
+`starship.toml` sets an explicit `format`, so only the modules named in it
+render: the current directory, the git branch, and the prompt character, which
+goes red when the last command failed. The directory is one component, since
+the full path is what `pwd` is for. starship enables roughly forty modules by
+default and several of them shell out on every prompt.
+
+Colors come from a named palette, `modus-vivendi`, holding the same accents
+Emacs and Neovim use here. Retheming is that one block; the modules refer to
+colors by name and never carry a hex value themselves.
+
+One trap worth writing down: starship's own color names are not ANSI's. There
+is no `magenta`, only `purple`, and an unrecognized name renders unstyled with
+no warning. The palette uses hex, which sidesteps the whole question.
+
+The prompt is styled through `starship.toml` and nothing else. `PS1` is
+regenerated on every prompt by `starship_precmd`, so anything assigned to it
+directly is discarded.
+
+## C style
+
+`clang-format` is [MaJerle/c-code-style](https://github.com/MaJerle/c-code-style)
+vendored verbatim, linked to `~/.clang-format`. The short version: 4-space
+indent, 120 columns, braces attached, pointers bound to the type (`char* p`),
+return type on its own line for definitions, and mandatory braces on control
+statements. Re-sync by overwriting the file with that repo's `.clang-format`,
+keeping the three provenance lines at the top.
+
+Emacs formats through apheleia, which shells out to `clang-format` itself.
+clang-format walks up from the file being formatted looking for a
+`.clang-format`, so this one applies to anything under `$HOME` that does not
+ship its own. A project with its own file still wins, which is the point.
 
 ## tmux
 

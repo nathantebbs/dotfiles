@@ -9,16 +9,24 @@ brew "astyle"
 brew "autoconf"
 # Tool for generating GNU Standards-compliant Makefiles
 brew "automake"
+# Bourne-Again SHell, a UNIX command interpreter
+brew "bash"
 # Formatting tools for C, C++, Obj-C, Java, JavaScript, TypeScript
 brew "clang-format"
 # Cross-platform make
 brew "cmake"
+# Strongly specified, highly compatible implementation of Markdown
+brew "cmark"
+# GNU File, Shell, and Text utilities
+brew "coreutils"
 # Reimplementation of ctags(1)
 brew "ctags"
 # Pack, ship and run any application as a lightweight container
 brew "docker", link: false
 # Isolated development environments using Docker
 brew "docker-compose"
+# Command-line tool to interact with exercism.io
+brew "exercism"
 # Like neofetch, but much faster because written mostly in C
 brew "fastfetch"
 # Cryptography and SSL/TLS Toolkit
@@ -41,6 +49,8 @@ brew "gh"
 brew "git-filter-repo"
 # OpenGL and OpenGL ES reference compiler for shading languages
 brew "glslang"
+# GNU implementation of the famous stream editor
+brew "gnu-sed"
 # GNU Privacy Guard (OpenPGP)
 brew "gnupg"
 # GNOME Spreadsheet Application
@@ -61,8 +71,12 @@ brew "isync"
 brew "jpeg"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
+# JIT library for the GNU compiler collection
+brew "libgccjit"
 # C99 library which implements a VT220 or xterm terminal emulator
 brew "libvterm"
+# Swiss Army knife of email handling
+brew "mailutils"
 # Utility for directing compilation
 brew "make"
 # Open-source, cross-platform JavaScript runtime environment
@@ -87,6 +101,8 @@ brew "neovim"
 brew "raylib"
 # Programming language with focus on simplicity, performance and modern systems
 brew "odin"
+# Formatter for The Odin Programming Language
+brew "odinfmt"
 # Language server for The Odin Programming Language
 brew "ols"
 # Swiss-army knife of markup format conversion
@@ -99,6 +115,8 @@ brew "pipx"
 brew "pngcheck"
 # Fast, disk space efficient package manager
 brew "pnpm"
+# Tool for managing OCI containers and pods
+brew "podman"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
 # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
@@ -165,7 +183,6 @@ cask "macfuse"
 cask "mos"
 # Peer to peer Bitorrent client
 cask "qbittorrent"
-# Simulator that runs MIPS32 assembly language programmes
 # Porting tool, to make Windows programs/games into native apps
 cask "sikarugir-app/sikarugir/sikarugir"
 # Video game digital distribution service

@@ -34,10 +34,23 @@ emacsctl() {
   esac
 }
 
-# OS Specific customizations
+# OS Specific customizations. EDITOR is exported: git, crontab and anything
+# else spawning an editor read it from the environment, not from the shell.
 case "$OSTYPE" in
-  darwin*) EDITOR=/opt/homebrew/bin/nvim ;;
-  linux*) EDITOR=/usr/bin/nvim ;;
+  darwin*)
+    export EDITOR=/opt/homebrew/bin/nvim
+    # BSD ls. CLICOLOR rather than an ls -G alias, so anything invoking ls
+    # gets the colors. LSCOLORS is 11 foreground/background letter pairs, in
+    # the order ls documents; cyan directories match the starship prompt.
+    export CLICOLOR=1
+    export LSCOLORS="GxFxBxdxCxDxdxabagacad"
+    ;;
+  linux*)
+    export EDITOR=/usr/bin/nvim
+    # GNU ls ignores LSCOLORS and needs the flag. Its built-in LS_COLORS is
+    # already reasonable, so there is nothing to set.
+    alias ls='ls --color=auto'
+    ;;
 esac
 
 # PATH. Each entry is guarded so a machine missing the toolchain doesn't break
@@ -47,8 +60,9 @@ esac
 [ -d "$HOME/go/bin" ]     && export PATH="$HOME/go/bin:$PATH"
 [ -d "/Applications/Emacs.app/Contents/MacOS/bin" ] && export PATH="/Applications/Emacs.app/Contents/MacOS/bin:$PATH"
 
+# ~/.bun/_bun is a zsh compdef file with no bash equivalent, so only the
+# binary comes across.
 if [ -d "$HOME/.bun" ]; then
   export BUN_INSTALL="$HOME/.bun"
   export PATH="$BUN_INSTALL/bin:$PATH"
-  [ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
 fi
