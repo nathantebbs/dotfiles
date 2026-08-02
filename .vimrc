@@ -38,6 +38,13 @@ set softtabstop=4
 set shiftwidth=4
 set noexpandtab
 
+" C is formatted by clang-format, which is set to spaces. Go is formatted by
+" gofmt, which is set to tabs, so this cannot move to the global setting.
+augroup vimrc_indent
+  autocmd!
+  autocmd FileType c,cpp setlocal expandtab shiftwidth=4 softtabstop=4 tabstop=4
+augroup END
+
 " Autoindent
 set autoindent
 
