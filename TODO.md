@@ -54,6 +54,12 @@
       covers the first and bash's own completion covers the second. WezTerm
       names the shell explicitly rather than reading the password database
 
+- [x] Dropped starship. `starship.toml` and
+      `util/scripts/install-starship.sh` deleted, along with the symlink in
+      `deploy.sh` and the setup.sh stage. The prompt is a plain colored `PS1`
+      in `bashrc`. The checkout under `~/source/third_party/starship` (836M)
+      and the binary in `~/.local/bin` are gone too
+
 ## Open
 
 Nothing open.

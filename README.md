@@ -31,7 +31,7 @@ git clone --depth=1 https://github.com/nathantebbs/dotfiles
 cd dotfiles
 ```
 
-2. Run setup (installs dependencies, fonts, symlinks, starship, bash)
+2. Run setup (installs dependencies, fonts, symlinks, bash)
 
 ```sh
 bash setup.sh
@@ -46,7 +46,6 @@ If you only need part of the setup:
 ```sh
 bash util/scripts/deploy.sh               # symlinks only
 bash util/scripts/install-fonts.sh        # fonts only
-bash util/scripts/install-starship.sh     # build starship from source
 bash util/scripts/install-bash.sh         # Homebrew bash + login shell
 bash util/scripts/install-vimplug.sh
 bash util/scripts/make-emacsclient-app.sh # Emacsclient.app launcher (macOS)
@@ -65,7 +64,6 @@ Located at `util/scripts/deploy.sh`, this script creates symlinks for all config
 | `wezterm/` | `~/.config/wezterm` |
 | `bashrc` | `~/.bashrc` |
 | `bash_profile` | `~/.bash_profile` |
-| `starship.toml` | `~/.config/starship.toml` |
 | `gitconfig` | `~/.gitconfig` |
 | `clang-format` | `~/.clang-format` |
 | `aerospace.toml` | `~/.aerospace.toml` |
@@ -276,7 +274,7 @@ and `/opt/homebrew/sbin` never arrives at all.
   last-window-wins
 - `shopt`: `globstar`, `autocd`, `cdspell`, `dirspell`, `checkwinsize`
 - `set -o vi`, matching vim, evil and tmux copy-mode
-- The starship prompt, initialised last because it owns `PS1`
+- `PS1`: the working directory in brackets and nothing else
 
 **`config.bash` provides** everything portable, which is the whole of the old
 `config.zsh` bar the bun completions:
@@ -290,45 +288,32 @@ and `/opt/homebrew/sbin` never arrives at all.
   emacsctl status   # check if running
   ```
 - OS-specific `$EDITOR` (nvim path varies between macOS and Linux)
-- `ls` colors. macOS gets `CLICOLOR` plus an `LSCOLORS` palette with cyan directories, matching the prompt; Linux gets `ls --color=auto`, since GNU ls ignores `LSCOLORS` entirely. oh-my-zsh used to supply an `ls -G` alias, so without this the switch would have lost colors outright
+- `ls` colors. macOS gets `CLICOLOR` plus an `LSCOLORS` palette with cyan directories; Linux gets `ls --color=auto`, since GNU ls ignores `LSCOLORS` entirely. oh-my-zsh used to supply an `ls -G` alias, so without this the switch would have lost colors outright
 - PATH additions, each guarded so a machine missing the toolchain still gets a working shell: `~/.local/bin`, `~/.cargo/bin`, `~/go/bin`, Emacs.app, and Bun
 
 `~/.bun/_bun` did not come across. It is a zsh `compdef` file with no bash
 equivalent, so bun contributes only its binary now.
 
-## starship
+## Prompt
 
-[starship](https://starship.rs/) replaces the oh-my-zsh theme, which was the
-last thing omz was doing. It is built from source into
-`~/source/third_party/starship`, matching how Emacs and the other hand-built
-tools on this machine are handled:
+Set at the bottom of `bashrc`: green brackets, blue directory, nothing else.
+One component, since the full path is what `pwd` is for.
 
 ```sh
-bash util/scripts/install-starship.sh
+PS1='\[\e[1;32m\][\[\e[1;34m\]\W\[\e[1;32m\]]\[\e[0m\]\$ '
 ```
 
-The script clones or updates the checkout and runs `cargo install --root
-~/.local`, which is already on PATH. `--locked` builds the dependency set
-upstream tested rather than whatever resolves that day. Re-running it updates
-to current upstream.
+```
+[dotfiles]$
+```
 
-`starship.toml` sets an explicit `format`, so only the modules named in it
-render: the current directory, the git branch, and the prompt character, which
-goes red when the last command failed. The directory is one component, since
-the full path is what `pwd` is for. starship enables roughly forty modules by
-default and several of them shell out on every prompt.
+The `\[ \]` pairs are not decoration. They tell bash which bytes print as
+zero width, and without them it miscounts the line and long commands wrap on
+top of themselves.
 
-Colors come from a named palette, `modus-vivendi`, holding the same accents
-Emacs and Neovim use here. Retheming is that one block; the modules refer to
-colors by name and never carry a hex value themselves.
-
-One trap worth writing down: starship's own color names are not ANSI's. There
-is no `magenta`, only `purple`, and an unrecognized name renders unstyled with
-no warning. The palette uses hex, which sidesteps the whole question.
-
-The prompt is styled through `starship.toml` and nothing else. `PS1` is
-regenerated on every prompt by `starship_precmd`, so anything assigned to it
-directly is discarded.
+This replaced starship, which had replaced the oh-my-zsh theme. Neither earned
+a dependency: a prompt generator that shells out on every prompt, built from
+source and kept current, to draw what one line of bash draws.
 
 ## C style
 

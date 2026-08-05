@@ -44,5 +44,6 @@ unset _rc _target
 
 . "$DOTFILES_DIR/config.bash"
 
-# starship owns PS1, so it goes last and nothing above may set a prompt.
-command -v starship >/dev/null 2>&1 && eval "$(starship init bash)"
+# Prompt. Green brackets, blue directory, one component. \[ \] wraps every
+# escape so bash counts the printed width and long lines wrap correctly.
+PS1='\[\e[1;32m\][\[\e[1;34m\]\W\[\e[1;32m\]]\[\e[0m\]\$ '

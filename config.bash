@@ -41,7 +41,7 @@ case "$OSTYPE" in
     export EDITOR=/opt/homebrew/bin/nvim
     # BSD ls. CLICOLOR rather than an ls -G alias, so anything invoking ls
     # gets the colors. LSCOLORS is 11 foreground/background letter pairs, in
-    # the order ls documents; cyan directories match the starship prompt.
+    # the order ls documents.
     export CLICOLOR=1
     export LSCOLORS="GxFxBxdxCxDxdxabagacad"
     ;;
