@@ -59,7 +59,6 @@
         modus-themes
 
         ;; Everything else
-        easysession
         evil-ghostel
         exec-path-from-shell
         ghostel

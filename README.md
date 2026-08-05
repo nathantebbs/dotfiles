@@ -168,7 +168,7 @@ Notable packages:
 - **Editing:** Evil, evil-collection, evil-surround, evil-mc, undo-fu (+ session), paredit, move-text, aggressive-indent, stripspace
 - **Completion / navigation:** Vertico, Consult, Marginalia, Embark, Orderless, Corfu + Cape
 - **Languages:** Odin, Python (pyvenv), Markdown, Org
-- **Tooling:** Magit, Apheleia (formatting), YASnippet, easysession, pdf-tools, helpful, doom-modeline, ghostel
+- **Tooling:** Magit, Apheleia (formatting), YASnippet, pdf-tools, helpful, doom-modeline, ghostel
 
 No LSP is configured here, unlike Neovim: formatting is apheleia's job and cc-mode indents C and C++ as you type. `pdf-tools` has its `epdfinfo` server built, so PDFs open without a build prompt.
 

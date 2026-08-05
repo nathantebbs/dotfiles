@@ -32,7 +32,6 @@ because it repairs `PATH`, which everything shelling out depends on.
 | `rc-odin` | `odin-ts-mode`, written here rather than installed |
 | `rc-org` | Org, agenda, pdf-tools |
 | `rc-git` | Magit |
-| `rc-session` | easysession |
 | `rc-terminal` | ghostel and its Evil integration |
 
 ## Packages

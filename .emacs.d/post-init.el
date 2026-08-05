@@ -29,7 +29,6 @@
 (require 'rc-odin)
 (require 'rc-org)
 (require 'rc-git)
-(require 'rc-session)
 (require 'rc-terminal)
 
 ;;; post-init.el ends here

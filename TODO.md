@@ -63,6 +63,11 @@
 - [x] The omz git aliases are back, written out in `config.bash` under
       upstream's names. That plugin was the other half of what omz was doing
 
+- [x] Dropped easysession and `rc-session.el`. Under a daemon
+      `frameset-restore` rebuilds a frame on the display it was saved from, so
+      restoring a GUI session from `emacsclient -t` opened a window instead of
+      a terminal frame. The daemon is the persistence
+
 ## Open
 
 Nothing open.
