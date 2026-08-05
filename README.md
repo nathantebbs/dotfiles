@@ -122,6 +122,8 @@ The leader is `<Space>`. Every binding of mine hangs off it, so Vim keeps its ow
 
 `nvim/init.lua` is a desktop-only Neovim config using [lazy.nvim](https://github.com/folke/lazy.nvim). lazy.nvim is bootstrapped automatically on first launch — no manual install needed.
 
+It tracks the `.vimrc` deliberately: same leader, same bindings, same search and split and wildmenu behavior. Only what Neovim does not already do by default is restated, so settings like `hidden`, `autoread` and the `Y` and `C-l` mappings appear in the `.vimrc` and not here.
+
 **Plugins:** Telescope (+ telescope-fzf-native), vim-surround, lightline, nvim-autopairs, todo-comments, presenting.nvim, undotree, vim-colors-modus, typst.vim
 
 No vim-polyglot here, and none in `.vimrc` either. Neovim 0.12 and Vim 9.1 both ship filetype detection, syntax and indent for every language in use, including odin, zig and typst. typst.vim stays for its compiler integration, not its syntax.
@@ -138,15 +140,21 @@ No vim-polyglot here, and none in `.vimrc` either. Neovim 0.12 and Vim 9.1 both 
 
 **Key bindings:**
 
+The leader is `<Space>`, the same as Vim's, and the bindings below it are the
+same keys doing the same things. Telescope stands in for fzf.vim.
+
 | Binding | Action |
 |---------|--------|
-| `C-x f` | Find files (Telescope) |
-| `C-x b` | Buffers (Telescope) |
-| `C-x l` | Live grep (Telescope) |
-| `C-x m` | Keymaps (Telescope) |
-| `C-x k` | Delete buffer |
-| `C-c C-u` | Toggle undotree |
-| `C-c C-e` | Open netrw |
+| `<leader> f` | Files (Telescope) |
+| `<leader> b` | Buffers (Telescope) |
+| `<leader> l` | Lines in buffer (Telescope) |
+| `<leader> /` | Grep the project (Telescope) |
+| `<leader> m` | Maps (Telescope) |
+| `<leader> e` | Open netrw |
+| `<leader> k` | Delete buffer |
+| `<leader> w` | Write |
+| `<leader> u` | Toggle undotree |
+| `<` / `>` (visual) | Shift and keep the selection |
 | `C-c C-p i` | Lazy sync |
 | `C-c C-p c` | Lazy clean |
 | `gd` / `gD` / `gy` | LSP definition / declaration / type definition |

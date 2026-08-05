@@ -68,6 +68,12 @@
       restoring a GUI session from `emacsclient -t` opened a window instead of
       a terminal frame. The daemon is the persistence
 
+- [x] Pulled the Neovim config back in line with the `.vimrc`: same `<Space>`
+      leader and the same bindings under it, plus the search, split, wildmenu,
+      undo and file-reload settings Neovim does not default to. Indentation is
+      spaces globally in both, `after/ftplugin/c.lua` deleted, and Go still
+      gets tabs from the `ftplugin/go.vim` both editors ship
+
 ## Open
 
 Nothing open.

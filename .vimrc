@@ -1,6 +1,6 @@
 " Author: Nathan Tebbs
 " File: .vimrc
-" Modified: 2026-07-30
+" Modified: 2026-08-04
 "
 " A .vimrc suppresses vim's defaults.vim, so anything that file would have
 " given us has to be spelled out here. Everything below is stock vim; the
@@ -32,18 +32,12 @@ endif
 set relativenumber
 set number
 
-" Tabstop bullsplish
+" Tabstop bullsplish. Spaces everywhere; clang-format is UseTab: Never and
+" gofmt is handled by vim's own ftplugin/go.vim, which sets noexpandtab.
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
-set noexpandtab
-
-" C is formatted by clang-format, which is set to spaces. Go is formatted by
-" gofmt, which is set to tabs, so this cannot move to the global setting.
-augroup vimrc_indent
-  autocmd!
-  autocmd FileType c,cpp setlocal expandtab shiftwidth=4 softtabstop=4 tabstop=4
-augroup END
+set expandtab
 
 " Autoindent
 set autoindent

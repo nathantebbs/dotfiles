@@ -6,30 +6,82 @@
 -- =====================
 -- Options
 -- =====================
+
+-- Everything of mine hangs off the leader, so Neovim keeps its own Ctrl keys.
+-- Must precede the mappings and lazy.nvim, which reads it at setup.
+vim.g.mapleader = " "
+
 vim.opt.compatible = false -- harmless; Neovim is nocompatible by default
 vim.opt.clipboard = "unnamedplus"
 
 vim.opt.relativenumber = true
 vim.opt.number = true
 
+-- Spaces everywhere; clang-format is UseTab: Never and gofmt is handled by
+-- Neovim's own ftplugin/go.vim, which sets noexpandtab.
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
-vim.opt.expandtab = false
+vim.opt.expandtab = true
 
 vim.opt.autoindent = true
 
 vim.opt.scrolloff = 10
 
 vim.opt.textwidth = 79
-vim.opt.colorcolumn = "+1"
+
+-- Prompt instead of failing on :q with unsaved changes. `hidden' is already
+-- Neovim's default, so only this half of the .vimrc pair is needed.
+vim.opt.confirm = true
+
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+
+-- Neovim keeps undo files under stdpath("state"), so unlike the .vimrc there
+-- is no directory to build here.
+vim.opt.undofile = true
+vim.opt.undolevels = 10000
 
 -- Finding files
 vim.opt.path:append("**")
 vim.opt.wildmenu = true
+vim.opt.wildmode = "longest:full,full"
+vim.opt.wildignorecase = true
+
+-- Keeps :find and path=** usable in a repo with vendored dependencies
+vim.opt.wildignore:append({ "*.o", "*.obj", "*.a", "*.so", "*.dylib", "*.pyc", "*.class" })
+vim.opt.wildignore:append({ ".git/**", "node_modules/**", "target/**", "build/**", "dist/**" })
 
 -- True color (good default in Neovim)
 vim.opt.termguicolors = true
+
+-- =====================
+-- Files
+-- =====================
+local rc_files = vim.api.nvim_create_augroup("rc_files", { clear = true })
+
+-- Pick up changes made outside Neovim
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
+  group = rc_files,
+  command = "silent! checktime",
+})
+
+vim.api.nvim_create_autocmd("BufReadPost", {
+  group = rc_files,
+  desc = "Reopen a file where it was left, except for commit messages",
+  callback = function(ev)
+    if vim.bo[ev.buf].filetype:match("commit") then
+      return
+    end
+    local mark = vim.api.nvim_buf_get_mark(ev.buf, '"')
+    if mark[1] >= 1 and mark[1] <= vim.api.nvim_buf_line_count(ev.buf) then
+      pcall(vim.api.nvim_win_set_cursor, 0, mark)
+    end
+  end,
+})
 
 -- =====================
 -- netrw tweaks
@@ -40,27 +92,40 @@ vim.g.netrw_altv = 1
 vim.g.netrw_liststyle = 3
 
 -- =====================
--- Keymaps (same intent)
+-- Keymaps
 -- =====================
+-- The same bindings as the .vimrc, on the same keys. Telescope stands in for
+-- fzf.vim, which is the only reason any of these differ in what they call.
 local map = vim.keymap.set
+
+map("n", "<Space>", "<Nop>")
+
 map("i", "<C-h>", "<C-w>")
 map("i", "<C-BS>", "<C-w>")
 map("i", "<C-Backspace>", "<C-w>")
-map("n", "<C-c><C-p>i", "<cmd>Lazy sync<cr>", { desc = "Plugins: install/update" })
-map("n", "<C-c><C-p>c", "<cmd>Lazy clean<cr>", { desc = "Plugins: clean" })
-map("n", "<C-c><C-e>", "<cmd>Ex<cr>", { desc = "netrw" })
 
--- Telescope
-map("n", "<C-x>l", ":Telescope live_grep<cr>")
-map("n", "<C-x>b", ":Telescope buffers<cr>")
-map("n", "<C-x>f", ":Telescope find_files<cr>")
-map("n", "<C-x>m", ":Telescope keymaps<cr>")
+-- Finding things
+map("n", "<leader>f", "<cmd>Telescope find_files<cr>", { desc = "Files" })
+map("n", "<leader>b", "<cmd>Telescope buffers<cr>", { desc = "Buffers" })
+map("n", "<leader>l", "<cmd>Telescope current_buffer_fuzzy_find<cr>", { desc = "Lines in buffer" })
+map("n", "<leader>/", "<cmd>Telescope live_grep<cr>", { desc = "Grep the project" })
+map("n", "<leader>m", "<cmd>Telescope keymaps<cr>", { desc = "Maps" })
+
+-- Files and buffers
+map("n", "<leader>e", "<cmd>Ex<cr>", { desc = "netrw" })
+map("n", "<leader>k", "<cmd>bdelete<cr>", { desc = "Delete buffer" })
+map("n", "<leader>w", "<cmd>write<cr>", { desc = "Write" })
 
 -- Undotree
-map("n", "<C-c><C-u>", "<cmd>UndotreeToggle<cr>")
+map("n", "<leader>u", "<cmd>UndotreeToggle<cr>", { desc = "Toggle undotree" })
 
--- Buffer mgmt
-map("n", "<C-x>k", "<cmd>bdelete<cr>")
+-- Keep the selection after shifting it
+map("x", "<", "<gv")
+map("x", ">", ">gv")
+
+-- No .vimrc counterpart: vim-plug is driven by :PlugInstall, not a mapping.
+map("n", "<C-c><C-p>i", "<cmd>Lazy sync<cr>", { desc = "Plugins: install/update" })
+map("n", "<C-c><C-p>c", "<cmd>Lazy clean<cr>", { desc = "Plugins: clean" })
 
 -- =====================
 -- Plugins
