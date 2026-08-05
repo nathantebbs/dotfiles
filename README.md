@@ -279,7 +279,8 @@ and `/opt/homebrew/sbin` never arrives at all.
 **`config.bash` provides** everything portable, which is the whole of the old
 `config.zsh` bar the bun completions:
 
-- Aliases: `emacs` (new GUI frame on the daemon), `e` (open a file in an existing frame), `et` (frame in this terminal), `keys` (fzf alias search)
+- Aliases: `emacs` (new GUI frame on the daemon), `e` (open a file in an existing frame), `et` (frame in this terminal), `keys` (fzf alias search), `lsa` (`ls -lah`)
+- The oh-my-zsh git aliases, by hand: `gst`, `gss`, `ga`, `gaa`, `gc`, `gcmsg`, `gcam`, `gc!`, `gca!`, `gco`, `gcb`, `gsw`, `gswc`, `gd`, `gds`, `gb`, `gl`, `gp`, `glo`, `glog`, `grs`, `grst`, `gsta`, `gstp`, `gstl`. Upstream's names, so the muscle memory carries over. The omz plugin defined several hundred; these are the ones in use
 - `emacsctl` — manage the Emacs daemon:
   ```sh
   emacsctl start    # launch daemon

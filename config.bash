@@ -6,6 +6,7 @@ alias emacs='emacsclient -c -n'
 alias e='emacsclient -n'
 alias et='emacsclient -t'
 alias keys="alias | fzf"
+alias lsa="ls -lah"
 
 # The daemon is a launchd job, so it has to be driven through launchctl.
 # Killing it directly would just make KeepAlive start it again.
@@ -33,6 +34,38 @@ emacsctl() {
       echo "Usage: emacsctl {start|stop|restart|status|logs}" ;;
   esac
 }
+
+# The omz git plugin by hand, cut to what I actually type. The names are
+# upstream's, so the muscle memory carries over from zsh.
+alias g='git'
+alias gst='git status'
+alias gss='git status --short'
+alias ga='git add'
+alias gaa='git add --all'
+alias gc='git commit -v'
+alias gcmsg='git commit -m'
+alias gcam='git commit -a -m'
+alias gco='git checkout'
+alias gcb='git checkout -b'
+alias gsw='git switch'
+alias gswc='git switch -c'
+alias gd='git diff'
+alias gds='git diff --staged'
+alias gb='git branch'
+alias gl='git pull'
+alias gp='git push'
+alias glo='git log --oneline --decorate'
+alias glog='git log --oneline --decorate --graph'
+alias grs='git restore'
+alias grst='git restore --staged'
+alias gsta='git stash push'
+alias gstp='git stash pop'
+alias gstl='git stash list'
+
+# omz's amend aliases. `!=` is one of the few things history expansion leaves
+# alone, and a trailing `!` is literal, so these are safe in an interactive shell.
+alias gc!='git commit -v --amend'
+alias gca!='git commit -v -a --amend'
 
 # OS Specific customizations. EDITOR is exported: git, crontab and anything
 # else spawning an editor read it from the environment, not from the shell.

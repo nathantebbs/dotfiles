@@ -60,6 +60,9 @@
       in `bashrc`. The checkout under `~/source/third_party/starship` (836M)
       and the binary in `~/.local/bin` are gone too
 
+- [x] The omz git aliases are back, written out in `config.bash` under
+      upstream's names. That plugin was the other half of what omz was doing
+
 ## Open
 
 Nothing open.
