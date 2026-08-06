@@ -12,8 +12,8 @@ The purpose of this repository is to store all configuration of any essential de
 | `git` | Version control |
 | `curl` | Script downloads |
 | `bash` | Shell (Homebrew; macOS ships 3.2) |
-| `neovim` | Primary editor (desktop/server) |
-| `emacs` | Secondary editor |
+| `emacs` | Primary editor |
+| `neovim` | Backup editor, and what `$EDITOR` falls back to |
 | `ripgrep` | Telescope live grep |
 | `fzf` | Fuzzy finder (vim + shell) |
 | `make` | Build telescope-fzf-native |
@@ -81,6 +81,10 @@ bash util/scripts/install-fonts.sh
 Installs fonts to `~/.local/share/fonts` (Linux) or `~/Library/Fonts` (macOS) and refreshes the font cache. See [Fonts](#fonts).
 
 ## Editors
+
+Emacs is the primary editor and owns `$EDITOR`. Vim and Neovim are the
+backups: stable, unchanging, and what `$EDITOR` falls back to when no daemon
+is answering.
 
 ### Vim
 
@@ -296,7 +300,7 @@ and `/opt/homebrew/sbin` never arrives at all.
   emacsctl restart  # kill and relaunch
   emacsctl status   # check if running
   ```
-- OS-specific `$EDITOR` (nvim path varies between macOS and Linux)
+- `$EDITOR` and `$VISUAL`, both `emacsclient -t -a nvim`. No `-n`, so git waits for the buffer; finish it with `C-x #`, not `C-x C-c`. `-a` runs nvim when no daemon answers, which is what vim and nvim are kept for. The paths are absolute and OS-specific, since a bare environment does not get `config.bash`'s PATH
 - `ls` colors. macOS gets `CLICOLOR` plus an `LSCOLORS` palette with cyan directories; Linux gets `ls --color=auto`, since GNU ls ignores `LSCOLORS` entirely. oh-my-zsh used to supply an `ls -G` alias, so without this the switch would have lost colors outright
 - PATH additions, each guarded so a machine missing the toolchain still gets a working shell: `~/.local/bin`, `~/.cargo/bin`, `~/go/bin`, Emacs.app, and Bun
 

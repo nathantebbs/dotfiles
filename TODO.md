@@ -74,6 +74,11 @@
       spaces globally in both, `after/ftplugin/c.lua` deleted, and Go still
       gets tabs from the `ftplugin/go.vim` both editors ship
 
+- [x] Emacs is the primary editor. `$EDITOR` and `$VISUAL` are
+      `emacsclient -t -a nvim`, so git and crontab open a terminal frame on
+      the daemon and fall back to nvim when it is not answering. vim and nvim
+      stay as they are; they are the backup now, not the daily driver
+
 ## Open
 
 Nothing open.

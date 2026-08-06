@@ -69,9 +69,15 @@ alias gca!='git commit -v -a --amend'
 
 # OS Specific customizations. EDITOR is exported: git, crontab and anything
 # else spawning an editor read it from the environment, not from the shell.
+#
+# Emacs is the editor, reached through the daemon. No -n, so git waits for the
+# buffer to be finished with C-x #. -a hands off to nvim when no daemon is
+# answering, which is the whole of what vim and nvim are kept for now. Unlike
+# -a "", that starts nothing outside launchd for emacsctl to lose track of.
 case "$OSTYPE" in
   darwin*)
-    export EDITOR=/opt/homebrew/bin/nvim
+    export EDITOR='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -t -a /opt/homebrew/bin/nvim'
+    export VISUAL="$EDITOR"
     # BSD ls. CLICOLOR rather than an ls -G alias, so anything invoking ls
     # gets the colors. LSCOLORS is 11 foreground/background letter pairs, in
     # the order ls documents.
@@ -79,7 +85,8 @@ case "$OSTYPE" in
     export LSCOLORS="GxFxBxdxCxDxdxabagacad"
     ;;
   linux*)
-    export EDITOR=/usr/bin/nvim
+    export EDITOR='/usr/bin/emacsclient -t -a /usr/bin/nvim'
+    export VISUAL="$EDITOR"
     # GNU ls ignores LSCOLORS and needs the flag. Its built-in LS_COLORS is
     # already reasonable, so there is nothing to set.
     alias ls='ls --color=auto'
