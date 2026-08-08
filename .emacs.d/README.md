@@ -28,7 +28,7 @@ because it repairs `PATH`, which everything shelling out depends on.
 | `rc-evil` | Evil, evil-collection, evil-mc, evil-surround, undo-fu, move-text |
 | `rc-editing` | Outline folding, stripspace, apheleia, YASnippet, spelling |
 | `rc-elisp` | paredit, aggressive-indent, highlight-defined, helpful |
-| `rc-programming` | C/C++ style, Python, Markdown |
+| `rc-programming` | C/C++ style, Python (tree-sitter, pyvenv, Flymake), Markdown |
 | `rc-odin` | `odin-ts-mode`, written here rather than installed |
 | `rc-org` | Org, agenda, pdf-tools |
 | `rc-git` | Magit |
@@ -63,6 +63,34 @@ M-x rc-odin-install-grammar
 
 That compiles [tree-sitter-odin](https://github.com/tree-sitter-grammars/tree-sitter-odin)
 into `.emacs.d/tree-sitter/`, which is gitignored.
+
+## Python
+
+`python-ts-mode` through `major-mode-remap-alist`, but only where the grammar
+is present, so a fresh clone falls back to `python-mode` rather than erroring.
+On a new machine:
+
+```
+M-x rc-programming-install-python-grammar
+```
+
+The toolchain is [uv](https://github.com/astral-sh/uv) and
+[ruff](https://github.com/astral-sh/ruff), both from the Brewfile.
+
+uv puts its environment at `.venv` in the project root and exports nothing, so
+opening a Python file walks up for that directory and hands it to pyvenv. That
+is what puts the project's own interpreter and its `ruff` on `exec-path`, which
+is what everything below then finds.
+
+Linting is Flymake over `ruff check`, falling back to `flake8` on a machine
+where `brew bundle` has not run. Both print `stdin:line:col: CODE message`,
+which is already the pattern Emacs expects. Only a file that will not run is an
+error: an undefined name and a syntax error. Import ordering and complexity are
+notes, and everything else is a warning.
+
+Formatting is apheleia running `ruff-isort` then `ruff format`, which is the
+pair that replaces isort and black. apheleia's own default for Python is black,
+which a uv setup does not install, so it is overridden.
 
 ## Emacs itself
 

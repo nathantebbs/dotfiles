@@ -127,6 +127,8 @@ brew "pylint"
 brew "pyright"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
+# Extremely fast Python linter and code formatter, written in Rust
+brew "ruff"
 # Safe, concurrent, practical language
 brew "rust"
 # Ruby language server
@@ -153,6 +155,8 @@ brew "tree-sitter-cli"
 brew "tree-sitter@0.25"
 # Markup-based typesetting system
 brew "typst"
+# Extremely fast Python package installer and resolver, written in Rust
+brew "uv"
 # Internet file retriever
 brew "wget"
 # Library to create, extract, and modify Windows Imaging files
