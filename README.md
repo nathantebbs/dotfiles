@@ -179,10 +179,10 @@ Notable packages:
 
 - **Editing:** Evil, evil-collection, evil-surround, evil-mc, undo-fu (+ session), paredit, move-text, aggressive-indent, stripspace
 - **Completion / navigation:** Vertico, Consult, Marginalia, Embark, Orderless, Corfu + Cape
-- **Languages:** Odin, Python (pyvenv), Markdown, Org
+- **Languages:** Odin, Python (tree-sitter, uv/ruff, pyvenv), Markdown, Org
 - **Tooling:** Magit, Apheleia (formatting), YASnippet, pdf-tools, helpful, doom-modeline, ghostel
 
-No LSP is configured here, unlike Neovim: formatting is apheleia's job and cc-mode indents C and C++ as you type. `pdf-tools` has its `epdfinfo` server built, so PDFs open without a build prompt.
+No LSP is configured here, unlike Neovim: formatting is apheleia's job, cc-mode indents C and C++ as you type, and Python is linted by Flymake driving `ruff`. `pdf-tools` has its `epdfinfo` server built, so PDFs open without a build prompt.
 
 Theme: modus-themes. Font: Zenbones Brainy at 17pt — see [Fonts](#fonts).
 
@@ -224,9 +224,39 @@ None of these pass `-a ""`. That flag would start a daemon outside launchd, whic
 - Shell: the Homebrew bash, as a login shell. Named explicitly rather than taken from the password database, so a machine where `chsh` has not run still opens bash and not the macOS 3.2
 - Font: Zenbones Brainy, 14pt, with Symbols Nerd Font Mono as fallback for icon glyphs
 - Background opacity: 0.92
-- Cursor: steady block
+- Cursor: steady block, which is only what an application that reshapes nothing gets
 - Tab bar hidden when only one tab is open
 - No confirmation prompt on window close
+- Scrollback: 10000 lines, inherited from what `tmux.conf` set back when tmux did this job
+- Bell: silent, because Vim rings it for a failed search
+
+**Keyboard:**
+
+Three settings exist for the editors running inside the terminal rather than for the terminal itself.
+
+- **Left Option is Meta.** macOS otherwise composes `Option+key` into a glyph, so Vim never sees `<M-...>`, Emacs never sees `M-p`, and readline never sees `M-b`. Right Option still composes, which is where accented characters come from
+- **Dead keys off.** A dead key waits for a second press to combine with, eating the first when a plain keystroke was meant
+- **Kitty keyboard protocol advertised.** Terminals cannot otherwise distinguish `<C-i>` from `<Tab>` or `<C-[>` from `<Esc>`, since they arrive as the same byte. Applications opt in, so anything that does not ask is unaffected
+
+**Key bindings:**
+
+Everything hangs off `Cmd`, the one modifier macOS never forwards to the terminal, so no binding here can shadow a Vim, Emacs or readline key. The cost is `Cmd+h`, which no longer hides the app; `Cmd+m` still does. Use the **left** diamond: Karabiner claims the right one for the window manager.
+
+| Binding | Action |
+|---------|--------|
+| `Cmd d` | Split right |
+| `Cmd D` | Split down |
+| `Cmd h/j/k/l` | Focus pane by direction |
+| `Cmd Ctrl h/j/k/l` | Resize pane by direction |
+| `Cmd z` | Zoom pane |
+| `Cmd x` | Close pane |
+| `Cmd [` / `Cmd ]` | Previous / next tab |
+| `Cmd K` | Clear scrollback |
+| `Cmd X` | Copy mode, which navigates with `hjkl`, `v` and `y` |
+| `Cmd Shift Space` | Quick select: label every path and URL on screen, jump by typing its letters |
+| `Cmd Enter` | Fullscreen |
+
+`Cmd+t`, `Cmd+w` and `Cmd+1`..`9` keep their defaults.
 
 ## Window manager
 

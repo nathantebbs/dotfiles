@@ -247,10 +247,11 @@ left to the type rules instead of being claimed as a constant.")
      ((and (parent-is ,rc-odin--comment-rx) c-ts-common-looking-at-star)
       c-ts-common-comment-start-after-first-star -1)
      ((parent-is ,rc-odin--comment-rx) no-indent 0)
-     ((parent-is ,(rx bos (or "bit_field_declaration" "block" "enum_declaration"
-                              "parameters" "struct" "struct_declaration"
-                              "struct_type" "switch_case" "switch_statement"
-                              "union_declaration")
+     ((parent-is ,(rx bos (or "bit_field_declaration" "block" "call_expression"
+                              "enum_declaration" "parameters" "struct"
+                              "struct_declaration" "struct_type" "switch_case"
+                              "switch_statement" "tuple_type" "union_declaration"
+                              "union_type")
                       eos))
       standalone-parent rc-odin-indent-offset)
      (catch-all parent-bol 0))))
@@ -280,7 +281,7 @@ left to the type rules instead of being claimed as a constant.")
     table))
 
 (defvar rc-odin--imenu-settings
-  '(("Procedure" "\\`procedure_declaration\\'" nil nil)
+  '(("Procedure" "\\`\\(?:overloaded_\\)?procedure_declaration\\'" nil nil)
     ("Struct" "\\`struct_declaration\\'" nil nil)
     ("Enum" "\\`enum_declaration\\'" nil nil)
     ("Union" "\\`union_declaration\\'" nil nil)
@@ -312,15 +313,18 @@ left to the type rules instead of being claimed as a constant.")
   (setq-local treesit-simple-indent-rules rc-odin--indent-rules)
   (setq-local treesit-simple-imenu-settings rc-odin--imenu-settings)
   (setq-local treesit-defun-type-regexp
-              (rx bos (or "procedure_declaration" "struct_declaration"
-                          "enum_declaration" "union_declaration"
-                          "bit_field_declaration")
+              (rx bos (or "procedure_declaration"
+                          "overloaded_procedure_declaration"
+                          "struct_declaration" "enum_declaration"
+                          "union_declaration" "bit_field_declaration")
                   eos))
   (setq-local treesit-defun-name-function #'rc-odin--defun-name)
 
   ;; Tabs, against the global default: the core library and odinfmt both use
-  ;; them, and one tab per level keeps tab-width the only thing to adjust.
+  ;; them. tab-width has to match the offset or a level indents to a tab plus
+  ;; padding spaces rather than to one tab.
   (setq-local indent-tabs-mode t)
+  (setq-local tab-width rc-odin-indent-offset)
 
   ;; Odin's comments are C's, down to /* */ nesting, so this sets comment-start
   ;; and the fill and paragraph machinery correctly on its own.

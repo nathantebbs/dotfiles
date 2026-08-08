@@ -1,12 +1,7 @@
-tap "homebrew-zathura/zathura"
 tap "nikitabobko/tap"
 tap "sikarugir-app/sikarugir", "https://github.com/Sikarugir-App/homebrew-sikarugir"
 # Spell checker with better logic than ispell
 brew "aspell"
-# Source code beautifier for C, C++, C#, and Java
-brew "astyle"
-# Automatic configure script builder
-brew "autoconf"
 # Tool for generating GNU Standards-compliant Makefiles
 brew "automake"
 # Bourne-Again SHell, a UNIX command interpreter
@@ -15,8 +10,6 @@ brew "bash"
 brew "clang-format"
 # Cross-platform make
 brew "cmake"
-# Strongly specified, highly compatible implementation of Markdown
-brew "cmark"
 # GNU File, Shell, and Text utilities
 brew "coreutils"
 # Reimplementation of ctags(1)
@@ -25,22 +18,14 @@ brew "ctags"
 brew "docker", link: false
 # Isolated development environments using Docker
 brew "docker-compose"
-# Command-line tool to interact with exercism.io
-brew "exercism"
 # Like neofetch, but much faster because written mostly in C
 brew "fastfetch"
-# Cryptography and SSL/TLS Toolkit
-brew "openssl@3"
 # Play, record, convert, and stream select audio and video codecs
 brew "ffmpeg"
 # Lint your Python code for style and logical errors
 brew "flake8"
 # Command-line fuzzy finder written in Go
 brew "fzf"
-# GNU multiple precision arithmetic library
-brew "gmp"
-# C library for multiple-precision floating-point computations
-brew "mpfr"
 # GNU compiler collection
 brew "gcc"
 # GitHub command-line tool
@@ -51,22 +36,17 @@ brew "git-filter-repo"
 brew "glslang"
 # GNU implementation of the famous stream editor
 brew "gnu-sed"
-# GNU Privacy Guard (OpenPGP)
+# GNU Privacy Guard. Listed for the same reason as poppler below: macOS ships
+# no gpg, and init.el points `auth-sources' at ~/.authinfo.gpg and sets
+# `epg-pinentry-mode'. Nothing in brew's graph records that, and it currently
+# survives only because poppler happens to depend on it.
 brew "gnupg"
-# GNOME Spreadsheet Application
-brew "gnumeric"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
 # Graph visualization software from AT&T and Bell Labs
 brew "graphviz"
-# Package compiler and linker metadata toolkit
-brew "pkgconf"
 # Improved top (interactive process viewer)
 brew "htop"
-# Configurable static site generator
-brew "hugo"
-# Synchronize a maildir with an IMAP server
-brew "isync"
 # Image manipulation library
 brew "jpeg"
 # Lightweight and flexible command-line JSON processor
@@ -75,30 +55,10 @@ brew "jq"
 brew "libgccjit"
 # C99 library which implements a VT220 or xterm terminal emulator
 brew "libvterm"
-# Swiss Army knife of email handling
-brew "mailutils"
 # Utility for directing compilation
 brew "make"
-# Open-source, cross-platform JavaScript runtime environment
-brew "node"
-# CLI for Node.js style checker and lint tool for Markdown files
-brew "markdownlint-cli"
-# CommonMark compliant Markdown formatter
-brew "mdformat"
-# Styled terminal markdown viewer
-brew "mdv"
-# Command-line music player client for mpd
-brew "mpc"
-# Tool for searching e-mail messages stored in the maildir-format
-brew "mu"
-# Lightweight PDF and XPS viewer
-brew "mupdf"
-# Incremental parsing library
-brew "tree-sitter"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
-# Simple and easy-to-use library to learn videogames programming
-brew "raylib"
 # Programming language with focus on simplicity, performance and modern systems
 brew "odin"
 # Formatter for The Odin Programming Language
@@ -115,26 +75,20 @@ brew "pipx"
 brew "pngcheck"
 # Fast, disk space efficient package manager
 brew "pnpm"
-# Tool for managing OCI containers and pods
-brew "podman"
-# PDF rendering library (based on the xpdf-3.0 code base)
-brew "poppler"
 # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
 brew "prettier"
-# It's not just a linter that annoys you!
-brew "pylint"
 # Static type checker for Python
 brew "pyright"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
+# Extremely fast Python linter and code formatter, written in Rust
+brew "ruff"
 # Safe, concurrent, practical language
 brew "rust"
 # Ruby language server
 brew "solargraph"
 # Performing reflection and disassembling SPIR-V
 brew "spirv-cross"
-# User interface to the TELNET protocol
-brew "telnet"
 # Official documentation format of the GNU project
 brew "texinfo"
 # Services for Typst
@@ -149,16 +103,17 @@ brew "tor"
 brew "tree"
 # Parser generator tool
 brew "tree-sitter-cli"
-# Incremental parsing library
-brew "tree-sitter@0.25"
 # Markup-based typesetting system
 brew "typst"
+# Extremely fast Python package installer and resolver, written in Rust
+brew "uv"
 # Internet file retriever
 brew "wget"
-# Library to create, extract, and modify Windows Imaging files
-brew "wimlib"
-# Utility to configure and test X input devices
-brew "xinput"
+# PDF rendering library. Listed explicitly and deliberately: Emacs pdf-tools
+# compiles its own epdfinfo against it, so nothing in brew's dependency graph
+# knows poppler is needed and a cleanup would take it and break PDF viewing.
+brew "poppler"
+
 # i3-like tiling window manager for macOS
 cask "aerospace"
 # Compact TeX distribution as alternative to the full TeX Live / MacTeX
@@ -187,8 +142,16 @@ cask "qbittorrent"
 cask "sikarugir-app/sikarugir/sikarugir"
 # Video game digital distribution service
 cask "steam"
+# Mesh VPN based on WireGuard
+cask "tailscale-app"
+# Email client
+cask "thunderbird"
 # Virtual machines UI using QEMU
 cask "utm"
+# GPU-accelerated cross-platform terminal emulator and multiplexer
+cask "wezterm"
+# Gecko based web browser
+cask "zen"
 # Open-source markdown editor
 cask "zettlr"
 go "github.com/klauspost/asmfmt/cmd/asmfmt"
@@ -209,8 +172,5 @@ go "honnef.co/go/tools/cmd/staticcheck"
 go "github.com/a-h/templ/cmd/templ"
 cargo "fpm"
 cargo "tdf-viewer"
-cargo "typst-cli"
-cargo "typst-lsp"
 npm "@prettier/plugin-ruby"
 npm "@zed-industries/claude-code-acp"
-npm "md-to-pdf"

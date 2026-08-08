@@ -35,8 +35,10 @@
 (setopt corfu-auto-prefix 1)
 (setopt corfu-cycle t)
 
-;; The mode hooks are what pull Corfu in; calling `global-corfu-mode' here
-;; instead would load it during startup rather than at the first prog buffer.
+;; Corfu ends up on everywhere, but lazily: the mode hooks are only the trigger
+;; that loads the package, and `global-corfu-mode' takes over from the first
+;; prog, shell or eshell buffer onward. Calling it at top level instead would
+;; load Corfu during startup.
 (add-hook 'prog-mode-hook #'corfu-mode)
 (add-hook 'shell-mode-hook #'corfu-mode)
 (add-hook 'eshell-mode-hook #'corfu-mode)
@@ -48,9 +50,30 @@
 
 (keymap-global-set "C-c p" #'cape-prefix-map)
 
-(add-hook 'completion-at-point-functions #'cape-dabbrev)
-(add-hook 'completion-at-point-functions #'cape-file)
-(add-hook 'completion-at-point-functions #'cape-elisp-block)
+;; Buffer-local, not global: the global value is inherited by the minibuffer
+;; and every special buffer, where dabbrev and filename completion only get in
+;; the way of the completion the buffer already provides.
+;;
+;; Depth 90 matters. `add-hook' prepends by default, which would put these
+;; ahead of the major mode's own capf and let dabbrev answer first with a worse
+;; candidate set. In the global value they sat behind it, at the local list's
+;; trailing t, and that order is what is being preserved here.
+(defun rc-completion-add-capfs ()
+  "Add the general-purpose Cape backends to the current buffer."
+  (add-hook 'completion-at-point-functions #'cape-dabbrev 90 t)
+  (add-hook 'completion-at-point-functions #'cape-file 90 t))
+
+(add-hook 'prog-mode-hook #'rc-completion-add-capfs)
+(add-hook 'text-mode-hook #'rc-completion-add-capfs)
+(add-hook 'conf-mode-hook #'rc-completion-add-capfs)
+
+;; Only useful where an Elisp src block can appear.
+(defun rc-completion-add-elisp-block-capf ()
+  "Add `cape-elisp-block' to the current buffer."
+  (add-hook 'completion-at-point-functions #'cape-elisp-block nil t))
+
+(add-hook 'org-mode-hook #'rc-completion-add-elisp-block-capf)
+(add-hook 'markdown-mode-hook #'rc-completion-add-elisp-block-capf)
 
 ;;; Embark
 
