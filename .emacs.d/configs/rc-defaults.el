@@ -93,6 +93,16 @@
 ;; Unlike `auto-save-mode', this writes the file itself rather than a #file#
 ;; alongside it, and only for buffers actually visiting a file.
 (setopt auto-save-visited-interval 5)
+
+;; The timer goes through `save-some-buffers', so it runs the save hooks: a
+;; buffer apheleia formats on save would be reformatted five seconds after the
+;; last keystroke, mid-edit. Those buffers keep the #file# auto-save instead.
+(defun rc-defaults-auto-save-visited-p ()
+  "Return non-nil if the current buffer should be auto-saved in place."
+  (not (bound-and-true-p apheleia-mode)))
+
+(setopt auto-save-visited-predicate #'rc-defaults-auto-save-visited-p)
+
 (auto-save-visited-mode 1)
 
 (provide 'rc-defaults)

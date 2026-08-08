@@ -16,8 +16,13 @@
 
 ;; early-init.el points `custom-file' here but never loads it, so anything set
 ;; through customize was written and ignored. Before the modules, so they win.
-(when (file-exists-p custom-file)
-  (load custom-file nil :nomessage))
+;;
+;; Customize writes `package-selected-packages' too, and that copy would shadow
+;; the manifest. pre-init.el is the one source of truth, so it is put back.
+(let ((manifest package-selected-packages))
+  (when (file-exists-p custom-file)
+    (load custom-file nil :nomessage))
+  (setq package-selected-packages manifest))
 
 (require 'rc-defaults)
 (require 'rc-ui)
