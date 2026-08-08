@@ -53,10 +53,15 @@
 ;; Buffer-local, not global: the global value is inherited by the minibuffer
 ;; and every special buffer, where dabbrev and filename completion only get in
 ;; the way of the completion the buffer already provides.
+;;
+;; Depth 90 matters. `add-hook' prepends by default, which would put these
+;; ahead of the major mode's own capf and let dabbrev answer first with a worse
+;; candidate set. In the global value they sat behind it, at the local list's
+;; trailing t, and that order is what is being preserved here.
 (defun rc-completion-add-capfs ()
   "Add the general-purpose Cape backends to the current buffer."
-  (add-hook 'completion-at-point-functions #'cape-dabbrev nil t)
-  (add-hook 'completion-at-point-functions #'cape-file nil t))
+  (add-hook 'completion-at-point-functions #'cape-dabbrev 90 t)
+  (add-hook 'completion-at-point-functions #'cape-file 90 t))
 
 (add-hook 'prog-mode-hook #'rc-completion-add-capfs)
 (add-hook 'text-mode-hook #'rc-completion-add-capfs)

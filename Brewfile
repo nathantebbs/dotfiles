@@ -36,6 +36,11 @@ brew "git-filter-repo"
 brew "glslang"
 # GNU implementation of the famous stream editor
 brew "gnu-sed"
+# GNU Privacy Guard. Listed for the same reason as poppler below: macOS ships
+# no gpg, and init.el points `auth-sources' at ~/.authinfo.gpg and sets
+# `epg-pinentry-mode'. Nothing in brew's graph records that, and it currently
+# survives only because poppler happens to depend on it.
+brew "gnupg"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
 # Graph visualization software from AT&T and Bell Labs
