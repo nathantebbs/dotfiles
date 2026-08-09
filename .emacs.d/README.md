@@ -108,7 +108,9 @@ in. See the [Emacs daemon](../README.md#emacs-daemon) section for `emacsctl`.
 Because the daemon has no frame at startup, the font and theme are applied
 from `server-after-make-frame-hook` rather than at load time, and
 `exec-path-from-shell` runs an interactive login shell so that `PATH` picks up
-everything `config.zsh` exports.
+everything `config.bash` exports. Interactive matters: `~/.bashrc` returns
+immediately in a non-interactive shell, and it is the file that sources
+`config.bash`, so `-l` on its own would come back with none of it.
 
 ## No LSP
 

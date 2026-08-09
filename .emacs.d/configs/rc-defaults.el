@@ -16,8 +16,8 @@
 ;; A GUI Emacs inherits none of the shell's PATH, and a launchd daemon gets an
 ;; even barer environment while reporting `window-system' as nil.
 (when (or (daemonp) (memq window-system '(mac ns x)))
-  ;; Interactive, not just login: config.zsh exports the PATH entries and only
-  ;; .zshrc sources it, so a plain "-l" shell drops cargo, go and bun.
+  ;; Interactive, not just login: ~/.bashrc returns early in a non-interactive
+  ;; shell and it is what sources config.bash, so "-l" alone drops its PATH.
   (setopt exec-path-from-shell-arguments '("-l" "-i"))
   (exec-path-from-shell-initialize))
 
