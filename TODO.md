@@ -100,7 +100,26 @@
       rules named Brave, Chrome, Safari, alacritty, VLC, Audacity, Logic, GIMP,
       zathura, MacDown, LibreOffice, VMware and Minecraft, none installed
 
+- [x] Worked `brew doctor` down. `tldr` was disabled upstream in October 2025,
+      so it is `tlrc` now, the official client, still invoked as `tldr`.
+      `linkliar` and `qbittorrent` fail the macOS Gatekeeper check and brew
+      disables them on 2026-09-01, so they left the Brewfile; both apps stay
+      installed and keep working. Untapped `homebrew-zathura/zathura`, which
+      nothing used. `brew bundle check` is clean for the first time
+
+- [x] Dropped Sikarugir. The Caskroom record outlived the install, there was no
+      app in `/Applications`, and reinstalling would have meant trusting a
+      third-party tap under brew's new tap-trust rules
+
 ## Open
 
 - [ ] AeroSpace warns that `config-version = 1` is outdated and wants a
       migration to 2. See https://nikitabobko.github.io/AeroSpace/guide#config-version
+
+- [ ] Xcode is 26.2 and brew wants 26.3. App Store update; clangd comes from
+      CommandLineTools, so the Neovim C setup rides on this
+
+- [ ] Decide whether `brew "docker", link: false` and `brew "docker-compose"`
+      earn their place. Docker Desktop ships both binaries, so the two formulae
+      are redundant with the cask, and the unlinked docker keg is what `brew
+      doctor` keeps warning about
