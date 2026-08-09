@@ -1,5 +1,4 @@
 tap "nikitabobko/tap"
-tap "sikarugir-app/sikarugir", "https://github.com/Sikarugir-App/homebrew-sikarugir"
 # Spell checker with better logic than ispell
 brew "aspell"
 # Tool for generating GNU Standards-compliant Makefiles
@@ -95,8 +94,9 @@ brew "spirv-cross"
 brew "texinfo"
 # Services for Typst
 brew "tinymist"
-# Simplified and community-driven man pages
-brew "tldr"
+# Official tldr client, the simplified community man pages. Replaces the tldr
+# formula, which brew disabled in October 2025 as unmaintained upstream.
+brew "tlrc"
 # Terminal multiplexer
 brew "tmux"
 # Anonymizing overlay network for TCP
@@ -130,18 +130,12 @@ cask "docker-desktop"
 cask "ghostty"
 # Keyboard customizer; provides the Hyper key for AeroSpace
 cask "karabiner-elements"
-# Link-Layer MAC spoofing GUI for macOS
-cask "linkliar"
 # Open-source firewall to block unknown outgoing connections
 cask "lulu"
 # File system integration
 cask "macfuse"
 # Smooths scrolling and set mouse scroll directions independently
 cask "mos"
-# Peer to peer Bitorrent client
-cask "qbittorrent"
-# Porting tool, to make Windows programs/games into native apps
-cask "sikarugir-app/sikarugir/sikarugir"
 # Video game digital distribution service
 cask "steam"
 # Mesh VPN based on WireGuard
