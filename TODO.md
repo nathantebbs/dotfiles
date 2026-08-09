@@ -79,6 +79,28 @@
       the daemon and fall back to nvim when it is not answering. vim and nvim
       stay as they are; they are the backup now, not the daily driver
 
+- [x] Audit pass over the whole repo. `prefix r` in tmux sourced `~/.tmux.conf`,
+      which `deploy.sh` never creates, so reloading was a no-op anywhere the old
+      root-owned symlink was absent. Dropped `Tetralux/odin.vim`: Vim 9.1 ships
+      syntax, ftplugin and indent for Odin, and the plugin loaded after the
+      runtime and overrode them. Cleared the lazy.nvim scaffolding comments and
+      the two stale `config.zsh` references left in live Emacs config. The
+      README had drifted on the C style, doom-modeline, the Brewfile stage and
+      what `setup.sh` installs
+
+- [x] Dropped Ruby. `solargraph` and `@prettier/plugin-ruby` left the Brewfile
+      and solargraph is uninstalled; it was there for one college class and no
+      Emacs mode or Neovim LSP entry ever referenced it
+
+- [x] Dropped the two `cargo` lines. `tdf-viewer` was installed from a git URL
+      and `fpm` from a local path under `~/dev`, so neither reproduced on a
+      fresh machine and `brew bundle check` failed on the pair every run
+
+- [x] Trimmed `aerospace.toml` to apps that exist on this machine. Thirteen
+      rules named Brave, Chrome, Safari, alacritty, VLC, Audacity, Logic, GIMP,
+      zathura, MacDown, LibreOffice, VMware and Minecraft, none installed
+
 ## Open
 
-Nothing open.
+- [ ] AeroSpace warns that `config-version = 1` is outdated and wants a
+      migration to 2. See https://nikitabobko.github.io/AeroSpace/guide#config-version
