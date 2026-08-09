@@ -181,7 +181,6 @@ if filereadable(expand('~/.vim/autoload/plug.vim'))
   Plug 'tpope/vim-surround'
   Plug 'sakshamgupta05/vim-todo-highlight'
   Plug 'mbbill/undotree'
-  Plug 'Tetralux/odin.vim'
 
   call plug#end()
 endif
