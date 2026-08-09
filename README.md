@@ -5,20 +5,33 @@ The purpose of this repository is to store all configuration of any essential de
 
 ## Dependencies
 
-`setup.sh` installs missing dependencies automatically via `apt` (Linux) or `brew` (macOS).
+`setup.sh` installs these automatically when they are missing, via `apt`
+(Linux) or `brew` (macOS). They are the floor: enough for a usable shell and a
+working editor.
 
 | Package | Purpose |
 |---------|---------|
 | `git` | Version control |
 | `curl` | Script downloads |
-| `bash` | Shell (Homebrew; macOS ships 3.2) |
-| `emacs` | Primary editor |
 | `neovim` | Backup editor, and what `$EDITOR` falls back to |
 | `ripgrep` | Telescope live grep |
 | `fzf` | Fuzzy finder (vim + shell) |
 | `make` | Build telescope-fzf-native |
 
-WezTerm is not installed by `setup.sh` — install it separately from [wezterm.org](https://wezterm.org/) if you want the terminal config.
+`bash` is not in that list because it needs more than an install: the Homebrew
+build has to reach `/etc/shells` and `chsh` before it is the login shell.
+`util/scripts/install-bash.sh` does all three, and `setup.sh` runs it as its
+last stage. See [bash](#bash).
+
+Emacs is not installed by `setup.sh` either. It is built from source with
+[build-emacs-for-macos](https://github.com/jimeh/build-emacs-for-macos), and a
+Homebrew Emacs alongside it would mean two binaries and two launchd agents
+contending for one daemon socket. `setup.sh` checks for `/Applications/Emacs.app`
+and prints the build instructions if it is absent.
+
+Everything beyond the floor is the [Brewfile](Brewfile), which is macOS-only
+and applied by `setup.sh` with `brew bundle install`. WezTerm, AeroSpace and
+Karabiner-Elements are casks in there, so they arrive with it.
 
 ## Usage
 
@@ -31,7 +44,7 @@ git clone --depth=1 https://github.com/nathantebbs/dotfiles
 cd dotfiles
 ```
 
-2. Run setup (installs dependencies, fonts, symlinks, bash)
+2. Run setup (dependencies, Brewfile, fonts, symlinks, vim-plug, bash)
 
 ```sh
 bash setup.sh
@@ -101,6 +114,10 @@ Then from within vim:
 ```
 
 **Plugins:** fzf + fzf.vim, vim-surround, vim-todo-highlight, undotree
+
+No language plugins. Vim 9.1 ships filetype detection, syntax, ftplugin and
+indent for everything in use, odin and typst included, and its Odin files are
+habamax/vim-odin upstreamed into the runtime.
 
 **Key bindings:**
 
@@ -180,11 +197,17 @@ Notable packages:
 - **Editing:** Evil, evil-collection, evil-surround, evil-mc, undo-fu (+ session), paredit, move-text, aggressive-indent, stripspace
 - **Completion / navigation:** Vertico, Consult, Marginalia, Embark, Orderless, Corfu + Cape
 - **Languages:** Odin, Python (tree-sitter, uv/ruff, pyvenv), Markdown, Org
-- **Tooling:** Magit, Apheleia (formatting), YASnippet, pdf-tools, helpful, doom-modeline, ghostel
+- **Tooling:** Magit, Apheleia (formatting), YASnippet, pdf-tools, helpful, ghostel
 
 No LSP is configured here, unlike Neovim: formatting is apheleia's job, cc-mode indents C and C++ as you type, and Python is linted by Flymake driving `ruff`. `pdf-tools` has its `epdfinfo` server built, so PDFs open without a build prompt.
 
 Theme: modus-themes. Font: Zenbones Brainy at 17pt — see [Fonts](#fonts).
+
+The mode line is the stock one with the dead weight cut, set in `rc-ui.el`:
+no coding-system block, no client-frame `@`, no frame identification, no
+percentage through the buffer. Minor mode lighters collapse to a single `…`
+that menus the full list on click. This replaced doom-modeline, which drew the
+same information and cost a package to do it.
 
 ### Emacs daemon
 
@@ -283,7 +306,9 @@ The setup is tuned for a HHKB Pro 2, which has no dedicated arrow or super key. 
 
 ### Workspace assignments
 
-Apps open on a fixed workspace via `on-window-detected` rules: browsers on 1, terminals on 2, editors on 3, comms on 4, AI on 5, docs on 6, media on 7, VMs on 8, games on 9. Finder floats instead of tiling. Edit the rules in `aerospace.toml` to taste.
+Apps open on a fixed workspace via `on-window-detected` rules. The scheme is browsers on 1, terminals on 2, editors on 3, comms on 4, AI on 5, docs on 6, media on 7, VMs on 8, games on 9; 7 currently has no rule because nothing on this machine claims it. Only installed apps are listed, so adding an app means adding its block. Finder floats instead of tiling.
+
+Find an app's bundle id with `aerospace list-apps`.
 
 ### Karabiner
 
@@ -322,7 +347,7 @@ and `/opt/homebrew/sbin` never arrives at all.
 `config.zsh` bar the bun completions:
 
 - Aliases: `emacs` (new GUI frame on the daemon), `e` (open a file in an existing frame), `et` (frame in this terminal), `keys` (fzf alias search), `lsa` (`ls -lah`)
-- The oh-my-zsh git aliases, by hand: `gst`, `gss`, `ga`, `gaa`, `gc`, `gcmsg`, `gcam`, `gc!`, `gca!`, `gco`, `gcb`, `gsw`, `gswc`, `gd`, `gds`, `gb`, `gl`, `gp`, `glo`, `glog`, `grs`, `grst`, `gsta`, `gstp`, `gstl`. Upstream's names, so the muscle memory carries over. The omz plugin defined several hundred; these are the ones in use
+- The oh-my-zsh git aliases, by hand: `g`, `gst`, `gss`, `ga`, `gaa`, `gc`, `gcmsg`, `gcam`, `gc!`, `gca!`, `gco`, `gcb`, `gsw`, `gswc`, `gd`, `gds`, `gb`, `gl`, `gp`, `glo`, `glog`, `grs`, `grst`, `gsta`, `gstp`, `gstl`. Upstream's names, so the muscle memory carries over. The omz plugin defined several hundred; these are the ones in use
 - `emacsctl` — manage the Emacs daemon:
   ```sh
   emacsctl start    # launch daemon
@@ -360,12 +385,21 @@ source and kept current, to draw what one line of bash draws.
 
 ## C style
 
-`clang-format` is [MaJerle/c-code-style](https://github.com/MaJerle/c-code-style)
-vendored verbatim, linked to `~/.clang-format`. The short version: 4-space
-indent, 120 columns, braces attached, pointers bound to the type (`char* p`),
-return type on its own line for definitions, and mandatory braces on control
-statements. Re-sync by overwriting the file with that repo's `.clang-format`,
-keeping the three provenance lines at the top.
+`clang-format` is [git's own `.clang-format`](https://github.com/git/git/blob/master/.clang-format)
+vendored, linked to `~/.clang-format`. The short version: 4-space indent and no
+tabs, no enforced column limit, braces attached except on a function definition,
+pointers bound to the name (`char *p`), return type on the same line as the
+name, and no short `if` or loop collapsed onto one line.
+
+Two things diverge from upstream, both marked in the file. git indents with
+8-wide hard tabs and this uses four spaces. And git's `ForEachMacros` and
+`IfMacros` lists name symbols that only exist inside git.git, so they are
+dropped. Re-sync by overwriting the file with that repo's `.clang-format`, then
+re-applying those two blocks.
+
+`ColumnLimit: 0` is deliberate. It means clang-format never reflows a line you
+broke by hand, which is the reason 80 columns stays a convention here rather
+than a rule the formatter enforces.
 
 Emacs formats through apheleia, which shells out to `clang-format` itself.
 clang-format walks up from the file being formatted looking for a
