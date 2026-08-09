@@ -55,7 +55,6 @@
         pdf-tools
 
         ;; Interface
-        doom-modeline
         modus-themes
 
         ;; Everything else

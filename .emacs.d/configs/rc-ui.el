@@ -32,8 +32,30 @@
 
 ;;; Mode line
 
+;; The stock mode line with the dead weight removed: the coding-system block,
+;; the "@" every client frame carries, and the frame identification.
+(setq-default mode-line-format
+              '("%e"
+                mode-line-front-space
+                mode-line-modified
+                mode-line-remote
+                " "
+                mode-line-buffer-identification
+                "  "
+                mode-line-position
+                (vc-mode vc-mode)
+                "  "
+                mode-line-modes
+                mode-line-format-right-align
+                mode-line-misc-info
+                mode-line-end-spaces))
+
+;; Minor mode lighters collapse to one "…", which menus the full list on click.
+(setopt mode-line-collapse-minor-modes t)
+
+;; Line and column, without the percentage through the buffer.
 (column-number-mode 1)
-(doom-modeline-mode 1)
+(setopt mode-line-percent-position nil)
 
 ;;; Buffer presentation
 

@@ -42,6 +42,9 @@
 (setopt evil-vsplit-window-right t)
 ;; Echoing the state would clobber eldoc.
 (setopt evil-echo-state nil)
+;; The state tag leads the mode line instead of sitting between the position
+;; and the major mode, where it is easy to miss.
+(setopt evil-mode-line-format '(before . mode-line-modified))
 (setopt evil-move-cursor-back nil)
 (setopt evil-v$-excludes-newline t)
 (setopt evil-want-C-h-delete t)
