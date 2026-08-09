@@ -11,7 +11,6 @@
 -- Must precede the mappings and lazy.nvim, which reads it at setup.
 vim.g.mapleader = " "
 
-vim.opt.compatible = false -- harmless; Neovim is nocompatible by default
 vim.opt.clipboard = "unnamedplus"
 
 vim.opt.relativenumber = true
@@ -148,7 +147,7 @@ require("lazy").setup({
       'nvim-telescope/telescope.nvim', version = '*',
       dependencies = {
         'nvim-lua/plenary.nvim',
-        -- optional but recommended
+        -- Native fzf sorter. Needs make, which setup.sh installs.
         { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
       }
     },
@@ -161,20 +160,13 @@ require("lazy").setup({
     {
       "folke/todo-comments.nvim",
       dependencies = { "nvim-lua/plenary.nvim" },
-      opts = {
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
-      }
+      opts = {},
     },
 
     -- Presenter
     {
       "sotte/presenting.nvim",
-      opts = {
-        -- fill in your options here
-        -- see :help Presenting.config
-      },
+      opts = {},
       cmd = { "Presenting" },
     },
     { "mbbill/undotree" },
@@ -229,4 +221,4 @@ vim.opt.background = "dark"
 vim.cmd.colorscheme("modus")
 
 vim.opt.laststatus = 2
-vim.g.lightline = { colorscheme = "one" } -- keep exactly what you had
+vim.g.lightline = { colorscheme = "one" }

@@ -1,5 +1,5 @@
--- ols, the Odin language server. Not installed on this machine yet; init.lua
--- skips any server whose binary is missing, so this stays inert until it is.
+-- ols, the Odin language server. From the Brewfile; init.lua skips any server
+-- whose binary is missing, so this stays inert on a machine without it.
 return {
   cmd = { "ols" },
   filetypes = { "odin" },
