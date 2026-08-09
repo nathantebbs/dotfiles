@@ -81,12 +81,14 @@ brew "prettier"
 brew "pyright"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
+# Powerful, clean, object-oriented scripting language. Listed for the same
+# reason as poppler below: build-emacs-for-macos runs a Ruby script and its
+# Gemfile wants a newer interpreter than the 2.6 macOS still ships.
+brew "ruby"
 # Extremely fast Python linter and code formatter, written in Rust
 brew "ruff"
 # Safe, concurrent, practical language
 brew "rust"
-# Ruby language server
-brew "solargraph"
 # Performing reflection and disassembling SPIR-V
 brew "spirv-cross"
 # Official documentation format of the GNU project
@@ -170,7 +172,4 @@ go "github.com/fatih/motion"
 go "github.com/mgechev/revive"
 go "honnef.co/go/tools/cmd/staticcheck"
 go "github.com/a-h/templ/cmd/templ"
-cargo "fpm"
-cargo "tdf-viewer"
-npm "@prettier/plugin-ruby"
 npm "@zed-industries/claude-code-acp"
