@@ -13,10 +13,6 @@ brew "cmake"
 brew "coreutils"
 # Reimplementation of ctags(1)
 brew "ctags"
-# Pack, ship and run any application as a lightweight container
-brew "docker", link: false
-# Isolated development environments using Docker
-brew "docker-compose"
 # Like neofetch, but much faster because written mostly in C
 brew "fastfetch"
 # Play, record, convert, and stream select audio and video codecs
@@ -124,7 +120,10 @@ cask "basictex"
 cask "bitwarden"
 # Terminal-based AI coding assistant
 cask "claude-code"
-# App to build and share containerised applications and microservices
+# App to build and share containerised applications and microservices. It ships
+# docker, docker-compose and kubectl into /usr/local/bin, so the brew formulae
+# for the first two are not listed; they only shadowed these with a build that
+# did not match the bundled daemon.
 cask "docker-desktop"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"

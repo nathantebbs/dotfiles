@@ -111,15 +111,12 @@
       app in `/Applications`, and reinstalling would have meant trusting a
       third-party tap under brew's new tap-trust rules
 
+- [x] Dropped the `docker` and `docker-compose` formulae. Docker Desktop ships
+      both into `/usr/local/bin`, and since `/opt/homebrew/bin` comes first on
+      PATH the formulae were shadowing them with 29.7.2 and 5.4.0 against a
+      daemon bundled with 29.6.2 and 5.3.1. `brew doctor` is clean
+
 ## Open
 
 - [ ] AeroSpace warns that `config-version = 1` is outdated and wants a
       migration to 2. See https://nikitabobko.github.io/AeroSpace/guide#config-version
-
-- [ ] Xcode is 26.2 and brew wants 26.3. App Store update; clangd comes from
-      CommandLineTools, so the Neovim C setup rides on this
-
-- [ ] Decide whether `brew "docker", link: false` and `brew "docker-compose"`
-      earn their place. Docker Desktop ships both binaries, so the two formulae
-      are redundant with the cask, and the unlinked docker keg is what `brew
-      doctor` keeps warning about
