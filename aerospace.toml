@@ -15,24 +15,13 @@ accordion-padding = 30
 default-root-container-layout = 'tiles'
 default-root-container-orientation = 'auto'
 
-# Send apps to a home workspace on launch (i3 assign). Delete any you don't use.
+# Send apps to a home workspace on launch (i3 assign). Only apps installed on
+# this machine are listed; add a block when a new one arrives.
 # Find an app's id with: aerospace list-apps
 
 # 1 Browsers
 [[on-window-detected]]
 if.app-id = 'app.zen-browser.zen'
-run = 'move-node-to-workspace 1'
-[[on-window-detected]]
-if.app-id = 'com.brave.Browser'
-run = 'move-node-to-workspace 1'
-[[on-window-detected]]
-if.app-id = 'org.mozilla.firefox'
-run = 'move-node-to-workspace 1'
-[[on-window-detected]]
-if.app-id = 'com.google.Chrome'
-run = 'move-node-to-workspace 1'
-[[on-window-detected]]
-if.app-id = 'com.apple.Safari'
 run = 'move-node-to-workspace 1'
 
 # 2 Terminals
@@ -41,9 +30,6 @@ if.app-id = 'com.github.wez.wezterm'
 run = 'move-node-to-workspace 2'
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
-run = 'move-node-to-workspace 2'
-[[on-window-detected]]
-if.app-id = 'org.alacritty'
 run = 'move-node-to-workspace 2'
 
 # 3 Code
@@ -63,52 +49,20 @@ run = 'move-node-to-workspace 4'
 [[on-window-detected]]
 if.app-id = 'com.anthropic.claudefordesktop'
 run = 'move-node-to-workspace 5'
-[[on-window-detected]]
-if.app-id = 'com.openai.codex'
-run = 'move-node-to-workspace 5'
 
 # 6 Docs / Notes
 [[on-window-detected]]
 if.app-id = 'com.zettlr.app'
 run = 'move-node-to-workspace 6'
-[[on-window-detected]]
-if.app-id = 'com.uranusjr.macdown'
-run = 'move-node-to-workspace 6'
-[[on-window-detected]]
-if.app-id = 'org.libreoffice.script'
-run = 'move-node-to-workspace 6'
-[[on-window-detected]]
-if.app-id = 'com.pwmt.zathura'
-run = 'move-node-to-workspace 6'
-
-# 7 Media
-[[on-window-detected]]
-if.app-id = 'org.videolan.vlc'
-run = 'move-node-to-workspace 7'
-[[on-window-detected]]
-if.app-id = 'org.audacityteam.audacity'
-run = 'move-node-to-workspace 7'
-[[on-window-detected]]
-if.app-id = 'com.apple.logic10'
-run = 'move-node-to-workspace 7'
-[[on-window-detected]]
-if.app-id = 'org.gimp.gimp'
-run = 'move-node-to-workspace 7'
 
 # 8 Virtualization
 [[on-window-detected]]
 if.app-id = 'com.utmapp.UTM'
 run = 'move-node-to-workspace 8'
-[[on-window-detected]]
-if.app-id = 'com.vmware.fusion'
-run = 'move-node-to-workspace 8'
 
 # 9 Games
 [[on-window-detected]]
 if.app-id = 'com.valvesoftware.steam'
-run = 'move-node-to-workspace 9'
-[[on-window-detected]]
-if.app-id = 'com.mojang.minecraftlauncher'
 run = 'move-node-to-workspace 9'
 
 # Keep Finder windows floating instead of tiled.
