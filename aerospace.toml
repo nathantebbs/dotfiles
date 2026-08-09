@@ -4,7 +4,17 @@
 # alone still sends a normal Cmd, and the LEFT diamond is untouched.
 # Reload after edits with: aerospace reload-config
 
+config-version = 2
+
 start-at-login = true
+
+# Version 2 dropped the inference that kept these alive: v1 read the right hand
+# side of the workspace bindings below, v2 falls back to nothing. Declared so
+# an empty workspace still exists to switch to.
+persistent-workspaces = [
+    '1', '2', '3', '4', '5',
+    '6', '7', '8', '9',
+]
 
 # Normalize the tree so focus/move stay predictable.
 enable-normalization-flatten-containers = true

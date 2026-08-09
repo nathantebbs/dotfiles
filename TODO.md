@@ -116,7 +116,13 @@
       PATH the formulae were shadowing them with 29.7.2 and 5.4.0 against a
       daemon bundled with 29.6.2 and 5.3.1. `brew doctor` is clean
 
+- [x] Migrated `aerospace.toml` to `config-version = 2`. One option changes
+      between the versions: v1 inferred `persistent-workspaces` from the right
+      hand side of the workspace bindings, v2 falls back to an empty array.
+      Declared 1-9 explicitly, so 7, 8 and 9 still exist while empty as they
+      did before. AeroSpace itself was already current at 0.21.3-Beta; the
+      warning was about the config schema, not the app
+
 ## Open
 
-- [ ] AeroSpace warns that `config-version = 1` is outdated and wants a
-      migration to 2. See https://nikitabobko.github.io/AeroSpace/guide#config-version
+Nothing open.
