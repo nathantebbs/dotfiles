@@ -78,7 +78,9 @@
 
 ;;; Compilation
 
-(keymap-global-set "C-c c" #'compile)
+;; Not `C-c c': rc-org.el takes that for `org-capture', which every piece of
+;; Org documentation assumes.
+(keymap-global-set "C-c b" #'compile)
 
 (provide 'rc-ui)
 ;;; rc-ui.el ends here
