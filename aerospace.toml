@@ -31,7 +31,7 @@ default-root-container-orientation = 'auto'
 
 # 1 Browsers
 [[on-window-detected]]
-if.app-id = 'app.zen-browser.zen'
+if.app-id = 'org.mozilla.firefox'
 run = 'move-node-to-workspace 1'
 
 # 2 Terminals
