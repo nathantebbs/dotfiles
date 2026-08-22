@@ -5,10 +5,10 @@
 - [x] Fix scripts: less clutter in root (moved to `util/scripts/`)
 - [x] Alacritty -> Kitty -> WezTerm
 - [x] i3 -> Hyprland, then dropped the Wayland stack entirely
-- [x] Automate font installation (`util/scripts/install-fonts.sh` — fonts live in `fonts/`)
+- [x] Automate font installation (`util/scripts/install-fonts.sh`, fonts live in `fonts/`)
 - [x] Automate omz `.zshrc` configuration (absolute path in `install-omz.sh`)
 - [x] Emacs: Helm -> Vertico/Consult/Marginalia/Embark
-- [x] Drop `hypr/`, `waybar/`, `rofi/` — no longer running a Linux desktop
+- [x] Drop `hypr/`, `waybar/`, `rofi/`. No longer running a Linux desktop
 - [x] Remove desktop symlinks from `deploy.sh` (they pointed at the deleted dirs and
       aborted the script on bare-metal Linux)
 - [x] Remove stale `external/.emacs.d` submodule declaration from `.gitmodules`

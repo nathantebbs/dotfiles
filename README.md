@@ -141,7 +141,7 @@ The leader is `<Space>`. Every binding of mine hangs off it, so Vim keeps its ow
 
 ### Neovim
 
-`nvim/init.lua` is a desktop-only Neovim config using [lazy.nvim](https://github.com/folke/lazy.nvim). lazy.nvim is bootstrapped automatically on first launch — no manual install needed.
+`nvim/init.lua` is a desktop-only Neovim config using [lazy.nvim](https://github.com/folke/lazy.nvim). lazy.nvim is bootstrapped automatically on first launch. No manual install needed.
 
 It tracks the `.vimrc` deliberately: same leader, same bindings, same search and split and wildmenu behavior. Only what Neovim does not already do by default is restated, so settings like `hidden`, `autoread` and the `Y` and `C-l` mappings appear in the `.vimrc` and not here.
 
@@ -201,7 +201,7 @@ Notable packages:
 
 No LSP is configured here, unlike Neovim: formatting is apheleia's job, cc-mode indents C and C++ as you type, and Python is linted by Flymake driving `ruff`. `pdf-tools` has its `epdfinfo` server built, so PDFs open without a build prompt.
 
-Theme: modus-themes. Font: Zenbones Brainy at 17pt — see [Fonts](#fonts).
+Theme: modus-themes. Font: Zenbones Brainy at 17pt. See [Fonts](#fonts).
 
 The mode line is the stock one with the dead weight cut, set in `rc-ui.el`:
 no coding-system block, no client-frame `@`, no frame identification, no
@@ -348,7 +348,7 @@ and `/opt/homebrew/sbin` never arrives at all.
 
 - Aliases: `emacs` (new GUI frame on the daemon), `e` (open a file in an existing frame), `et` (frame in this terminal), `keys` (fzf alias search), `lsa` (`ls -lah`)
 - The oh-my-zsh git aliases, by hand: `g`, `gst`, `gss`, `ga`, `gaa`, `gc`, `gcmsg`, `gcam`, `gc!`, `gca!`, `gco`, `gcb`, `gsw`, `gswc`, `gd`, `gds`, `gb`, `gl`, `gp`, `glo`, `glog`, `grs`, `grst`, `gsta`, `gstp`, `gstl`. Upstream's names, so the muscle memory carries over. The omz plugin defined several hundred; these are the ones in use
-- `emacsctl` — manage the Emacs daemon:
+- `emacsctl` manages the Emacs daemon:
   ```sh
   emacsctl start    # launch daemon
   emacsctl stop     # kill daemon
@@ -412,8 +412,8 @@ ship its own. A project with its own file still wins, which is the point.
 
 - vi mode keys, mouse enabled
 - Windows and panes are 1-indexed and renumber on close
-- `prefix h` / `prefix v` — split horizontally / vertically in the current pane's directory
-- `prefix r` — reload config
+- `prefix h` / `prefix v`: split horizontally / vertically in the current pane's directory
+- `prefix r`: reload config
 - Copy mode: `v` to select, `y` to yank
 
 ## Fonts
