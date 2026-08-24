@@ -26,8 +26,9 @@ shopt -s globstar              # ** recurses
 shopt -s autocd                # a bare directory name cds into it
 shopt -s cdspell dirspell      # fix small typos in path arguments
 
-# vi keys, matching vim, evil and tmux copy-mode.
-set -o vi
+# Emacs keys, matching the editor. bash defaults to this; the line is here
+# so the keymap is stated rather than inherited.
+set -o emacs
 
 # ~/.bashrc is a symlink into the repo, so BASH_SOURCE points at the link.
 # Resolve it and config.bash loads no matter where the repo is cloned.

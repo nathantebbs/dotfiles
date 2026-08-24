@@ -340,7 +340,7 @@ and `/opt/homebrew/sbin` never arrives at all.
   terminals do not overwrite each other. bash defaults to 500 lines and
   last-window-wins
 - `shopt`: `globstar`, `autocd`, `cdspell`, `dirspell`, `checkwinsize`
-- `set -o vi`, matching vim, evil and tmux copy-mode
+- `set -o emacs`, matching the editor. It is bash's default, stated rather than inherited
 - `PS1`: `user@host` in color, then the working directory in brackets
 
 **`config.bash` provides** everything portable, which is the whole of the old
