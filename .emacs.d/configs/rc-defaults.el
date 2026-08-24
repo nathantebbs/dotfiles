@@ -1,15 +1,23 @@
-;;; rc-defaults.el --- Built-in state and the shell environment -*- lexical-binding: t; -*-
+;;; rc-defaults.el --- Built-in state, modifiers and the shell environment -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
-;; The built-in minor modes that persist state across sessions, plus Dired and
-;; auto-save.
+;; The built-in minor modes that persist state across sessions, plus the macOS
+;; modifier keys, Dired and auto-save.
 ;;
 ;; minimal-emacs.d sets the variables for most of these but deliberately does
 ;; not turn the modes on, so the `add-hook' calls below are what actually
 ;; enables them. Only settings that differ from upstream's are repeated here.
 
 ;;; Code:
+
+;;; macOS modifiers
+
+;; Meta moves to the left Command key, the same trade that put Control on Caps
+;; Lock. Option takes over Super, so the s- bindings in ns-win.el still work.
+(when (featurep 'ns)
+  (setopt ns-command-modifier 'meta)
+  (setopt ns-alternate-modifier 'super))
 
 ;;; Shell environment
 
