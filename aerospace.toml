@@ -131,6 +131,9 @@ cmd-ctrl-alt-e = 'layout tiles horizontal vertical'
 cmd-ctrl-alt-s = 'layout accordion'
 cmd-ctrl-alt-f = 'fullscreen'
 
+# --- Float the focused window (i3: mod+shift+space). ---
+cmd-ctrl-alt-shift-space = 'layout floating tiling'
+
 # --- Resize the focused window. ---
 cmd-ctrl-alt-minus = 'resize smart -50'
 cmd-ctrl-alt-equal = 'resize smart +50'
