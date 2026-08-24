@@ -31,6 +31,7 @@
 (require 'rc-editing)
 (require 'rc-elisp)
 (require 'rc-programming)
+(require 'rc-cc)
 (require 'rc-odin)
 (require 'rc-org)
 (require 'rc-git)

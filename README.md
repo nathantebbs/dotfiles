@@ -196,10 +196,10 @@ Notable packages:
 
 - **Editing:** Evil, evil-collection, evil-surround, evil-mc, undo-fu (+ session), paredit, move-text, aggressive-indent, stripspace
 - **Completion / navigation:** Vertico, Consult, Marginalia, Embark, Orderless, Corfu + Cape
-- **Languages:** Odin, Python (tree-sitter, uv/ruff, pyvenv), CMake (tree-sitter), Markdown, Org
+- **Languages:** C/C++ (tree-sitter, Eglot/clangd), Odin, Python (tree-sitter, uv/ruff, pyvenv), CMake (tree-sitter), Markdown, Org
 - **Tooling:** Magit, Apheleia (formatting), YASnippet, pdf-tools, helpful, ghostel
 
-No LSP is configured here, unlike Neovim: formatting is apheleia's job, cc-mode indents C and C++ as you type, and Python is linted by Flymake driving `ruff`. `pdf-tools` has its `epdfinfo` server built, so PDFs open without a build prompt.
+C and C++ are the only languages here that run a language server: Eglot drives `clangd` with the same flags as the Neovim config, and `rc-cc.el` covers the tree-sitter modes, indentation, diagnostics and navigation. Python is linted by Flymake driving `ruff` instead, which covers the same ground without a server. Formatting everywhere is apheleia's job. `pdf-tools` has its `epdfinfo` server built, so PDFs open without a build prompt.
 
 Theme: modus-themes. Font: Zenbones Brainy at 17pt. See [Fonts](#fonts).
 

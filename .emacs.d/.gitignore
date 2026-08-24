@@ -22,7 +22,7 @@ elpa/
 # Native compilation cache
 eln-cache/
 
-# Compiled tree-sitter grammars, built per machine by rc-odin-install-grammar
+# Compiled tree-sitter grammars, built per machine by the rc-*-install commands
 tree-sitter/
 
 # Backup and auto-save files
