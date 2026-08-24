@@ -44,6 +44,6 @@ unset _rc _target
 
 . "$DOTFILES_DIR/config.bash"
 
-# Prompt. Green brackets, blue directory, one component. \[ \] wraps every
-# escape so bash counts the printed width and long lines wrap correctly.
-PS1='\[\e[1;32m\][\[\e[1;34m\]\W\[\e[1;32m\]]\[\e[0m\]\$ '
+# Prompt. Cyan user, magenta host, green brackets, blue directory. \[ \] wraps
+# every escape so bash counts the printed width and long lines wrap correctly.
+PS1='\[\e[1;36m\]\u\[\e[1;33m\]@\[\e[1;35m\]\h \[\e[1;32m\][\[\e[1;34m\]\W\[\e[1;32m\]] \[\e[0m\]\$ '

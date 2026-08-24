@@ -341,7 +341,7 @@ and `/opt/homebrew/sbin` never arrives at all.
   last-window-wins
 - `shopt`: `globstar`, `autocd`, `cdspell`, `dirspell`, `checkwinsize`
 - `set -o vi`, matching vim, evil and tmux copy-mode
-- `PS1`: the working directory in brackets and nothing else
+- `PS1`: `user@host` in color, then the working directory in brackets
 
 **`config.bash` provides** everything portable, which is the whole of the old
 `config.zsh` bar the bun completions:
@@ -364,15 +364,15 @@ equivalent, so bun contributes only its binary now.
 
 ## Prompt
 
-Set at the bottom of `bashrc`: green brackets, blue directory, nothing else.
-One component, since the full path is what `pwd` is for.
+Set at the bottom of `bashrc`: cyan user, magenta host, green brackets, blue
+directory. One path component, since the full path is what `pwd` is for.
 
 ```sh
-PS1='\[\e[1;32m\][\[\e[1;34m\]\W\[\e[1;32m\]]\[\e[0m\]\$ '
+PS1='\[\e[1;36m\]\u\[\e[1;33m\]@\[\e[1;35m\]\h \[\e[1;32m\][\[\e[1;34m\]\W\[\e[1;32m\]] \[\e[0m\]\$ '
 ```
 
 ```
-[dotfiles]$
+nathan@host [dotfiles] $
 ```
 
 The `\[ \]` pairs are not decoration. They tell bash which bytes print as
