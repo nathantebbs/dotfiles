@@ -29,6 +29,19 @@
 
 (add-hook 'c-mode-common-hook #'rc-programming-c-indent-style)
 
+;;; CMake
+
+;; cmake-ts-mode ships with Emacs and its own autoloads already claim
+;; CMakeLists.txt and .cmake, falling back to `fundamental-mode' when the
+;; grammar is missing, so only the grammar is left to install. Requiring the
+;; mode is what registers its pinned source entry, which is why the source is
+;; not repeated here the way Odin's and Python's are.
+(defun rc-programming-install-cmake-grammar ()
+  "Compile and install the CMake tree-sitter grammar."
+  (interactive)
+  (require 'cmake-ts-mode)
+  (treesit-install-language-grammar 'cmake))
+
 ;;; Python
 
 ;; Homebrew installs python3 and no bare `python'. Emacs 30 already defaults
