@@ -306,7 +306,7 @@ The setup is tuned for a HHKB Pro 2, which has no dedicated arrow or super key. 
 
 ### Workspace assignments
 
-Apps open on a fixed workspace via `on-window-detected` rules. The scheme is browsers on 1, terminals on 2, editors on 3, comms on 4, AI on 5, docs on 6, media on 7, VMs on 8, games on 9; 7 currently has no rule because nothing on this machine claims it. Only installed apps are listed, so adding an app means adding its block. Finder floats instead of tiling.
+Apps open on a fixed workspace via `on-window-detected` rules. The scheme is browsers on 1, terminals on 2, editors on 3, comms on 4, AI on 5, docs on 6, media on 7, VMs on 8, games on 9; 7 currently has no rule because nothing on this machine claims it. Only installed apps are listed, so adding an app means adding its block. Finder floats instead of tiling, as does `sdl3-sandbox`, matched on its executable name because an unbundled binary has no bundle id.
 
 Find an app's bundle id with `aerospace list-apps`.
 

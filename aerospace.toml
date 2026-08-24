@@ -80,6 +80,11 @@ run = 'move-node-to-workspace 9'
 if.app-id = 'com.apple.finder'
 run = 'layout floating'
 
+# An unbundled binary has no bundle id, so this matches on the executable name.
+[[on-window-detected]]
+if.app-name-regex-substring = 'sdl3-sandbox'
+run = 'layout floating'
+
 # i3-style gaps.
 [gaps]
 inner.horizontal = 8
