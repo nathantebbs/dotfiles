@@ -66,9 +66,10 @@ into `.emacs.d/tree-sitter/`, which is gitignored.
 
 ## Python
 
-`python-ts-mode` through `major-mode-remap-alist`, but only where the grammar
-is present, so a fresh clone falls back to `python-mode` rather than erroring.
-On a new machine:
+`python-ts-mode` through `treesit-enabled-modes`, but only where the grammar is
+present, so a fresh clone falls back to `python-mode` rather than erroring.
+python.el registers its own commit-pinned grammar source and its own remap
+entry, so neither is repeated here. On a new machine:
 
 ```
 M-x rc-programming-install-python-grammar

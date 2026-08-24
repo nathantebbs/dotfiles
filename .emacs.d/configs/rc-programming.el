@@ -50,19 +50,25 @@
 (setopt python-shell-interpreter "python3")
 (setopt python-interpreter "python3")
 
-;; Tree-sitter on the same terms as Odin: the grammar is built per machine and
-;; the directory is gitignored, so the remap only takes hold once it exists and
-;; a fresh clone falls back to `python-mode' rather than erroring.
-(add-to-list 'treesit-language-source-alist
-             '(python "https://github.com/tree-sitter/tree-sitter-python"))
-
+;; python.el registers its own commit-pinned grammar source when it loads, so
+;; requiring it is what makes the grammar installable. Stating a source here
+;; would only add a second, unpinned entry racing that one.
 (defun rc-programming-install-python-grammar ()
   "Compile and install the Python tree-sitter grammar."
   (interactive)
+  (require 'python)
   (treesit-install-language-grammar 'python))
 
+;; python.el's autoloads have already put python-mode in
+;; `treesit-major-mode-remap-alist', so enabling the mode is all that is left.
+;; Appended rather than assigned, so another module can enable its own modes
+;; through the same option.
+;;
+;; Guarded on the grammar, so a fresh clone falls back to `python-mode' rather
+;; than sitting in a python-ts-mode with no font lock.
 (when (treesit-ready-p 'python t)
-  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode)))
+  (setopt treesit-enabled-modes
+          (append treesit-enabled-modes '(python-ts-mode))))
 
 (add-hook 'python-base-mode-hook #'pyvenv-mode)
 
