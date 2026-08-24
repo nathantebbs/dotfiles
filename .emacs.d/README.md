@@ -137,16 +137,50 @@ applies to that file and sets `c-ts-indent-offset`, `c-basic-offset` and
 YAML is what resolves `BasedOnStyle` and nested directories correctly. One
 process per directory, cached.
 
-`BreakBeforeBraces` maps onto a `c-ts-mode` indent style as well, but only
-inside a function body does that land where clang-format does. Every
-`c-ts-mode` style cascades the indent of a brace that opens a namespace or a
-class on its own line, so an Allman project still has those two corrected on
-save rather than while typing.
+`BreakBeforeBraces` maps onto a `c-ts-mode` indent style as well, so an Allman
+project types Allman.
 
-Defaults for a file no `.clang-format` covers are K&R at four columns with no
-tabs, matching `~/.clang-format`. The `linux` style is the closer match to that
-file's `BreakBeforeBraces` but forces `indent-tabs-mode` on, which the same
-file turns off.
+Indentation then comes from two places, because no one source is good at both
+jobs:
+
+| | Per line, as you type | Over a region (`indent-region`, `=` in Evil) |
+|---|---|---|
+| Source | tree-sitter | clang-format |
+| Why | Survives the half-written buffer typing produces | Exact by construction |
+
+clang-format is exact but useless mid-edit: with braces still unbalanced it has
+nothing to balance and guesses badly. tree-sitter has error recovery and is
+what should answer a keystroke. Over a region the buffer is usually whole, and
+there clang-format wins outright.
+
+Two details make the clang-format side safe. It has no indent-only mode and
+would otherwise rewrap to `ColumnLimit`, changing how many lines come back and
+putting every column after the first rewrap on the wrong line; the resolved
+style is dumped to a temp file with the limit lifted, so line breaks stay put
+and indentation is the only thing that moves. And the leading whitespace is
+copied verbatim rather than re-derived from a column, so tabs land exactly
+where clang-format puts them.
+
+Two `c-ts-mode` gaps are patched for the typing path, both reproducible under
+`emacs -Q`:
+
+- **Macro bodies.** tree-sitter-c parses the whole body of a multi-line macro
+  as one opaque `preproc_arg` token, so `c-ts-mode` gives up with `no-indent`.
+  The syntax table still works: `parse-partial-sexp` counts unclosed braces
+  between the directive and the line, skipping strings and comments.
+- **Nested directives.** `c-ts-mode` sends a top-level form under a directive
+  to column 0 with a rule that reaches only one level deep. A header with an
+  include guard around an `#ifdef` nests two.
+
+Measured against `clang-format` over 55 files of C in these projects, 51
+re-indent to exactly what clang-format produces. Running `indent-region` over
+already-formatted code changes nothing at all, which is the property that
+matters most: `=` never churns a file.
+
+C++ is where the split earns itself. Under Allman braces `c-ts-mode` cascades
+the indent of a brace opening a namespace or class, and closing that with
+tree-sitter rules needs a special case per declaration form. The region path
+sidesteps all of it.
 
 ### The server
 
