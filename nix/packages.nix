@@ -1,11 +1,47 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
+    aspell
+    automake
+    clang-tools
+    cmake
+    coreutils
     curl
+    fastfetch
+    ffmpeg
     fzf
+    gh
     git
+    git-filter-repo
+    glslang
+    gnupg
+    gnused
     gnumake
+    graphviz
+    htop
+    jq
     neovim
+    pandoc
+    pigz
+    pngcheck
+    pnpm
+    poppler
+    prettier
+    pyright
     ripgrep
+    ruby
+    ruff
+    spirv-cross
+    texinfo
+    tinymist
+    tlrc
+    tmux
+    tor
+    tree
+    tree-sitter
+    typst
+    universal-ctags
+    uv
+    wget
   ];
 }
