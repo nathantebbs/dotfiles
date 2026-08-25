@@ -23,7 +23,17 @@ emacsctl() {
     stop)
       launchctl bootout "$target" ;;
     restart)
-      launchctl kickstart -k "$target" ;;
+      launchctl print "$target" >/dev/null 2>&1 && launchctl bootout "$target"
+      sleep 1
+      launchctl bootstrap "gui/$(id -u)" \
+        "$HOME/Library/LaunchAgents/$label.plist"
+      local attempt
+      for attempt in {1..20}; do
+        command emacsclient -e "(emacs-version)" >/dev/null 2>&1 && return
+        sleep 0.5
+      done
+      echo "Emacs daemon failed to become ready" >&2
+      return 1 ;;
     status)
       command emacsclient -e "(emacs-version)" >/dev/null 2>&1 \
         && echo "Emacs daemon: running" \
