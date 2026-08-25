@@ -16,6 +16,7 @@ let
     gopls
     neovim
     ninja
+    pandoc
     pkg-config
     poppler-utils
     pyright
