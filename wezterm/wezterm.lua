@@ -3,11 +3,11 @@ local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
 -- Shell. WezTerm would read the login shell out of the password database,
--- which is right only on a machine where chsh has already run. Naming the
--- shell here means a fresh clone gets bash before setup.sh does anything.
+-- which is right only on a machine where chsh has already run. Prefer the
+-- managed profile and keep the system shell for bootstrap.
 -- "-l" makes it a login shell, so ~/.bash_profile runs.
 local function bash_path()
-	for _, path in ipairs({ "/opt/homebrew/bin/bash", "/usr/local/bin/bash", "/bin/bash" }) do
+	for _, path in ipairs({ wezterm.home_dir .. "/.nix-profile/bin/bash", "/bin/bash" }) do
 		local f = io.open(path, "r")
 		if f then
 			f:close()

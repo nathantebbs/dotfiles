@@ -76,7 +76,7 @@ alias gca!='git commit -v -a --amend'
 # -a "", that starts nothing outside launchd for emacsctl to lose track of.
 case "$OSTYPE" in
   darwin*)
-    export EDITOR='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -t -a /opt/homebrew/bin/nvim'
+    export EDITOR="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -t -a $HOME/.nix-profile/bin/nvim"
     export VISUAL="$EDITOR"
     # BSD ls. CLICOLOR rather than an ls -G alias, so anything invoking ls
     # gets the colors. LSCOLORS is 11 foreground/background letter pairs, in

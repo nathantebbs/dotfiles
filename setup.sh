@@ -16,54 +16,37 @@ err()  { echo -e "${RED}[ERROR]${NC} $*"; }
 echo "=== dotfiles setup ==="
 echo ""
 
-# ── 1. System dependencies ───────────────────────────────────────────────────
-echo "--- Dependencies ---"
+# 1. Nix packages
+echo "Nix packages"
 echo ""
 
-# package name : command to check
-DEPS=(
-  "neovim:nvim"
-  "ripgrep:rg"
-  "fzf:fzf"
-  "make:make"
-  "curl:curl"
-  "git:git"
-)
+command -v nix >/dev/null 2>&1 || {
+  err "Nix not found. Install it from https://nixos.org/download/"
+  exit 1
+}
 
-missing=()
-for entry in "${DEPS[@]}"; do
-  pkg="${entry%%:*}"
-  cmd="${entry##*:}"
-  command -v "$cmd" >/dev/null 2>&1 || missing+=("$pkg")
-done
+case "$OSTYPE" in
+  darwin*) profile="nathantebbs@macbook" ;;
+  linux*) profile="nathantebbs@linux" ;;
+  *)
+    err "Unsupported OS: $OSTYPE"
+    exit 1
+    ;;
+esac
 
-if [ ${#missing[@]} -gt 0 ]; then
-  warn "Missing packages: ${missing[*]}"
-  case "$OSTYPE" in
-    linux*)
-      sudo apt update
-      sudo apt install -y "${missing[@]}"
-      ;;
-    darwin*)
-      if ! command -v brew >/dev/null 2>&1; then
-        err "Homebrew not found. Install it from https://brew.sh then re-run this script."
-        exit 1
-      fi
-      brew install "${missing[@]}"
-      ;;
-    *)
-      err "Unsupported OS: $OSTYPE"
-      exit 1
-      ;;
-  esac
-else
-  info "All dependencies already installed"
-fi
+flake_attr="homeConfigurations.\"$profile\".activationPackage"
+activation_package="$(
+  nix --extra-experimental-features 'nix-command flakes' build \
+    "$DOTFILES_DIR#$flake_attr" --no-link --print-out-paths
+)"
+"$activation_package/activate"
+info "Home Manager profile applied: $profile"
+unset activation_package flake_attr profile
 
 echo ""
 
 # Emacs is built from source via github.com/jimeh/build-emacs-for-macos, not
-# installed by brew. Installing a Homebrew Emacs alongside it leaves two
+# installed by Nix. Installing another Emacs alongside it leaves two
 # binaries and two launchd agents fighting over the same daemon socket.
 case "$OSTYPE" in
   darwin*)
@@ -75,7 +58,7 @@ case "$OSTYPE" in
     else
       warn "Emacs.app not found. Build it with:"
       warn "  https://github.com/jimeh/build-emacs-for-macos"
-      warn "Do not 'brew install emacs'; it conflicts with the daemon agent."
+      warn "Do not install another Emacs; it conflicts with the daemon agent."
     fi
     ;;
   linux*)
@@ -85,43 +68,26 @@ esac
 
 echo ""
 
-# ── 1b. Brewfile ─────────────────────────────────────────────────────────────
-# The dependency list above is the bare minimum needed to get a usable shell.
-# The Brewfile is the full package set; it is macOS-only.
-case "$OSTYPE" in
-  darwin*)
-    echo "--- Brewfile ---"
-    echo ""
-    if [ -f "$DOTFILES_DIR/Brewfile" ]; then
-      brew bundle install --file="$DOTFILES_DIR/Brewfile"
-      info "Brewfile applied"
-    else
-      warn "No Brewfile found, skipping"
-    fi
-    echo ""
-    ;;
-esac
-
-# ── 2. Fonts ─────────────────────────────────────────────────────────────────
-echo "--- Fonts ---"
+# 2. Fonts
+echo "Fonts"
 echo ""
 bash "$DOTFILES_DIR/util/scripts/install-fonts.sh"
 echo ""
 
-# ── 3. Symlinks ───────────────────────────────────────────────────────────────
-echo "--- Symlinks ---"
+# 3. Symlinks
+echo "Symlinks"
 echo ""
 bash "$DOTFILES_DIR/util/scripts/deploy.sh"
 echo ""
 
-# ── 4. vim-plug ───────────────────────────────────────────────────────────────
-echo "--- vim-plug ---"
+# 4. vim-plug
+echo "vim-plug"
 echo ""
 bash "$DOTFILES_DIR/util/scripts/install-vimplug.sh"
 echo ""
 
-# ── 5. Default shell ─────────────────────────────────────────────────────────
-echo "--- bash ---"
+# 5. Default shell
+echo "bash"
 echo ""
 bash "$DOTFILES_DIR/util/scripts/install-bash.sh"
 echo ""

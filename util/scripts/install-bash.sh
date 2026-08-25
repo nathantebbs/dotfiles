@@ -3,7 +3,7 @@
 # Install a modern bash and make it the login shell.
 #
 # macOS ships bash 3.2 at /bin/bash and will not ship a newer one, so the
-# Homebrew build is the real shell here. chsh refuses any shell that is not
+# Nix build is the real shell here. chsh refuses any shell that is not
 # listed in /etc/shells, so that file has to be edited first, and that needs
 # root. Everything below is idempotent.
 
@@ -20,12 +20,14 @@ err()  { echo -e "${RED}[ERROR]${NC} $*"; }
 
 case "$OSTYPE" in
   darwin*)
-    command -v brew >/dev/null 2>&1 || { err "Homebrew not found"; exit 1; }
-    brew list bash >/dev/null 2>&1 || brew install bash
-    BASH_PATH="$(brew --prefix)/bin/bash"
+    BASH_PATH="$HOME/.nix-profile/bin/bash"
     ;;
   *)
-    BASH_PATH="$(command -v bash)"
+    if [ -x "$HOME/.nix-profile/bin/bash" ]; then
+      BASH_PATH="$HOME/.nix-profile/bin/bash"
+    else
+      BASH_PATH="$(command -v bash)"
+    fi
     ;;
 esac
 
