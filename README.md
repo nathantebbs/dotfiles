@@ -25,12 +25,15 @@ the macOS or Linux profile and activates it before deploying the dotfiles.
 | `python3`, `uv`, `ruff`, `pyright` | Python development |
 | `go`, `gopls` | Go development |
 | `clangd`, `clang-format`, `cmake`, `ninja` | C and C++ development |
+| `sdl3`, `sdl3-image`, `sdl3-mixer`, `sdl3-ttf` | SDL3 application development |
 | `gcc` | Linux C and C++ compiler |
+| `sdl3-shadercross` | Linux SDL3 shader translation |
 | `poppler-utils` | PDF tools |
 
 The shared package list is `nix/packages.nix`. Project-specific compilers and
 tools belong in each project's flake. macOS uses Apple clang from Xcode Command
-Line Tools. Linux gets GCC from the Home Manager profile.
+Line Tools. Linux gets GCC and SDL3 shadercross from the Home Manager profile.
+Shadercross can be built from source in a macOS project when needed.
 
 Emacs is not installed by `setup.sh` either. It is built from source with
 [build-emacs-for-macos](https://github.com/jimeh/build-emacs-for-macos), and a
