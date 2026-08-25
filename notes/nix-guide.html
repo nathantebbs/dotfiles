@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nix environment guide</title>
+<style>
+/* ============================================================
+   Standard HTML house style for plans, audits, and design docs.
+   Deliberately project-agnostic: this never adopts a project's theme.
+   Plain document on a plain background. Legibility over decoration.
+   ============================================================ */
+
+:root {
+  --bg:        #fbfbf9;
+  --fg:        #1a1a1a;
+  --fg-muted:  #5c5c5c;
+  --rule:      #d4d4cf;
+  --surface:   #f0f0ec;
+  --link:      #0b4fa8;
+  --visited:   #6b3fa0;
+  --accent:    #8a5a00;
+  --good:      #1c6b2e;
+  --bad:       #a11b1b;
+  --measure:   72em;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:       #101010;
+    --fg:       #e6e6e3;
+    --fg-muted: #9a9a95;
+    --rule:     #3a3a3a;
+    --surface:  #1c1c1c;
+    --link:     #89a6ff;
+    --visited:  #d98cff;
+    --accent:   #e0a33a;
+    --good:     #52c96a;
+    --bad:      #ff6b52;
+  }
+}
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--fg);
+  background: var(--bg);
+  margin: 0;
+  padding: 2.5rem 1.25rem 6rem;
+}
+
+/* Left-justified, not centered: the document hugs the left gutter and simply
+   stops at the measure. */
+main, .doc {
+  max-width: var(--measure);
+  margin: 0;
+}
+
+/* --- headings ------------------------------------------------ */
+
+h1, h2, h3, h4 {
+  line-height: 1.25;
+  font-weight: 600;
+  margin: 2.2em 0 0.6em;
+}
+h1 {
+  font-size: 1.9rem;
+  margin-top: 0;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--rule);
+}
+h2 { font-size: 1.35rem; }
+h3 { font-size: 1.1rem; }
+h4 { font-size: 1rem; color: var(--fg-muted); }
+
+/* Byline directly under the h1: date, repo, commit, author. */
+.meta {
+  color: var(--fg-muted);
+  font-size: 0.875rem;
+  margin: -0.2em 0 2.5em;
+}
+.meta > * + *::before { content: " · "; }
+
+/* --- prose --------------------------------------------------- */
+
+p, ul, ol, dl, table, pre, blockquote { margin: 0 0 1.1em; }
+
+a          { color: var(--link); }
+a:visited  { color: var(--visited); }
+
+strong { font-weight: 600; }
+
+small, .muted { color: var(--fg-muted); font-size: 0.875rem; }
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: 2.5em 0;
+}
+
+blockquote {
+  margin-left: 0;
+  padding: 0.1em 0 0.1em 1em;
+  border-left: 3px solid var(--rule);
+  color: var(--fg-muted);
+}
+
+ul, ol { padding-left: 1.4em; }
+li { margin: 0.25em 0; }
+li > ul, li > ol { margin: 0.25em 0; }
+
+/* --- code ---------------------------------------------------- */
+
+code, kbd, samp, .path {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.875em;
+}
+
+code {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 0.1em 0.3em;
+}
+
+/* File paths and identifiers: mono, but no box. */
+.path { color: var(--fg-muted); }
+
+pre {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: 0.75em 0.9em;
+  overflow-x: auto;
+  line-height: 1.45;
+}
+pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 0.8125rem;
+}
+
+/* --- tables -------------------------------------------------- */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9375rem;
+}
+th, td {
+  border: 1px solid var(--rule);
+  padding: 0.45em 0.7em;
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  background: var(--surface);
+  font-weight: 600;
+}
+
+/* Wide tables scroll inside their own box; the page never scrolls sideways. */
+.scroll { overflow-x: auto; margin: 0 0 1.1em; }
+.scroll table { margin: 0; }
+
+/* --- callouts ------------------------------------------------ */
+
+.note, .warn, .ok {
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--fg-muted);
+  background: var(--surface);
+  padding: 0.7em 0.9em;
+  margin: 0 0 1.1em;
+}
+.note > :last-child, .warn > :last-child, .ok > :last-child { margin-bottom: 0; }
+.warn { border-left-color: var(--accent); }
+.ok   { border-left-color: var(--good); }
+
+.note-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 0.3em;
+}
+
+/* --- status tags --------------------------------------------- */
+
+.tag {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  padding: 0.05em 0.4em;
+  white-space: nowrap;
+  color: var(--fg-muted);
+}
+.tag-good { color: var(--good); }
+.tag-warn { color: var(--accent); }
+.tag-bad  { color: var(--bad); }
+
+/* --- task lists ---------------------------------------------- */
+
+/* <ul class="tasks"> with <li data-state="done|wip|todo"> */
+ul.tasks { list-style: none; padding-left: 0; }
+ul.tasks li {
+  padding-left: 1.9em;
+  position: relative;
+  margin: 0.4em 0;
+}
+ul.tasks li::before {
+  position: absolute;
+  left: 0;
+  font-family: ui-monospace, Menlo, monospace;
+  color: var(--fg-muted);
+  content: "[ ]";
+}
+ul.tasks li[data-state="done"]::before { content: "[x]"; color: var(--good); }
+ul.tasks li[data-state="wip"]::before  { content: "[~]"; color: var(--accent); }
+ul.tasks li[data-state="done"] { color: var(--fg-muted); }
+
+/* --- definition list (decisions, key/value facts) ------------- */
+
+dl { display: grid; grid-template-columns: minmax(8rem, max-content) 1fr; gap: 0.4em 1.2em; }
+dt { font-weight: 600; }
+dd { margin: 0; }
+
+/* --- table of contents --------------------------------------- */
+
+/* <nav class="toc"> wrapping a nested <ol> or <ul> of in-page links. */
+.toc {
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  padding: 0.9em 1.1em;
+  margin: 0 0 2.2em;
+}
+.toc ol, .toc ul { list-style: none; padding-left: 0; margin: 0; }
+.toc li { margin: 0.15em 0; }
+.toc ol ol, .toc ul ul { padding-left: 1.1em; }
+.toc ol ol li, .toc ul ul li { font-size: 0.9375rem; }
+.toc a { text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+
+/* A long flat contents list reads better in columns once there is room. */
+@media (min-width: 52rem) {
+  .toc > ol, .toc > ul { columns: 2; column-gap: 2.5em; }
+  .toc > ol > li, .toc > ul > li { break-inside: avoid; }
+}
+
+/* Back to contents link at the foot of a section. */
+.backtotoc { font-size: 0.8125rem; color: var(--fg-muted); }
+
+/* --- footnotes / source trail -------------------------------- */
+
+.footer {
+  margin-top: 4rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  color: var(--fg-muted);
+  font-size: 0.8125rem;
+}
+
+@media (max-width: 34rem) {
+  body { font-size: 16px; padding: 1.5rem 1rem 4rem; }
+  dl { grid-template-columns: 1fr; gap: 0.15em; }
+  dd { margin-bottom: 0.6em; }
+}
+
+@media print {
+  :root { --bg: #fff; --fg: #000; }
+  body { font-size: 11pt; }
+  a { color: #000; }
+}
+</style>
+</head>
+<body>
+<main>
+
+<h1>Nix environment guide</h1>
+<p class="meta"><span>2026-08-24</span><span>dotfiles migration</span><span>Guide and review</span></p>
+
+<p>Nix and Home Manager now own the command-line development environment on macOS and Linux. The macOS profile builds and runs without Homebrew. Use <code>setup.sh</code> for a new machine. Use the flake commands below for routine changes.</p>
+
+<nav class="toc">
+  <ol>
+    <li><a href="#review">Migration review</a></li>
+    <li><a href="#files">Configuration map</a></li>
+    <li><a href="#bootstrap">Bootstrap a machine</a></li>
+    <li><a href="#daily">Daily use</a></li>
+    <li><a href="#packages">Change packages</a></li>
+    <li><a href="#projects">Project environments</a></li>
+    <li><a href="#rollback">Rollback and recovery</a></li>
+    <li><a href="#macos">macOS boundary</a></li>
+    <li><a href="#verification">Verification</a></li>
+  </ol>
+</nav>
+
+<h2 id="review">Migration review</h2>
+
+<p>The migration is ready for daily macOS development. Homebrew is absent. The account login shell points to the Nix profile. A clean login shell resolves the managed toolchain from that profile.</p>
+
+<div class="scroll">
+<table>
+  <thead>
+    <tr><th>Area</th><th>Status</th><th>Result</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Package graph</td><td><span class="tag tag-good">verified</span></td><td>Both Home Manager profiles evaluate. The macOS activation package builds.</td></tr>
+    <tr><td>Login shell</td><td><span class="tag tag-good">verified</span></td><td>The account uses <span class="path">~/.nix-profile/bin/bash</span>.</td></tr>
+    <tr><td>PATH order</td><td><span class="tag tag-good">fixed</span></td><td>The Nix profile precedes system paths and user tool directories.</td></tr>
+    <tr><td>Emacs daemon</td><td><span class="tag tag-good">verified</span></td><td>The launch agent reloads its plist and starts with the Nix PATH.</td></tr>
+    <tr><td>Linux build</td><td><span class="tag tag-warn">evaluate only</span></td><td>The x86_64 Linux profile evaluates on macOS. Build it on a Linux workstation.</td></tr>
+    <tr><td>GUI applications</td><td><span class="tag tag-warn">manual</span></td><td>Nix does not manage the macOS application set.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="note">
+  <span class="note-label">Package policy</span>
+  The shared profile contains tools used across projects and tools required by these dotfiles. Put specialized compilers and utilities in project flakes.
+</div>
+
+<h2 id="files">Configuration map</h2>
+
+<dl>
+  <dt><span class="path">flake.nix</span></dt>
+  <dd>Declares the pinned inputs and the macOS and Linux profiles.</dd>
+  <dt><span class="path">flake.lock</span></dt>
+  <dd>Records exact Nixpkgs and Home Manager revisions.</dd>
+  <dt><span class="path">nix/home.nix</span></dt>
+  <dd>Sets the Home Manager identity and state version.</dd>
+  <dt><span class="path">nix/packages.nix</span></dt>
+  <dd>Lists shared packages and Linux-only packages.</dd>
+  <dt><span class="path">setup.sh</span></dt>
+  <dd>Activates the correct profile and runs the remaining setup scripts.</dd>
+  <dt><span class="path">bash_profile</span></dt>
+  <dd>Loads Home Manager variables and gives the Nix profile PATH precedence.</dd>
+</dl>
+
+<h2 id="bootstrap">Bootstrap a machine</h2>
+
+<p>Install Nix first. Install Xcode Command Line Tools on macOS. Then clone this repository and run setup.</p>
+
+<pre><code>git clone --depth=1 https://github.com/nathantebbs/dotfiles
+cd dotfiles
+bash setup.sh</code></pre>
+
+<p>The script selects <code>nathantebbs@macbook</code> on macOS. It selects <code>nathantebbs@linux</code> on Linux. It activates packages before installing fonts or changing the login shell.</p>
+
+<div class="warn">
+  <span class="note-label">Git visibility</span>
+  Nix flakes only copy tracked files from a Git worktree. Stage a new Nix file before testing it. A commit is not required.
+</div>
+
+<h2 id="daily">Daily use</h2>
+
+<p>Build before switching. This catches evaluation and package failures without changing the current profile.</p>
+
+<pre><code>activation_package="$(nix --extra-experimental-features 'nix-command flakes' \
+  build '.#homeConfigurations."nathantebbs@macbook".activationPackage' \
+  --no-link --print-out-paths)"
+
+"$activation_package/activate"</code></pre>
+
+<p><code>setup.sh</code> uses <code>--no-link</code> and runs the activation package directly. Use it when the other setup stages also need to run.</p>
+
+<h3>Update pinned inputs</h3>
+
+<pre><code>nix --extra-experimental-features 'nix-command flakes' \
+  flake update
+
+nix --extra-experimental-features 'nix-command flakes' \
+  flake check --no-build</code></pre>
+
+<p>Review the lock-file diff. Build the activation package before committing the update.</p>
+
+<h2 id="packages">Change packages</h2>
+
+<p>Edit <span class="path">nix/packages.nix</span>. Add portable tools to <code>commonPackages</code>. Add Linux compiler packages to <code>linuxPackages</code>.</p>
+
+<pre><code>commonPackages = with pkgs; [
+  existing-tool
+  new-tool
+];</code></pre>
+
+<p>Search Nixpkgs when an attribute name differs from the command name. Build the macOS profile after every package change. Evaluate both profiles with <code>nix flake check --no-build</code>.</p>
+
+<h2 id="projects">Project environments</h2>
+
+<p>The home profile is a workstation baseline. A project flake should own exact compiler versions, libraries, services, and build tools that vary by repository.</p>
+
+<pre><code>nix shell nixpkgs#package-name
+nix develop
+nix flake check</code></pre>
+
+<p>Use <code>nix shell</code> for a temporary command. Use <code>nix develop</code> when the project has a development shell. Keep a package global only when several unrelated projects or the dotfiles need it.</p>
+
+<h2 id="rollback">Rollback and recovery</h2>
+
+<p>Home Manager keeps generations. List them before changing the active profile. The rollback command activates the previous generation.</p>
+
+<pre><code>home-manager generations
+home-manager switch --rollback</code></pre>
+
+<p>A Git revert is the repository rollback. Rebuild and activate after reverting a package or module change.</p>
+
+<h3>Broken login shell</h3>
+
+<p>Open a terminal with <span class="path">/bin/bash</span>. Rebuild the profile. Then rerun the shell installer.</p>
+
+<pre><code>/bin/bash
+bash util/scripts/install-bash.sh</code></pre>
+
+<h3>Stale application environment</h3>
+
+<p>Applications opened before a package-manager migration can retain an old PATH. Quit and reopen the application. Restart the Emacs launch agent after plist or PATH changes.</p>
+
+<pre><code>emacsctl restart
+emacsctl status</code></pre>
+
+<h2 id="macos">macOS boundary</h2>
+
+<p>Home Manager owns command-line packages and the user profile. macOS applications remain manual. This includes WezTerm, Ghostty, AeroSpace, Karabiner, Docker Desktop, and other applications that need vendor installers or macOS permissions.</p>
+
+<p>The source-built Emacs application also remains outside Nix. Its launch agent receives <span class="path">~/.nix-profile/bin</span> through the committed plist. The current Emacs binary has no dynamic links into the removed Homebrew prefix.</p>
+
+<h2 id="verification">Verification</h2>
+
+<p>Run these checks after a package update or bootstrap change.</p>
+
+<pre><code>nix --extra-experimental-features 'nix-command flakes' \
+  flake check --no-build
+
+nix --extra-experimental-features 'nix-command flakes' \
+  build '.#homeConfigurations."nathantebbs@macbook".activationPackage' \
+  --no-link
+
+bash -n setup.sh bash_profile bashrc config.bash
+plutil -lint emacs/dev.nathantebbs.emacs.plist</code></pre>
+
+<p>Open a clean login shell and inspect command ownership.</p>
+
+<pre><code>for command_name in bash git python3 go clangd nvim codex; do
+  command -v "$command_name"
+done</code></pre>
+
+<p>Each managed command should resolve below <span class="path">~/.nix-profile/bin</span>. A system tool is acceptable only when the package policy deliberately leaves it to the operating system.</p>
+
+<p class="footer">Sources: flake.nix, flake.lock, nix/home.nix, nix/packages.nix, setup.sh, bash_profile, config.bash, the Emacs launch plist, live shell probes, Nix evaluation, the macOS activation build, and launchd inspection.</p>
+
+</main>
+</body>
+</html>
