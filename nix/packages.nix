@@ -5,6 +5,7 @@ let
     bashInteractive
     clang-tools
     cmake
+    codex
     curl
     fzf
     gh
