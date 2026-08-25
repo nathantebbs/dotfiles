@@ -341,7 +341,7 @@ and `/opt/homebrew/sbin` never arrives at all.
   last-window-wins
 - `shopt`: `globstar`, `autocd`, `cdspell`, `dirspell`, `checkwinsize`
 - `set -o emacs`, matching the editor. It is bash's default, stated rather than inherited
-- `PS1`: `user@host` in color, then the working directory in brackets
+- The prompt: two lines, built per prompt by `__prompt`. See [Prompt](#prompt)
 
 **`config.bash` provides** everything portable, which is the whole of the old
 `config.zsh` bar the bun completions:
@@ -364,16 +364,50 @@ equivalent, so bun contributes only its binary now.
 
 ## Prompt
 
-Set at the bottom of `bashrc`: cyan user, magenta host, green brackets, blue
-directory. One path component, since the full path is what `pwd` is for.
-
-```sh
-PS1='\[\e[1;36m\]\u\[\e[1;33m\]@\[\e[1;35m\]\h \[\e[1;32m\][\[\e[1;34m\]\W\[\e[1;32m\]] \[\e[0m\]\$ '
-```
+Two lines. The first says who and where and what state things are in, the
+second is the command. Splitting them is what lets the path be the full path:
+it can run as long as it likes without pushing the cursor to the right margin,
+and what gets typed always starts at column three.
 
 ```
-nathan@host [dotfiles] $
+nathan@host [~/source/repos/dotfiles] (main*? ↑2) 1m4s &1 ✗130
+$
 ```
+
+Everything after the directory is conditional and absent when it has nothing
+to say. A clean checkout with nothing running is just the first two segments.
+
+| Segment | Shown when | Meaning |
+| --- | --- | --- |
+| `nathan@host` | always | host turns red under `SSH_CONNECTION` |
+| `[~/path]` | always | `\w`, so `$HOME` collapses to `~` |
+| `(main)` | inside a repo | branch, or `@` and a short SHA when detached |
+| `+` | index differs from HEAD | staged |
+| `*` | worktree differs from index | unstaged |
+| `?` | files git does not track | untracked |
+| `!` | unmerged paths | conflict |
+| `↑2 ↓1` | upstream has diverged | commits ahead, commits behind |
+| `py:name` | `VIRTUAL_ENV` is set | active virtualenv |
+| `1m4s` | last command took 5s or more | wall time |
+| `&1` | background jobs exist | how many |
+| `✗130` | last command failed | its exit code |
+
+A failing command also turns the `$` red, so the eye finds it without reading.
+
+`__prompt` runs the whole thing out of `PROMPT_COMMAND`, and it is bash
+builtins bar two forks: one `git status --porcelain=v2 --branch`, which is
+where branch, flags and divergence all come from at once, and one `jobs -p`.
+That costs about 13ms in a repo. Outside one it is 0.6ms, because the walk up
+the tree looking for `.git` is builtins only and skips the `git` exec when
+there is no repo to ask about.
+
+Command duration comes from a `DEBUG` trap recording `SECONDS`. The trap is
+armed by the previous prompt and disarms itself on the first command after,
+so it times the command and not the minutes spent typing it.
+
+Branch names and the virtualenv name have `\`, `` ` `` and `$` stripped out of
+them. Bash expands `PS1` again on every draw, and a directory someone else
+named is not trusted input.
 
 The `\[ \]` pairs are not decoration. They tell bash which bytes print as
 zero width, and without them it miscounts the line and long commands wrap on
@@ -381,7 +415,7 @@ top of themselves.
 
 This replaced starship, which had replaced the oh-my-zsh theme. Neither earned
 a dependency: a prompt generator that shells out on every prompt, built from
-source and kept current, to draw what one line of bash draws.
+source and kept current, to draw what a page of bash draws.
 
 ## C style
 
