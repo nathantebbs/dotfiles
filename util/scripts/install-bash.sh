@@ -34,8 +34,7 @@ esac
 [ -x "$BASH_PATH" ] || { err "No bash at $BASH_PATH"; exit 1; }
 info "bash: $BASH_PATH ($("$BASH_PATH" -c 'echo $BASH_VERSION'))"
 
-# grep -qxF, not a substring match: /opt/homebrew/bin/bash must not be
-# satisfied by an existing /opt/homebrew/bin/bash-something line.
+# Match the complete path. A similarly named shell is not equivalent.
 if grep -qxF "$BASH_PATH" /etc/shells; then
   info "$BASH_PATH already in /etc/shells"
 else

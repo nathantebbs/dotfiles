@@ -1,4 +1,4 @@
--- gopls. Installed by the Brewfile's `go "golang.org/x/tools/gopls"` line.
+-- gopls. Installed by the shared Nix profile.
 return {
   cmd = { "gopls" },
   filetypes = { "go", "gomod", "gowork", "gotmpl" },

@@ -5,9 +5,9 @@ The purpose of this repository is to store all configuration of any essential de
 
 ## Dependencies
 
-`setup.sh` installs these automatically when they are missing, via `apt`
-(Linux) or `brew` (macOS). They are the floor: enough for a usable shell and a
-working editor.
+Install [Nix](https://nixos.org/download/) before running `setup.sh`. The
+repository pins Nixpkgs and Home Manager in `flake.lock`. `setup.sh` selects
+the macOS or Linux profile and activates it before deploying the dotfiles.
 
 | Package | Purpose |
 |---------|---------|
@@ -17,21 +17,29 @@ working editor.
 | `ripgrep` | Telescope live grep |
 | `fzf` | Fuzzy finder (vim + shell) |
 | `make` | Build telescope-fzf-native |
+| `bash` | Shared interactive shell |
+| `gh` | Git credential helper |
+| `aspell` | Emacs spell checking |
+| `gnupg` | Encrypted Emacs auth sources |
+| `tmux` | Terminal multiplexer |
+| `python3`, `uv`, `ruff`, `pyright` | Python development |
+| `go`, `gopls` | Go development |
+| `clangd`, `clang-format`, `cmake`, `ninja` | C and C++ development |
+| `gcc` | Linux C and C++ compiler |
+| `poppler-utils` | PDF tools |
 
-`bash` is not in that list because it needs more than an install: the Homebrew
-build has to reach `/etc/shells` and `chsh` before it is the login shell.
-`util/scripts/install-bash.sh` does all three, and `setup.sh` runs it as its
-last stage. See [bash](#bash).
+The shared package list is `nix/packages.nix`. Project-specific compilers and
+tools belong in each project's flake. macOS uses Apple clang from Xcode Command
+Line Tools. Linux gets GCC from the Home Manager profile.
 
 Emacs is not installed by `setup.sh` either. It is built from source with
 [build-emacs-for-macos](https://github.com/jimeh/build-emacs-for-macos), and a
-Homebrew Emacs alongside it would mean two binaries and two launchd agents
+another Emacs alongside it would mean two binaries and two launchd agents
 contending for one daemon socket. `setup.sh` checks for `/Applications/Emacs.app`
 and prints the build instructions if it is absent.
 
-Everything beyond the floor is the [Brewfile](Brewfile), which is macOS-only
-and applied by `setup.sh` with `brew bundle install`. WezTerm, AeroSpace and
-Karabiner-Elements are casks in there, so they arrive with it.
+macOS applications remain outside Nix. Install WezTerm, AeroSpace, Karabiner,
+and other GUI applications from their vendor or the App Store.
 
 ## Usage
 
@@ -44,13 +52,17 @@ git clone --depth=1 https://github.com/nathantebbs/dotfiles
 cd dotfiles
 ```
 
-2. Run setup (dependencies, Brewfile, fonts, symlinks, vim-plug, bash)
+2. Install Nix and the Xcode Command Line Tools on macOS.
+
+3. Run setup.
 
 ```sh
 bash setup.sh
 ```
 
-> **macOS:** [Homebrew](https://brew.sh) must be installed before running `setup.sh`.
+The setup activates `nathantebbs@macbook` on macOS and `nathantebbs@linux` on
+Linux. It then installs fonts, deploys symlinks, installs vim-plug, and selects
+the managed Bash as the login shell.
 
 ### Individual scripts
 
@@ -59,7 +71,7 @@ If you only need part of the setup:
 ```sh
 bash util/scripts/deploy.sh               # symlinks only
 bash util/scripts/install-fonts.sh        # fonts only
-bash util/scripts/install-bash.sh         # Homebrew bash + login shell
+bash util/scripts/install-bash.sh         # Nix profile bash + login shell
 bash util/scripts/install-vimplug.sh
 bash util/scripts/make-emacsclient-app.sh # Emacsclient.app launcher (macOS)
 ```
@@ -153,11 +165,11 @@ No vim-polyglot here, and none in `.vimrc` either. Neovim 0.12 and Vim 9.1 both 
 
 | Server | Languages | Installed by |
 |--------|-----------|--------------|
-| `clangd` | C, C++, Obj-C, CUDA | Xcode CommandLineTools |
-| `gopls` | Go | Brewfile (`go install`) |
-| `pyright` | Python | Brewfile |
-| `tinymist` | Typst | Brewfile |
-| `ols` | Odin | Homebrew |
+| `clangd` | C, C++, Obj-C, CUDA | Nix |
+| `gopls` | Go | Nix |
+| `pyright` | Python | Nix |
+| `tinymist` | Typst | Project environment |
+| `ols` | Odin | Project environment |
 
 **Key bindings:**
 
@@ -190,7 +202,7 @@ Theme: `modus` (dark background), lightline with the `one` colorscheme.
 
 `.emacs.d/` is built on [minimal-emacs.d](https://github.com/jamescherti/minimal-emacs.d) and uses the built-in `package.el`. No third-party package manager, and no `use-package`: the configuration is plain Elisp split into `configs/rc-*.el` modules that `post-init.el` requires. See [`.emacs.d/README.md`](.emacs.d/README.md).
 
-Emacs itself is built with [build-emacs-for-macos](https://github.com/jimeh/build-emacs-for-macos), not Homebrew.
+Emacs itself is built with [build-emacs-for-macos](https://github.com/jimeh/build-emacs-for-macos).
 
 Notable packages:
 
@@ -244,7 +256,7 @@ None of these pass `-a ""`. That flag would start a daemon outside launchd, whic
 
 `wezterm/wezterm.lua` configures the [WezTerm](https://wezterm.org/) terminal emulator.
 
-- Shell: the Homebrew bash, as a login shell. Named explicitly rather than taken from the password database, so a machine where `chsh` has not run still opens bash and not the macOS 3.2
+- Shell: the Nix profile Bash as a login shell, with `/bin/bash` as the bootstrap fallback
 - Font: Zenbones Brainy, 14pt, with Symbols Nerd Font Mono as fallback for icon glyphs
 - Background opacity: 0.92
 - Cursor: steady block, which is only what an application that reshapes nothing gets
@@ -283,7 +295,7 @@ Everything hangs off `Cmd`, the one modifier macOS never forwards to the termina
 
 ## Window manager
 
-macOS-only. [AeroSpace](https://github.com/nikitabobko/AeroSpace) is an i3-like tiling window manager, configured in `aerospace.toml` (linked to `~/.aerospace.toml`). [Karabiner-Elements](https://karabiner-elements.pqrs.org/) supplies the modifier key it binds to. Both install from the Brewfile.
+macOS-only. [AeroSpace](https://github.com/nikitabobko/AeroSpace) is an i3-like tiling window manager, configured in `aerospace.toml` and linked to `~/.aerospace.toml`. [Karabiner-Elements](https://karabiner-elements.pqrs.org/) supplies the modifier key it binds to. Install both outside Nix.
 
 ### Mod key
 
@@ -317,22 +329,19 @@ Find an app's bundle id with `aerospace list-apps`.
 ## bash
 
 macOS ships bash 3.2 and never will ship a newer one, so the shell here is the
-Homebrew build. `chsh` only accepts a shell listed in `/etc/shells`, so that
+Nix profile build. `chsh` only accepts a shell listed in `/etc/shells`, so that
 file has to be edited first:
 
 ```sh
 bash util/scripts/install-bash.sh
 ```
 
-That installs `bash` from Homebrew, adds it to `/etc/shells` (needs sudo) and
-runs `chsh`. It is idempotent, so re-running it is a no-op.
+Home Manager installs Bash first. The script adds the stable profile path to
+`/etc/shells` and runs `chsh`. It is idempotent.
 
 `bash_profile` exists because macOS terminals open login shells, which read it
-instead of `~/.bashrc`. It runs `brew shellenv` and then sources `~/.bashrc`,
-in that order, so the guarded prepends in `config.bash` land in front of
-Homebrew. This is what `~/.zprofile` used to do for zsh; bash never reads that
-file, and without the call `/opt/homebrew/bin` arrives last via `path_helper`
-and `/opt/homebrew/sbin` never arrives at all.
+instead of `~/.bashrc`. It sources Home Manager's session variables and then
+loads `~/.bashrc`.
 
 **`bashrc` provides** the parts that are bash's own:
 
