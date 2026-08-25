@@ -22,12 +22,20 @@ let
     python3
     ripgrep
     ruff
+    sdl3
+    sdl3.dev
+    sdl3-image
+    sdl3-image.dev
+    sdl3-mixer
+    sdl3-mixer.dev
+    sdl3-ttf
     tmux
     uv
   ];
 
   linuxPackages = with pkgs; [
     gcc
+    sdl3-shadercross
   ];
 in
 {
