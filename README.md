@@ -229,17 +229,17 @@ same information and cost a package to do it.
 
 ### Emacs daemon
 
-Emacs runs as a launchd agent started at login, so `emacsclient` always has a server to attach to.
+Emacs runs as a service-manager job started at login (a launchd agent on macOS, a systemd `--user` unit on Linux), so `emacsclient` always has a server to attach to.
 
 ```sh
 emacsctl status    # is the daemon answering?
-emacsctl restart   # after rebuilding Emacs, or editing the plist
-emacsctl stop      # unload the job (KeepAlive will not resurrect it)
-emacsctl start     # load it again
-emacsctl logs      # tail the daemon's stderr
+emacsctl restart   # after rebuilding Emacs, or editing the unit
+emacsctl stop      # stop the job (it will not be resurrected)
+emacsctl start     # start it again
+emacsctl logs      # tail the daemon's log
 ```
 
-The agent is `emacs/dev.nathantebbs.emacs.plist`, linked into `~/Library/LaunchAgents` by `deploy.sh`. launchd reads it when the job loads, so changes need an `emacsctl restart`. Logs go to `~/Library/Logs/emacs-daemon.{out,err}`.
+On macOS the agent is `emacs/dev.nathantebbs.emacs.plist`, linked into `~/Library/LaunchAgents` by `deploy.sh`; launchd reads it when the job loads, so changes need an `emacsctl restart`, and logs go to `~/Library/Logs/emacs-daemon.{out,err}`. On Linux the unit is `emacs.service`, shipped by the distro's `emacs` package and enabled by `deploy.sh`; logs come from `journalctl --user -u emacs.service`.
 
 **Reaching the daemon:**
 
@@ -248,13 +248,13 @@ The agent is `emacs/dev.nathantebbs.emacs.plist`, linked into `~/Library/LaunchA
 | `emacs` | New GUI frame, terminal free immediately (`emacsclient -c -n`) |
 | `e file` | Open a file in an existing frame (`emacsclient -n`) |
 | `et` | Frame inside the current terminal (`emacsclient -t`) |
-| Emacsclient.app | Same as `emacs`, from Spotlight, the Dock or Aerospace |
+| Emacsclient.app (macOS) | Same as `emacs`, from Spotlight, the Dock or Aerospace |
 
-None of these pass `-a ""`. That flag would start a daemon outside launchd, which `emacsctl` could then neither stop nor restart. When there is no socket the fix is `emacsctl start`.
+None of these pass `-a ""`. That flag would start a daemon outside the service manager, which `emacsctl` could then neither stop nor restart. When there is no socket the fix is `emacsctl start`.
 
-`Emacsclient.app` is generated into `/Applications` by `util/scripts/make-emacsclient-app.sh` and rebuilt on every `setup.sh` run. It is a build product, not a symlink, so it is not in this repo. If the daemon is down it kickstarts the launchd job rather than spawning its own.
+`Emacsclient.app` is macOS-only: generated into `/Applications` by `util/scripts/make-emacsclient-app.sh` and rebuilt on every `setup.sh` run. It is a build product, not a symlink, so it is not in this repo. If the daemon is down it kickstarts the launchd job rather than spawning its own.
 
-`open -a Emacs` does **not** use the daemon; it launches a second independent Emacs.
+`open -a Emacs` (macOS) does **not** use the daemon; it launches a second independent Emacs.
 
 ## Terminal
 

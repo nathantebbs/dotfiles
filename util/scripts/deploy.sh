@@ -62,13 +62,23 @@ create_symlink "$DOTFILES_DIR/aerospace.toml" "$HOME/.aerospace.toml" "aerospace
 mkdir -p "$HOME/.config/karabiner"
 create_symlink "$DOTFILES_DIR/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json" "karabiner"
 
-# The Emacs daemon agent is macOS-only. launchd reads the plist at load time,
-# so it has to be reloaded after this changes: emacsctl restart.
+# The Emacs daemon agent is macOS-only; launchd reads the plist at load time,
+# so it has to be reloaded after this changes: emacsctl restart. On Linux the
+# unit ships with the emacs package itself, so there is nothing to symlink,
+# just enable so it starts at login the way RunAtLoad does on macOS.
 case "$OSTYPE" in
   darwin*)
     mkdir -p "$HOME/Library/LaunchAgents" "$HOME/Library/Logs"
     create_symlink "$DOTFILES_DIR/emacs/dev.nathantebbs.emacs.plist" \
       "$HOME/Library/LaunchAgents/dev.nathantebbs.emacs.plist" "emacs daemon"
+    ;;
+  linux*)
+    if systemctl --user list-unit-files emacs.service >/dev/null 2>&1; then
+      systemctl --user enable emacs.service
+      echo -e "${GREEN}[OK]${NC} Enabled emacs daemon (emacs.service)"
+    else
+      echo -e "${YELLOW}[INFO]${NC} emacs.service not found; install emacs first"
+    fi
     ;;
 esac
 

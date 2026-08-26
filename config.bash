@@ -1,16 +1,42 @@
 # -n is what frees the terminal. The old "&disown" backgrounded the alias
 # itself, which also threw away emacsclient's errors when the daemon was down.
-# No -a "": that would start a daemon outside launchd, which emacsctl could
-# not then stop. If these say no socket, the answer is emacsctl start.
+# No -a "": that would start a daemon outside the service manager, which
+# emacsctl could not then stop. If these say no socket, run emacsctl start.
 alias emacs='emacsclient -c -n'
 alias e='emacsclient -n'
 alias et='emacsclient -t'
 alias keys="alias | fzf"
 alias lsa="ls -lah"
 
-# The daemon is a launchd job, so it has to be driven through launchctl.
-# Killing it directly would just make KeepAlive start it again.
+# The daemon is a service-manager job (launchd on macOS, systemd --user on
+# Linux), so it has to be driven through that, not killed directly. Killing it
+# directly would just make KeepAlive/Restart start it again.
 emacsctl() {
+  case "$OSTYPE" in
+    darwin*) _emacsctl_darwin "$@" ;;
+    linux*) _emacsctl_linux "$@" ;;
+    *) echo "emacsctl: unsupported OS: $OSTYPE" >&2; return 1 ;;
+  esac
+}
+
+# Polls emacsclient until the daemon answers, for the restart path on either OS.
+_emacsctl_wait_ready() {
+  local attempt
+  for attempt in {1..20}; do
+    command emacsclient -e "(emacs-version)" >/dev/null 2>&1 && return
+    sleep 0.5
+  done
+  echo "Emacs daemon failed to become ready" >&2
+  return 1
+}
+
+_emacsctl_status() {
+  command emacsclient -e "(emacs-version)" >/dev/null 2>&1 \
+    && echo "Emacs daemon: running" \
+    || echo "Emacs daemon: stopped"
+}
+
+_emacsctl_darwin() {
   local label="dev.nathantebbs.emacs"
   local target="gui/$(id -u)/$label"
   case "$1" in
@@ -27,19 +53,27 @@ emacsctl() {
       sleep 1
       launchctl bootstrap "gui/$(id -u)" \
         "$HOME/Library/LaunchAgents/$label.plist"
-      local attempt
-      for attempt in {1..20}; do
-        command emacsclient -e "(emacs-version)" >/dev/null 2>&1 && return
-        sleep 0.5
-      done
-      echo "Emacs daemon failed to become ready" >&2
-      return 1 ;;
-    status)
-      command emacsclient -e "(emacs-version)" >/dev/null 2>&1 \
-        && echo "Emacs daemon: running" \
-        || echo "Emacs daemon: stopped" ;;
+      _emacsctl_wait_ready ;;
+    status) _emacsctl_status ;;
     logs)
       tail -n 40 "$HOME/Library/Logs/emacs-daemon.err" ;;
+    *)
+      echo "Usage: emacsctl {start|stop|restart|status|logs}" ;;
+  esac
+}
+
+# emacs.service ships with the Fedora emacs package (/usr/lib/systemd/user),
+# so there is no plist-equivalent file in this repo to deploy for it.
+_emacsctl_linux() {
+  case "$1" in
+    start) systemctl --user start emacs.service ;;
+    stop) systemctl --user stop emacs.service ;;
+    restart)
+      systemctl --user restart emacs.service
+      _emacsctl_wait_ready ;;
+    status) _emacsctl_status ;;
+    logs)
+      journalctl --user -u emacs.service -n 40 --no-pager ;;
     *)
       echo "Usage: emacsctl {start|stop|restart|status|logs}" ;;
   esac
@@ -95,7 +129,9 @@ case "$OSTYPE" in
     export LSCOLORS="GxFxBxdxCxDxdxabagacad"
     ;;
   linux*)
-    export EDITOR='/usr/bin/emacsclient -t -a /usr/bin/nvim'
+    # nvim comes from the Nix profile (setup.sh), not the distro package
+    # manager, so the fallback has to point there rather than /usr/bin.
+    export EDITOR="/usr/bin/emacsclient -t -a $HOME/.nix-profile/bin/nvim"
     export VISUAL="$EDITOR"
     # GNU ls ignores LSCOLORS and needs the flag. Its built-in LS_COLORS is
     # already reasonable, so there is nothing to set.
