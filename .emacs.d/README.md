@@ -67,10 +67,10 @@ into `.emacs.d/tree-sitter/`, which is gitignored.
 
 ## Python
 
-`python-ts-mode` through `treesit-enabled-modes`, but only where the grammar is
-present, so a fresh clone falls back to `python-mode` rather than erroring.
-python.el registers its own commit-pinned grammar source and its own remap
-entry, so neither is repeated here. On a new machine:
+`python-ts-mode` comes in through `major-mode-remap-alist`, but only where the
+grammar is present, so a fresh clone falls back to `python-mode` rather than
+erroring. python.el registers its own commit-pinned grammar source, so that
+part is not repeated here. On a new machine:
 
 ```
 M-x rc-programming-install-python-grammar
@@ -115,10 +115,9 @@ back to guessing the flags for every file. clangd finds `build/` on its own,
 so there is nothing to point at it. `compile` is set to `cmake --build
 <root>/build` in a CMake project, so `C-c b` builds the same tree.
 
-`c-ts-mode` and `c++-ts-mode` come in through `treesit-enabled-modes`, but only
-where both grammars are present. Without them Emacs would still enter
-`c-ts-mode` and leave the buffer with no font lock and no indentation, so a
-fresh clone stays in cc-mode until the install command has run.
+`c-ts-mode` and `c++-ts-mode` come in through `major-mode-remap-alist`, but
+only where both grammars are present, so a fresh clone stays in cc-mode, with
+font lock and indentation, until the install command has run.
 
 ### Formatting and indentation
 

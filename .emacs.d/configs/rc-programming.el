@@ -34,16 +34,13 @@
   (require 'python)
   (treesit-install-language-grammar 'python))
 
-;; python.el's autoloads have already put python-mode in
-;; `treesit-major-mode-remap-alist', so enabling the mode is all that is left.
-;; Appended rather than assigned, so another module can enable its own modes
-;; through the same option.
+;; python.el's autoloads only register the function name; nothing puts it in
+;; `major-mode-remap-alist' until we do, per the mode's own docstring.
 ;;
 ;; Guarded on the grammar, so a fresh clone falls back to `python-mode' rather
 ;; than sitting in a python-ts-mode with no font lock.
 (when (treesit-ready-p 'python t)
-  (setopt treesit-enabled-modes
-          (append treesit-enabled-modes '(python-ts-mode))))
+  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode)))
 
 (add-hook 'python-base-mode-hook #'pyvenv-mode)
 

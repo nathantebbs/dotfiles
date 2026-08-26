@@ -61,20 +61,17 @@
   (dolist (lang '(c cpp doxygen cmake))
     (treesit-install-language-grammar lang)))
 
-;; c-ts-mode's autoloads have already put the c, c++ and c-or-c++ entries in
-;; `treesit-major-mode-remap-alist'. Setting this option is what copies them
-;; into `major-mode-remap-alist'.
+;; c-ts-mode's autoloads only register the function names; nothing puts them
+;; in `major-mode-remap-alist' until we do, per the mode's own docstring.
 ;;
-;; Appended rather than assigned, since rc-programming enables python-ts-mode
-;; through the same option.
-;;
-;; Guarded on both grammars: without them Emacs would still enter c-ts-mode and
-;; leave the buffer with no font lock and no indentation, so a fresh clone is
-;; better off in cc-mode until `rc-cc-install-grammars' has run.
+;; Guarded on both grammars: without them a fresh clone is better off in
+;; cc-mode, with font lock and indentation, until `rc-cc-install-grammars'
+;; has run.
 (when (and (treesit-ready-p 'c t) (treesit-ready-p 'cpp t))
-  (setopt treesit-enabled-modes
-          (append treesit-enabled-modes
-                  '(c-ts-mode c++-ts-mode c-or-c++-ts-mode))))
+  (dolist (entry '((c-mode . c-ts-mode)
+                    (c++-mode . c++-ts-mode)
+                    (c-or-c++-mode . c-or-c++-ts-mode)))
+    (add-to-list 'major-mode-remap-alist entry)))
 
 ;; Fontifies @param and @return inside /** */, and is off by default.
 (setopt c-ts-mode-enable-doxygen (treesit-ready-p 'doxygen t))
