@@ -110,4 +110,8 @@ config.keys = {
 	{ key = "Enter", mods = "CMD", action = act.ToggleFullScreen },
 }
 
+
+-- Stop WezTerm from resizing the window frame on font zoom
+config.adjust_window_size_when_changing_font_size = false
+
 return config
