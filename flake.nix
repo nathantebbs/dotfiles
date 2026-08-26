@@ -42,6 +42,11 @@
           system = "x86_64-linux";
           username = "nathantebbs";
         };
+
+        "vetr0s@linux" = mkHome {
+          system = "x86_64-linux";
+          username = "vetr0s";
+        };
       };
     };
 }

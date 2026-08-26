@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 #
-# Install a modern bash and make it the login shell.
+# Install a modern bash and make it the login shell. macOS only: it ships
+# bash 3.2 at /bin/bash and will not ship a newer one, so the Nix build is
+# the real shell there. Linux distros already ship a current bash as
+# /bin/bash, so setup.sh does not call this script there.
 #
-# macOS ships bash 3.2 at /bin/bash and will not ship a newer one, so the
-# Nix build is the real shell here. chsh refuses any shell that is not
-# listed in /etc/shells, so that file has to be edited first, and that needs
-# root. Everything below is idempotent.
+# chsh refuses any shell that is not listed in /etc/shells, so that file has
+# to be edited first, and that needs root. Everything below is idempotent.
 
 set -e
 
@@ -18,18 +19,7 @@ info() { echo -e "${GREEN}[OK]${NC} $*"; }
 warn() { echo -e "${YELLOW}[INFO]${NC} $*"; }
 err()  { echo -e "${RED}[ERROR]${NC} $*"; }
 
-case "$OSTYPE" in
-  darwin*)
-    BASH_PATH="$HOME/.nix-profile/bin/bash"
-    ;;
-  *)
-    if [ -x "$HOME/.nix-profile/bin/bash" ]; then
-      BASH_PATH="$HOME/.nix-profile/bin/bash"
-    else
-      BASH_PATH="$(command -v bash)"
-    fi
-    ;;
-esac
+BASH_PATH="$HOME/.nix-profile/bin/bash"
 
 [ -x "$BASH_PATH" ] || { err "No bash at $BASH_PATH"; exit 1; }
 info "bash: $BASH_PATH ($("$BASH_PATH" -c 'echo $BASH_VERSION'))"

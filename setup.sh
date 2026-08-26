@@ -26,8 +26,8 @@ command -v nix >/dev/null 2>&1 || {
 }
 
 case "$OSTYPE" in
-  darwin*) profile="nathantebbs@macbook" ;;
-  linux*) profile="nathantebbs@linux" ;;
+  darwin*) profile="$(id -un)@macbook" ;;
+  linux*) profile="$(id -un)@linux" ;;
   *)
     err "Unsupported OS: $OSTYPE"
     exit 1
@@ -87,10 +87,17 @@ bash "$DOTFILES_DIR/util/scripts/install-vimplug.sh"
 echo ""
 
 # 5. Default shell
-echo "bash"
-echo ""
-bash "$DOTFILES_DIR/util/scripts/install-bash.sh"
-echo ""
+# Only macOS ships an outdated bash (3.2) that needs replacing. Linux
+# distros already ship a current bash as /bin/bash, so there is nothing
+# for this step to do there.
+case "$OSTYPE" in
+  darwin*)
+    echo "bash"
+    echo ""
+    bash "$DOTFILES_DIR/util/scripts/install-bash.sh"
+    echo ""
+    ;;
+esac
 
 echo -e "${GREEN}=== Setup complete! ===${NC}"
 echo "Open a new terminal to start using bash."

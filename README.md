@@ -63,9 +63,12 @@ cd dotfiles
 bash setup.sh
 ```
 
-The setup activates `nathantebbs@macbook` on macOS and `nathantebbs@linux` on
-Linux. It then installs fonts, deploys symlinks, installs vim-plug, and selects
-the managed Bash as the login shell.
+The setup activates the Home Manager profile matching the current user, e.g.
+`nathantebbs@macbook` on macOS or `vetr0s@linux` on Linux (`<username>@macbook`
+or `<username>@linux`, from `id -un`). Add a matching `homeConfigurations` entry
+in `flake.nix` the first time a new username runs setup. It then installs
+fonts, deploys symlinks, installs vim-plug, and selects the managed Bash as the
+login shell.
 
 ### Individual scripts
 
@@ -74,7 +77,7 @@ If you only need part of the setup:
 ```sh
 bash util/scripts/deploy.sh               # symlinks only
 bash util/scripts/install-fonts.sh        # fonts only
-bash util/scripts/install-bash.sh         # Nix profile bash + login shell
+bash util/scripts/install-bash.sh         # Nix profile bash + login shell (macOS)
 bash util/scripts/install-vimplug.sh
 bash util/scripts/make-emacsclient-app.sh # Emacsclient.app launcher (macOS)
 ```
