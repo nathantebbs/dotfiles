@@ -1,115 +1,68 @@
 # dotfiles
 
+This repository stores configuration for the developer tools I use on macOS
+and Linux. Shared configuration lives at the root. Platform integration lives
+under [`macos/`](macos/) and [`linux/`](linux/).
 
-The purpose of this repository is to store all configuration of any essential developer tools that I use.
+The repository deploys configuration. It does not install Linux packages or
+manage Linux services. macOS has an optional minimal
+[`Brewfile`](macos/Brewfile). The macOS setup remains explicit.
 
-## Dependencies
+## Layout
 
-Install [Nix](https://nixos.org/download/) before running `setup.sh`. The
-repository pins Nixpkgs and Home Manager in `flake.lock`. `setup.sh` selects
-the macOS or Linux profile and activates it before deploying the dotfiles.
+| Path | Ownership |
+|------|-----------|
+| `.emacs.d/`, `nvim/`, `.vimrc` | Shared editor configuration |
+| `bashrc`, `bash_profile`, `config.bash` | Shared shell configuration |
+| `tmux/`, `wezterm/` | Shared terminal configuration |
+| `gitconfig`, `clang-format` | Shared tool configuration |
+| `fonts/` | Font assets used by the terminal and editors |
+| `macos/` | Homebrew manifest, launchd, AeroSpace, Karabiner, and macOS shell behavior |
+| `linux/` | Distribution-neutral Linux behavior |
+| `notes/` | Audits, historical notes, and Org design documents |
 
-| Package | Purpose |
-|---------|---------|
-| `git` | Version control |
-| `curl` | Script downloads |
-| `neovim` | Backup editor, and what `$EDITOR` falls back to |
-| `ripgrep` | Telescope live grep |
-| `fzf` | Fuzzy finder (vim + shell) |
-| `make` | Build telescope-fzf-native |
-| `bash` | Shared interactive shell |
-| `gh` | Git credential helper |
-| `aspell` | Emacs spell checking |
-| `gnupg` | Encrypted Emacs auth sources |
-| `tmux` | Terminal multiplexer |
-| `python3`, `uv`, `ruff`, `pyright` | Python development |
-| `go`, `gopls` | Go development |
-| `clangd`, `clang-format`, `cmake`, `ninja` | C and C++ development |
-| `sdl3`, `sdl3-image`, `sdl3-mixer`, `sdl3-ttf` | SDL3 application development |
-| `gcc` | Linux C and C++ compiler |
-| `sdl3-shadercross` | Linux SDL3 shader translation |
-| `poppler-utils` | PDF tools |
+## Deployment
 
-The shared package list is `nix/packages.nix`. Project-specific compilers and
-tools belong in each project's flake. macOS uses Apple clang from Xcode Command
-Line Tools. Linux gets GCC and SDL3 shadercross from the Home Manager profile.
-Shadercross can be built from source in a macOS project when needed.
-
-Emacs is not installed by `setup.sh` either. It is built from source with
-[build-emacs-for-macos](https://github.com/jimeh/build-emacs-for-macos), and a
-another Emacs alongside it would mean two binaries and two launchd agents
-contending for one daemon socket. `setup.sh` checks for `/Applications/Emacs.app`
-and prints the build instructions if it is absent.
-
-macOS applications remain outside Nix. Install WezTerm, AeroSpace, Karabiner,
-and other GUI applications from their vendor or the App Store.
-
-## Usage
-
-### Installation
-
-1. Clone the repository
+Clone the repository and run setup:
 
 ```sh
 git clone --depth=1 https://github.com/nathantebbs/dotfiles
 cd dotfiles
-```
-
-2. Install Nix and the Xcode Command Line Tools on macOS.
-
-3. Run setup.
-
-```sh
 bash setup.sh
 ```
 
-The setup activates the Home Manager profile matching the current user, e.g.
-`nathantebbs@macbook` on macOS or `vetr0s@linux` on Linux (`<username>@macbook`
-or `<username>@linux`, from `id -un`). Add a matching `homeConfigurations` entry
-in `flake.nix` the first time a new username runs setup. It then installs
-fonts, deploys symlinks, installs vim-plug, and selects the managed Bash as the
-login shell.
+`setup.sh` detects macOS or Linux. It deploys the shared link manifest and the
+selected platform manifest. Existing targets move to timestamped backups.
+Correct links remain unchanged on later runs.
 
-### Individual scripts
-
-If you only need part of the setup:
+Review deployment without changing the home directory:
 
 ```sh
-bash util/scripts/deploy.sh               # symlinks only
-bash util/scripts/install-fonts.sh        # fonts only
-bash util/scripts/install-bash.sh         # Nix profile bash + login shell (macOS)
-bash util/scripts/install-vimplug.sh
-bash util/scripts/make-emacsclient-app.sh # Emacsclient.app launcher (macOS)
+bash setup.sh --dry-run
 ```
 
-### deploy.sh
+The platform can be selected for testing:
 
-Located at `util/scripts/deploy.sh`, this script creates symlinks for all configurations to their expected locations. It safely backs up any existing files before creating symlinks.
+```sh
+bash setup.sh --platform macos --dry-run
+bash setup.sh --platform linux --dry-run
+```
 
-| Config | Target |
-|--------|--------|
-| `.emacs.d/` | `~/.emacs.d` |
-| `.vimrc` | `~/.vimrc` |
-| `tmux/` | `~/.config/tmux` |
-| `nvim/` | `~/.config/nvim` |
-| `wezterm/` | `~/.config/wezterm` |
-| `bashrc` | `~/.bashrc` |
-| `bash_profile` | `~/.bash_profile` |
-| `gitconfig` | `~/.gitconfig` |
-| `clang-format` | `~/.clang-format` |
-| `aerospace.toml` | `~/.aerospace.toml` |
-| `karabiner/karabiner.json` | `~/.config/karabiner/karabiner.json` |
-| `emacs/dev.nathantebbs.emacs.plist` | `~/Library/LaunchAgents/` (macOS only) |
+Package installation, fonts, editor plugin bootstrap, and macOS system setup
+are separate actions. See [`macos/README.md`](macos/README.md) or
+[`linux/README.md`](linux/README.md) for the platform boundary.
 
-### install-fonts.sh
-
-Font files (`.ttf`/`.otf`) live in the `fonts/` directory at the repo root. To install them:
+The optional helpers are:
 
 ```sh
 bash util/scripts/install-fonts.sh
+bash util/scripts/install-vimplug.sh
+bash macos/scripts/install-bash.sh
+bash macos/scripts/make-emacsclient-app.sh
 ```
 
-Installs fonts to `~/.local/share/fonts` (Linux) or `~/Library/Fonts` (macOS) and refreshes the font cache. See [Fonts](#fonts).
+Shared link policy lives in `util/links.tsv`. Platform link policy lives in
+`macos/links.tsv` and `linux/links.tsv`.
 
 ## Editors
 
@@ -169,11 +122,11 @@ No vim-polyglot here, and none in `.vimrc` either. Neovim 0.12 and Vim 9.1 both 
 
 **LSP:** Neovim's built-in client, so there is no lspconfig plugin. Each server's table is a file in `nvim/lsp/`, picked up off the runtimepath by name. A server whose binary is missing is skipped, so a machine without the toolchain still starts clean.
 
-| Server | Languages | Installed by |
+| Server | Languages | Command |
 |--------|-----------|--------------|
-| `clangd` | C, C++, Obj-C, CUDA | Nix |
-| `gopls` | Go | Nix |
-| `pyright` | Python | Nix |
+| `clangd` | C, C++, Obj-C, CUDA | `clangd` |
+| `gopls` | Go | `gopls` |
+| `pyright` | Python | `pyright-langserver` |
 | `tinymist` | Typst | Project environment |
 | `ols` | Odin | Project environment |
 
@@ -229,7 +182,9 @@ same information and cost a package to do it.
 
 ### Emacs daemon
 
-Emacs runs as a service-manager job started at login (a launchd agent on macOS, a systemd `--user` unit on Linux), so `emacsclient` always has a server to attach to.
+Emacs uses a daemon so `emacsclient` can open frames without starting another
+editor process. macOS launchd integration lives in `macos/`. The Linux host
+owns its daemon implementation.
 
 ```sh
 emacsctl status    # is the daemon answering?
@@ -239,7 +194,9 @@ emacsctl start     # start it again
 emacsctl logs      # tail the daemon's log
 ```
 
-On macOS the agent is `emacs/dev.nathantebbs.emacs.plist`, linked into `~/Library/LaunchAgents` by `deploy.sh`; launchd reads it when the job loads, so changes need an `emacsctl restart`, and logs go to `~/Library/Logs/emacs-daemon.{out,err}`. On Linux the unit is `emacs.service`, shipped by the distro's `emacs` package and enabled by `deploy.sh`; logs come from `journalctl --user -u emacs.service`.
+The `emacsctl` helper is available on macOS. It manages the launchd agent at
+`macos/emacs/dev.nathantebbs.emacs.plist`. Linux daemon commands depend on the
+host and are not defined here.
 
 **Reaching the daemon:**
 
@@ -250,9 +207,11 @@ On macOS the agent is `emacs/dev.nathantebbs.emacs.plist`, linked into `~/Librar
 | `et` | Frame inside the current terminal (`emacsclient -t`) |
 | Emacsclient.app (macOS) | Same as `emacs`, from Spotlight, the Dock or Aerospace |
 
-None of these pass `-a ""`. That flag would start a daemon outside the service manager, which `emacsctl` could then neither stop nor restart. When there is no socket the fix is `emacsctl start`.
+None of these pass `-a ""`. The editor command falls back to Neovim when no
+daemon answers.
 
-`Emacsclient.app` is macOS-only: generated into `/Applications` by `util/scripts/make-emacsclient-app.sh` and rebuilt on every `setup.sh` run. It is a build product, not a symlink, so it is not in this repo. If the daemon is down it kickstarts the launchd job rather than spawning its own.
+`Emacsclient.app` is macOS-only. Build it explicitly with
+`macos/scripts/make-emacsclient-app.sh`. It is not part of root deployment.
 
 `open -a Emacs` (macOS) does **not** use the daemon; it launches a second independent Emacs.
 
@@ -262,7 +221,7 @@ None of these pass `-a ""`. That flag would start a daemon outside the service m
 
 `wezterm/wezterm.lua` configures the [WezTerm](https://wezterm.org/) terminal emulator.
 
-- Shell: the Nix profile Bash as a login shell, with `/bin/bash` as the bootstrap fallback
+- Shell: the login shell configured on the host
 - Font: Zenbones Brainy, 14pt, with Symbols Nerd Font Mono as fallback for icon glyphs
 - Background opacity: 0.92
 - Cursor: steady block, which is only what an application that reshapes nothing gets
@@ -273,7 +232,8 @@ None of these pass `-a ""`. That flag would start a daemon outside the service m
 
 **Keyboard:**
 
-Three settings exist for the editors running inside the terminal rather than for the terminal itself.
+The Kitty keyboard protocol applies on both platforms. Option handling and the
+bindings below apply only on macOS. Linux keeps WezTerm's default bindings.
 
 - **Left Option is Meta.** macOS otherwise composes `Option+key` into a glyph, so Vim never sees `<M-...>`, Emacs never sees `M-p`, and readline never sees `M-b`. Right Option still composes, which is where accented characters come from
 - **Dead keys off.** A dead key waits for a second press to combine with, eating the first when a plain keystroke was meant
@@ -301,7 +261,10 @@ Everything hangs off `Cmd`, the one modifier macOS never forwards to the termina
 
 ## Window manager
 
-macOS-only. [AeroSpace](https://github.com/nikitabobko/AeroSpace) is an i3-like tiling window manager, configured in `aerospace.toml` and linked to `~/.aerospace.toml`. [Karabiner-Elements](https://karabiner-elements.pqrs.org/) supplies the modifier key it binds to. Install both outside Nix.
+macOS-only. [AeroSpace](https://github.com/nikitabobko/AeroSpace) is an i3-like
+tiling window manager. Its config lives at `macos/aerospace.toml`.
+[Karabiner-Elements](https://karabiner-elements.pqrs.org/) supplies the modifier
+key it binds to. Both applications are listed in `macos/Brewfile`.
 
 ### Mod key
 
@@ -330,24 +293,23 @@ Find an app's bundle id with `aerospace list-apps`.
 
 ### Karabiner
 
-`karabiner/karabiner.json` holds the Hyper remap plus HHKB-specific fixes. Karabiner owns this file and rewrites it when settings change in its GUI, so expect it to reformat on edit. Do not run a second window manager such as Rectangle or yabai alongside AeroSpace; they fight over window placement.
+`macos/karabiner/karabiner.json` holds the Hyper remap plus HHKB-specific
+fixes. Karabiner owns this file and rewrites it when settings change in its
+GUI. Do not run another window manager alongside AeroSpace.
 
 ## bash
 
-macOS ships bash 3.2 and never will ship a newer one, so the shell here is the
-Nix profile build. `chsh` only accepts a shell listed in `/etc/shells`, so that
-file has to be edited first:
+macOS ships Bash 3.2. The minimal Brewfile installs a current Bash. Set it as
+the login shell with:
 
 ```sh
-bash util/scripts/install-bash.sh
+bash macos/scripts/install-bash.sh
 ```
 
-Home Manager installs Bash first. The script adds the stable profile path to
-`/etc/shells` and runs `chsh`. It is idempotent.
+The script resolves Homebrew's Bash prefix. It adds that path to `/etc/shells`
+and runs `chsh`. It is idempotent.
 
-`bash_profile` exists because macOS terminals open login shells, which read it
-instead of `~/.bashrc`. It sources Home Manager's session variables and then
-loads `~/.bashrc`.
+`bash_profile` loads `~/.bashrc` for login shells.
 
 **`bashrc` provides** the parts that are bash's own:
 
@@ -363,14 +325,15 @@ loads `~/.bashrc`.
 
 - Aliases: `emacs` (new GUI frame on the daemon), `e` (open a file in an existing frame), `et` (frame in this terminal), `keys` (fzf alias search), `lsa` (`ls -lah`)
 - The oh-my-zsh git aliases, by hand: `g`, `gst`, `gss`, `ga`, `gaa`, `gc`, `gcmsg`, `gcam`, `gc!`, `gca!`, `gco`, `gcb`, `gsw`, `gswc`, `gd`, `gds`, `gb`, `gl`, `gp`, `glo`, `glog`, `grs`, `grst`, `gsta`, `gstp`, `gstl`. Upstream's names, so the muscle memory carries over. The omz plugin defined several hundred; these are the ones in use
-- `emacsctl` manages the Emacs daemon:
+- On macOS, `emacsctl` manages the Emacs daemon:
   ```sh
   emacsctl start    # launch daemon
   emacsctl stop     # kill daemon
   emacsctl restart  # kill and relaunch
   emacsctl status   # check if running
   ```
-- `$EDITOR` and `$VISUAL`, both `emacsclient -t -a nvim`. No `-n`, so git waits for the buffer; finish it with `C-x #`, not `C-x C-c`. `-a` runs nvim when no daemon answers, which is what vim and nvim are kept for. The paths are absolute and OS-specific, since a bare environment does not get `config.bash`'s PATH
+- `$EDITOR` and `$VISUAL`, both `emacsclient -t -a nvim`. Git waits for the
+  buffer. Finish it with `C-x #`. Neovim opens when no daemon answers.
 - `ls` colors. macOS gets `CLICOLOR` plus an `LSCOLORS` palette with cyan directories; Linux gets `ls --color=auto`, since GNU ls ignores `LSCOLORS` entirely. oh-my-zsh used to supply an `ls -G` alias, so without this the switch would have lost colors outright
 - PATH additions, each guarded so a machine missing the toolchain still gets a working shell: `~/.local/bin`, `~/.cargo/bin`, `~/go/bin`, Emacs.app, and Bun
 

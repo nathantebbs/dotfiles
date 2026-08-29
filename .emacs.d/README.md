@@ -76,8 +76,8 @@ part is not repeated here. On a new machine:
 M-x rc-programming-install-python-grammar
 ```
 
-The Nix profile supplies [uv](https://github.com/astral-sh/uv) and
-[ruff](https://github.com/astral-sh/ruff).
+The Python workflow expects [uv](https://github.com/astral-sh/uv) and
+[ruff](https://github.com/astral-sh/ruff) on `PATH`.
 
 uv puts its environment at `.venv` in the project root and exports nothing, so
 opening a Python file walks up for that directory and hands it to pyvenv. That
@@ -219,17 +219,12 @@ C and C++ are the only things here that start a server, which is why the Eglot
 configuration lives in `rc-cc.el` rather than a module of its own. A second
 consumer is when to lift it out.
 
-## Emacs itself
+## Emacs and the daemon
 
-Built from source with
-[build-emacs-for-macos](https://github.com/jimeh/build-emacs-for-macos) and
-installed to `/Applications/Emacs.app`. Do not install a second Emacs. Two
-binaries and two launchd agents would contend for the same daemon socket.
-
-## Daemon
-
-Emacs runs as a launchd agent started at login, and `emacsclient` is the way
-in. See the [Emacs daemon](../README.md#emacs-daemon) section for `emacsctl`.
+The configuration is shared. Each host owns the Emacs binary and daemon. See
+the [macOS instructions](../macos/README.md) or
+[Linux boundary](../linux/README.md). The root
+[Emacs daemon section](../README.md#emacs-daemon) describes client behavior.
 
 Because the daemon has no frame at startup, the font and theme are applied
 from `server-after-make-frame-hook` rather than at load time, and
