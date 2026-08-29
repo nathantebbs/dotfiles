@@ -19,9 +19,7 @@
 
 ;;; Python
 
-;; Homebrew installs python3 and no bare `python'. Emacs 30 already defaults
-;; both of these to python3; stating them keeps an older one from going looking
-;; for a Python 2 that is not there either.
+;; Select Python 3 explicitly. Older Emacs versions may still try `python'.
 (setopt python-shell-interpreter "python3")
 (setopt python-interpreter "python3")
 
@@ -68,9 +66,8 @@
 (add-hook 'python-base-mode-hook #'rc-programming-activate-venv 90)
 
 ;; Linting without a language server, which the rest of this configuration also
-;; does without. ruff is the same toolchain as uv and subsumes flake8, so it is
-;; preferred; flake8 stays as the fallback for a machine where brew bundle has
-;; not run. Resolved once at startup, after exec-path-from-shell has fixed PATH.
+;; does without. Ruff subsumes Flake8, so it is preferred. Flake8 remains the
+;; fallback. Resolve the command after exec-path-from-shell has repaired PATH.
 ;;
 ;; Both print `stdin:line:col: CODE message', which is already what
 ;; `python-flymake-command-output-pattern' expects, so only severities follow.
