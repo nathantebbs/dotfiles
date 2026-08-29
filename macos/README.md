@@ -51,5 +51,7 @@ bash macos/scripts/make-emacsclient-app.sh
 ```
 
 The launchd agent, AeroSpace config, and Karabiner config are linked by the
-root setup script. Restart the Emacs daemon with `emacsctl restart` after the
-agent changes.
+root setup script. The shell uses Neovim for `$EDITOR` and `$VISUAL`.
+
+Run `emacsctl start` after the first deployment. A later login also loads the
+agent through `RunAtLoad`. Use `emacsctl restart` after the agent changes.

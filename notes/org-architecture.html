@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Org Mode Architecture — life and work</title>
+<title>Org Mode architecture: life and work</title>
 <style>
 /* ============================================================
-   Standard HTML — house style for plans, audits, and design docs.
+   Standard HTML house style for plans, audits, and design docs.
    Deliberately project-agnostic: this never adopts a project's theme.
    Plain document on a plain background. Legibility over decoration.
    ============================================================ */
@@ -255,7 +255,7 @@ dd { margin: 0; }
 <body>
 <main>
 
-<h1>Org Mode Architecture</h1>
+<h1>Org Mode architecture</h1>
 <p class="meta"><span>2026-08-12</span><span>dotfiles @ 99eddb1</span><span>Design</span></p>
 
 <p>The previous setup did not fail because it was badly designed. It failed
@@ -266,6 +266,14 @@ structure lived in deep heading hierarchies, so every add was a placement
 decision. This architecture fixes both by making capture unconditional and
 deferring all structure to a weekly review. Seven files, two keyword sequences,
 five capture templates, two agenda views, no new packages.</p>
+
+<div class="note">
+  <span class="note-label">Historical design</span>
+  This document records the proposal that produced the current Org config.
+  The work directory decision was resolved as <span class="path">~/source/work-org</span>.
+  The config now lives in <span class="path">.emacs.d/configs/rc-org.el</span>.
+  See <span class="path">notes/org-guide.html</span> for current usage.
+</div>
 
 <h2>What the old system actually got right</h2>
 
@@ -325,9 +333,9 @@ exactly the condition under which keywords drift out of sync with config.</p>
 
 <h2>Files</h2>
 
-<p>Seven files at the root of <span class="path">~/source/org</span>, except
-<span class="path">work.org</span> — see the open decision below. Each answers
-one question, and the questions do not overlap.</p>
+<p>Seven files live across the two Org directories. The work file lives in
+<span class="path">~/source/work-org</span>. Each file answers one question.
+The questions do not overlap.</p>
 
 <div class="scroll">
 <table>
@@ -381,8 +389,9 @@ one question, and the questions do not overlap.</p>
 </table>
 </div>
 
-<p>Note that only three of the seven ever receive a refile, and refiling is the
-only operation that asks you to think. Four of the seven are write-and-forget.</p>
+<p>The intended workflow uses life, work, and projects as the normal refile
+destinations. The implemented config offers every heading down to level three
+across all agenda files.</p>
 
 <h2>Keywords</h2>
 
@@ -475,10 +484,10 @@ review is a landfill, and the third block is what catches a project that has
 quietly stopped moving. That block is the single highest-value piece of the
 whole design, because a stalled project is invisible in every other view.</p>
 
-<h2>Open decision: where work.org lives</h2>
+<h2>Resolved decision: where work.org lives</h2>
 
 <div class="warn">
-  <span class="note-label">Decide before a job starts, not after</span>
+  <span class="note-label">Resolved</span>
   <span class="path">~/source/org</span> pushes to
   <code>github:vetr0s/org</code>. Work notes, ticket numbers, and internal
   names in a repo hosted outside the company is the kind of thing an employment
@@ -487,7 +496,7 @@ whole design, because a stalled project is invisible in every other view.</p>
   moving a file.
 </div>
 
-<p>Recommended: a second, local-only repo at
+<p>The config uses a second, local-only repo at
 <span class="path">~/source/work-org</span> holding
 <span class="path">work.org</span>. <code>org-agenda-files</code> is a list, so a
 second directory entry costs nothing and both files appear in one agenda.</p>
@@ -496,23 +505,23 @@ second directory entry costs nothing and both files appear in one agenda.</p>
 existing repo is worse than it looks. It silently stops being backed up, and
 you will not notice until you need it.</p>
 
-<h2>Config changes</h2>
+<h2>Implemented config</h2>
 
 <p>All of this is built-in org. No new packages, so
 <span class="path">pre-init.el</span> is untouched and the deliberate absence of
 ELPA org stays intact. Everything lands in
-<span class="path">.emacs.d/configs/rc-org.el</span>, which currently sets four
-variables and one binding.</p>
+<span class="path">.emacs.d/configs/rc-org.el</span>. It implements the full
+workflow described below.</p>
 
 <ul class="tasks">
-  <li data-state="todo"><code>org-directory</code>, and <code>org-agenda-files</code> as two directory entries.</li>
-  <li data-state="todo"><code>org-capture-templates</code> plus a <code>C-c c</code> binding.</li>
-  <li data-state="todo"><code>org-refile-targets</code> across the four actionable files.</li>
-  <li data-state="todo"><code>org-todo-keywords</code>, two sequences, and faces extended to match.</li>
-  <li data-state="todo"><code>org-log-done</code> and <code>org-log-into-drawer</code>.</li>
-  <li data-state="todo"><code>org-archive-location</code> pointing inside <span class="path">archive/</span>.</li>
-  <li data-state="todo"><code>org-tag-alist</code>.</li>
-  <li data-state="todo"><code>org-agenda-custom-commands</code>, two views.</li>
+  <li data-state="done"><code>org-directory</code>, and <code>org-agenda-files</code> as two directory entries.</li>
+  <li data-state="done"><code>org-capture-templates</code> plus a <code>C-c c</code> binding.</li>
+  <li data-state="done"><code>org-refile-targets</code> across every agenda file through level three.</li>
+  <li data-state="done"><code>org-todo-keywords</code>, two sequences, and faces extended to match.</li>
+  <li data-state="done"><code>org-log-done</code> and <code>org-log-into-drawer</code>.</li>
+  <li data-state="done"><code>org-archive-location</code> pointing inside <span class="path">archive/</span>.</li>
+  <li data-state="done"><code>org-tag-alist</code>.</li>
+  <li data-state="done"><code>org-agenda-custom-commands</code>, two views.</li>
 </ul>
 
 <p>The existing keyword faces inherit from theme faces rather than naming
@@ -531,11 +540,11 @@ capture-and-review loop is a habit. <strong>Mobile sync</strong>: it was on the
 old project list and never got done; it is a separate project, not part of this
 one.</p>
 
-<h2>Phasing</h2>
+<h2>Original phasing</h2>
 
 <ul class="tasks">
   <li data-state="done">Archive the prior contents. All seven paths moved under <span class="path">archive/</span> as git renames, history preserved, nothing committed.</li>
-  <li data-state="todo">Write <span class="path">rc-org.el</span> and create the seven files with headers only.</li>
+  <li data-state="done">Write <span class="path">rc-org.el</span> and create the seven files with headers only.</li>
   <li data-state="todo">Use it for two weeks and change nothing. Resist tuning; the point is finding out which parts you actually touch.</li>
   <li data-state="todo">Then, and only then, revisit the excluded list above.</li>
 </ul>

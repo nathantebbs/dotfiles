@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Using This Org Setup — guide</title>
+<title>Using this Org setup: guide</title>
 <style>
 /* ============================================================
-   Standard HTML — house style for plans, audits, and design docs.
+   Standard HTML house style for plans, audits, and design docs.
    Deliberately project-agnostic: this never adopts a project's theme.
    Plain document on a plain background. Legibility over decoration.
    ============================================================ */
@@ -280,7 +280,7 @@ dd { margin: 0; }
 <body>
 <main>
 
-<h1>Using This Org Setup</h1>
+<h1>Using this Org setup</h1>
 <p class="meta"><span>2026-08-12</span><span>dotfiles @ 99eddb1</span><span>Guide</span></p>
 
 <p>One rule runs the whole system: <strong>capture never asks where a thing
@@ -398,9 +398,9 @@ belongs to.</p>
 </table>
 </div>
 
-<p>Four of the seven you never have to think about placing. Only the three
-actionable ones receive a refile, which means refiling is the only operation in
-the entire system that asks you to make a judgement.</p>
+<p>Four of the seven have direct capture templates. Life, work, and projects are
+the normal refile destinations. Emacs offers every heading down to level three
+across all agenda files, so another file can receive a refile when needed.</p>
 
 <h2 id="capture">4. Capture</h2>
 
@@ -538,18 +538,18 @@ they used <code>DEADLINE</code> for weekly chores, which is not what a deadline
 is for.</p>
 
 <dl>
-  <dt><code>C-c C-s</code> — SCHEDULED</dt>
+  <dt><code>C-c C-s</code>: SCHEDULED</dt>
   <dd><em>I will start working on this on this date.</em> Before that date the
   item is invisible in the agenda. Use it to hide things until they are
   relevant.</dd>
-  <dt><code>C-c C-d</code> — DEADLINE</dt>
+  <dt><code>C-c C-d</code>: DEADLINE</dt>
   <dd><em>This must be finished by this date.</em> Org starts warning you
   several days in advance and nags after it passes. Use it only when something
   genuinely goes wrong if you miss it.</dd>
-  <dt><code>C-c .</code> — plain active timestamp</dt>
+  <dt><code>C-c .</code>: plain active timestamp</dt>
   <dd>An appointment. It appears on that day and does not nag. This is what
   most calendar-like entries actually want.</dd>
-  <dt><code>C-c !</code> — inactive timestamp</dt>
+  <dt><code>C-c !</code>: inactive timestamp</dt>
   <dd>A date written down for the record. Never appears in the agenda.</dd>
 </dl>
 
@@ -608,13 +608,13 @@ a fast way to navigate. <code>C-c C-x C-w</code> cuts a subtree and
 <code>r</code>. Everything else in that dispatcher is Org's built-in set, which
 you can ignore until you want it.</p>
 
-<h3><code>C-c a d</code> — Day</h3>
+<h3><code>C-c a d</code>: day</h3>
 
 <p>Today's scheduled items and deadlines, then a block of every
 <code>NEXT</code> item across all files. Work and personal appear together,
 labelled by file. This is the view you make decisions from.</p>
 
-<h3><code>C-c a r</code> — Review</h3>
+<h3><code>C-c a r</code>: review</h3>
 
 <p>Three blocks: the whole inbox, everything <code>WAIT</code>, and every
 <code>ACTIVE</code> project with no <code>NEXT</code> child. Described in
@@ -858,7 +858,7 @@ capture-and-review loop is an actual habit, which realistically means a month.</
     <tr>
       <td>Mobile sync</td>
       <td>Was on your old project list and never got done. It is its own project, not part of this one.</td>
-      <td>—</td>
+      <td>None</td>
     </tr>
   </tbody>
 </table>

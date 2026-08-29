@@ -38,7 +38,8 @@ because it repairs `PATH`, which everything shelling out depends on.
 ## Packages
 
 Declared in `pre-init.el` as `package-selected-packages` and installed on
-first start. Everything comes from ELPA; nothing is pulled from a repository.
+first start. Packages come from the configured GNU ELPA, NonGNU ELPA, MELPA,
+and MELPA Stable archives. Nothing is pulled directly from a repository.
 
 Org is deliberately **not** in the manifest: Emacs ships a current one, and a
 second copy from ELPA races the built-in for load order.

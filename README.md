@@ -431,4 +431,6 @@ ship its own. A project with its own file still wins, which is the point.
 
 ## Fonts
 
-Configs use **Zenbones Brainy** (WezTerm, Emacs) and **Symbols Nerd Font Mono** (`fonts/NFM.ttf`, the WezTerm icon fallback). Both are committed under `fonts/` and installed by `util/scripts/install-fonts.sh`, which runs as part of `setup.sh`.
+Configs use **Zenbones Brainy** (WezTerm, Emacs) and **Symbols Nerd Font Mono**
+(`fonts/NFM.ttf`, the WezTerm icon fallback). Both are committed under
+`fonts/`. Install them explicitly with `util/scripts/install-fonts.sh`.
