@@ -1,0 +1,16 @@
+tap "nikitabobko/tap"
+
+brew "aspell"
+brew "bash"
+brew "clang-format"
+brew "fzf"
+brew "gh"
+brew "gnupg"
+brew "neovim"
+brew "poppler"
+brew "ripgrep"
+brew "tmux"
+
+cask "aerospace"
+cask "karabiner-elements"
+cask "wezterm"

@@ -1,0 +1,50 @@
+# macOS configuration
+
+This directory owns configuration and setup that only applies to macOS. The
+root setup script deploys these files after the shared configuration.
+
+## Homebrew
+
+The Brewfile contains the small workstation layer used directly by these
+dotfiles. It excludes language toolchains, project libraries, and personal
+applications.
+
+Install Homebrew using its official instructions. Then run:
+
+```sh
+brew bundle --file macos/Brewfile
+```
+
+The root setup script does not run Homebrew.
+
+## Setup
+
+Deploy the shared and macOS configuration from the repository root:
+
+```sh
+bash setup.sh
+```
+
+Install the committed fonts when needed:
+
+```sh
+bash util/scripts/install-fonts.sh
+```
+
+Set Homebrew Bash as the login shell after the Brewfile has been installed:
+
+```sh
+bash macos/scripts/install-bash.sh
+```
+
+Emacs is built separately with
+[build-emacs-for-macos](https://github.com/jimeh/build-emacs-for-macos). Build
+the daemon launcher after `/Applications/Emacs.app` exists:
+
+```sh
+bash macos/scripts/make-emacsclient-app.sh
+```
+
+The launchd agent, AeroSpace config, and Karabiner config are linked by the
+root setup script. Restart the Emacs daemon with `emacsctl restart` after the
+agent changes.

@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 #
-# Install a modern bash and make it the login shell. macOS only: it ships
-# bash 3.2 at /bin/bash and will not ship a newer one, so the Nix build is
-# the real shell there. Linux distros already ship a current bash as
-# /bin/bash, so setup.sh does not call this script there.
+# Make Homebrew Bash the login shell on macOS.
 #
 # chsh refuses any shell that is not listed in /etc/shells, so that file has
 # to be edited first, and that needs root. Everything below is idempotent.
@@ -19,7 +16,8 @@ info() { echo -e "${GREEN}[OK]${NC} $*"; }
 warn() { echo -e "${YELLOW}[INFO]${NC} $*"; }
 err()  { echo -e "${RED}[ERROR]${NC} $*"; }
 
-BASH_PATH="$HOME/.nix-profile/bin/bash"
+command -v brew >/dev/null 2>&1 || { err "Homebrew is not installed"; exit 1; }
+BASH_PATH="$(brew --prefix bash)/bin/bash"
 
 [ -x "$BASH_PATH" ] || { err "No bash at $BASH_PATH"; exit 1; }
 info "bash: $BASH_PATH ($("$BASH_PATH" -c 'echo $BASH_VERSION'))"

@@ -2,23 +2,6 @@ local wezterm = require("wezterm")
 
 local config = wezterm.config_builder()
 
--- Shell. WezTerm would read the login shell out of the password database,
--- which is right only on a machine where chsh has already run. Prefer the
--- managed profile and keep the system shell for bootstrap.
--- "-l" makes it a login shell, so ~/.bash_profile runs.
-local function bash_path()
-	for _, path in ipairs({ wezterm.home_dir .. "/.nix-profile/bin/bash", "/bin/bash" }) do
-		local f = io.open(path, "r")
-		if f then
-			f:close()
-			return path
-		end
-	end
-	return "/bin/sh"
-end
-
-config.default_prog = { bash_path(), "-l" }
-
 -- Font. Zenbones Brainy has no icon glyphs, so fall back to Symbols Nerd Font
 -- Mono (fonts/NFM.ttf, installed by util/scripts/install-fonts.sh) for the
 -- powerline separators and devicons that prompts and statuslines use.
@@ -48,17 +31,6 @@ config.audible_bell = "Disabled"
 
 -- KEYBOARD:
 
--- macOS composes Option+key into a glyph, so Vim never sees <M-...>, Emacs
--- never sees M-p, and readline never sees M-b. Left Option becomes a real Meta
--- instead. Right Option keeps composing, which is where the accented
--- characters still come from.
-config.send_composed_key_when_left_alt_is_pressed = false
-config.send_composed_key_when_right_alt_is_pressed = true
-
--- Dead keys wait for a second keypress to combine with, which eats the first
--- one when the intent was a plain keystroke.
-config.use_dead_keys = false
-
 -- Advertise the kitty keyboard protocol. Terminals cannot otherwise tell <C-i>
 -- from <Tab> or <C-[> from <Esc>, because they arrive as the same byte. Opt-in
 -- per application, so anything that does not ask is unaffected.
@@ -69,9 +41,14 @@ config.enable_kitty_keyboard = true
 -- Everything below hangs off CMD. It is the one modifier macOS never forwards
 -- to the terminal, so no binding here can shadow a Vim, Emacs or readline key.
 -- The cost is CMD+h, which stops hiding the app; CMD+m still does that.
-local act = wezterm.action
+if wezterm.target_triple:find("apple") then
+	-- Keep Left Option available as Meta. Right Option still composes accents.
+	config.send_composed_key_when_left_alt_is_pressed = false
+	config.send_composed_key_when_right_alt_is_pressed = true
+	config.use_dead_keys = false
 
-config.keys = {
+	local act = wezterm.action
+	config.keys = {
 	-- Splits. The pane inherits the cwd, which is what tmux's -c did.
 	{ key = "d", mods = "CMD", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
 	{ key = "d", mods = "CMD|SHIFT", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
@@ -108,7 +85,8 @@ config.keys = {
 	{ key = "Space", mods = "CMD|SHIFT", action = act.QuickSelect },
 
 	{ key = "Enter", mods = "CMD", action = act.ToggleFullScreen },
-}
+	}
+end
 
 
 -- Stop WezTerm from resizing the window frame on font zoom

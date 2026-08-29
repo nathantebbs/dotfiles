@@ -3,84 +3,127 @@
 set -e
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+DRY_RUN=0
+PLATFORM=""
 
-# Colors for output
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-RED='\033[0;31m'
-NC='\033[0m' # No Color
+info() { printf '[OK] %s\n' "$*"; }
+warn() { printf '[INFO] %s\n' "$*"; }
+err() { printf '[ERROR] %s\n' "$*" >&2; }
 
-# Function to create symlink safely
-create_symlink() {
-    local source="$1"
-    local target="$2"
-    local name="$3"
-
-    # Check if source exists
-    if [ ! -e "$source" ]; then
-        echo -e "${RED}[ERROR]${NC} Source not found: $source"
-        return 1
-    fi
-
-    # If target already exists
-    if [ -e "$target" ] || [ -L "$target" ]; then
-        # If it's already a symlink pointing to the right place
-        if [ -L "$target" ] && [ "$(readlink "$target")" = "$source" ]; then
-            echo -e "${GREEN}[OK]${NC} $name already linked correctly"
-            return 0
-        fi
-
-        # Otherwise, backup the existing file/directory
-        backup="${target}.backup.$(date +%Y%m%d_%H%M%S)"
-        echo -e "${YELLOW}[INFO]${NC} Backing up existing $name to $backup"
-        mv "$target" "$backup"
-    fi
-
-    # Create the symlink
-    ln -s "$source" "$target"
-    echo -e "${GREEN}[OK]${NC} Linked $name"
+usage() {
+  printf 'Usage: %s [--dry-run] [--platform macos|linux]\n' "$0"
 }
 
-echo "Setting up dotfiles symlinks..."
-echo ""
+detect_platform() {
+  case "$OSTYPE" in
+    darwin*) printf 'macos\n' ;;
+    linux*) printf 'linux\n' ;;
+    *) err "Unsupported OS: $OSTYPE"; return 1 ;;
+  esac
+}
 
-create_symlink "$DOTFILES_DIR/.emacs.d" "$HOME/.emacs.d" "emacs"
-create_symlink "$DOTFILES_DIR/.vimrc" "$HOME/.vimrc" "vim"
+validate_relative_path() {
+  case "$2" in
+    ""|/*|..|../*|*/../*|*/..) err "Invalid $1 path: $2"; return 1 ;;
+  esac
+}
 
-# A fresh macOS account has no ~/.config; create it before linking into it.
-mkdir -p "$HOME/.config"
-create_symlink "$DOTFILES_DIR/tmux" "$HOME/.config/tmux" "tmux"
-create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim" "nvim"
-create_symlink "$DOTFILES_DIR/wezterm" "$HOME/.config/wezterm" "wezterm"
-create_symlink "$DOTFILES_DIR/bashrc" "$HOME/.bashrc" "bash"
-create_symlink "$DOTFILES_DIR/bash_profile" "$HOME/.bash_profile" "bash profile"
-create_symlink "$DOTFILES_DIR/gitconfig" "$HOME/.gitconfig" "git"
-create_symlink "$DOTFILES_DIR/clang-format" "$HOME/.clang-format" "clang-format"
-create_symlink "$DOTFILES_DIR/aerospace.toml" "$HOME/.aerospace.toml" "aerospace"
+next_backup_path() {
+  local target="$1"
+  local stamp candidate sequence
 
-# Karabiner owns its config dir; link only the file, not the whole directory.
-mkdir -p "$HOME/.config/karabiner"
-create_symlink "$DOTFILES_DIR/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json" "karabiner"
+  stamp="$(date +%Y%m%d_%H%M%S)"
+  candidate="$target.backup.$stamp"
+  sequence=1
+  while [ -e "$candidate" ] || [ -L "$candidate" ]; do
+    candidate="$target.backup.$stamp.$sequence"
+    sequence=$((sequence + 1))
+  done
+  printf '%s\n' "$candidate"
+}
 
-# The Emacs daemon agent is macOS-only; launchd reads the plist at load time,
-# so it has to be reloaded after this changes: emacsctl restart. On Linux the
-# unit ships with the emacs package itself, so there is nothing to symlink,
-# just enable so it starts at login the way RunAtLoad does on macOS.
-case "$OSTYPE" in
-  darwin*)
-    mkdir -p "$HOME/Library/LaunchAgents" "$HOME/Library/Logs"
-    create_symlink "$DOTFILES_DIR/emacs/dev.nathantebbs.emacs.plist" \
-      "$HOME/Library/LaunchAgents/dev.nathantebbs.emacs.plist" "emacs daemon"
-    ;;
-  linux*)
-    if systemctl --user list-unit-files emacs.service >/dev/null 2>&1; then
-      systemctl --user enable emacs.service
-      echo -e "${GREEN}[OK]${NC} Enabled emacs daemon (emacs.service)"
-    else
-      echo -e "${YELLOW}[INFO]${NC} emacs.service not found; install emacs first"
+deploy_link() {
+  local source_rel="$1"
+  local target_rel="$2"
+  local name="$3"
+  local source="$DOTFILES_DIR/$source_rel"
+  local target="$HOME/$target_rel"
+  local backup=""
+
+  validate_relative_path source "$source_rel"
+  validate_relative_path target "$target_rel"
+
+  if [ ! -e "$source" ]; then
+    err "Source not found: $source"
+    return 1
+  fi
+
+  if [ -L "$target" ] && [ "$(readlink "$target")" = "$source" ]; then
+    info "$name already linked correctly"
+    return
+  fi
+
+  if [ "$DRY_RUN" -eq 1 ]; then
+    if [ -e "$target" ] || [ -L "$target" ]; then
+      warn "Would back up $name"
     fi
-    ;;
+    info "Would link $name"
+    return
+  fi
+
+  mkdir -p "$(dirname "$target")"
+  if [ -e "$target" ] || [ -L "$target" ]; then
+    backup="$(next_backup_path "$target")"
+    warn "Backing up $name to $backup"
+    mv "$target" "$backup"
+  fi
+
+  if ! ln -s "$source" "$target"; then
+    [ -n "$backup" ] && mv "$backup" "$target"
+    err "Could not link $name"
+    return 1
+  fi
+  info "Linked $name"
+}
+
+deploy_manifest() {
+  local manifest="$1"
+  local source target name extra
+
+  [ -f "$manifest" ] || return
+  while IFS=$'\t' read -r source target name extra; do
+    [ -z "$source" ] && continue
+    case "$source" in \#*) continue ;; esac
+    if [ -z "$target" ] || [ -z "$name" ] || [ -n "$extra" ]; then
+      err "Invalid manifest row in $manifest: $source"
+      return 1
+    fi
+    deploy_link "$source" "$target" "$name"
+  done < "$manifest"
+}
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --dry-run) DRY_RUN=1 ;;
+    --platform)
+      shift
+      [ "$#" -gt 0 ] || { err "--platform needs a value"; usage; exit 1; }
+      PLATFORM="$1"
+      ;;
+    -h|--help) usage; exit ;;
+    *) err "Unknown argument: $1"; usage; exit 1 ;;
+  esac
+  shift
+done
+
+[ -n "$PLATFORM" ] || PLATFORM="$(detect_platform)"
+case "$PLATFORM" in
+  macos|linux) ;;
+  *) err "Unsupported platform: $PLATFORM"; exit 1 ;;
 esac
 
-echo ""
-echo -e "${GREEN}[OK]${NC} Symlink deployment complete!"
+printf 'Deploying shared and %s configuration\n\n' "$PLATFORM"
+deploy_manifest "$DOTFILES_DIR/util/links.tsv"
+deploy_manifest "$DOTFILES_DIR/$PLATFORM/links.tsv"
+printf '\n'
+info "Deployment complete"

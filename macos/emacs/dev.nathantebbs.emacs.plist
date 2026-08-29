@@ -18,19 +18,6 @@
   <key>KeepAlive</key>
   <true/>
 
-  <!-- launchd hands agents a bare PATH. exec-path-from-shell repairs the rest
-       from a login shell; this is enough for Emacs to start. -->
-  <key>EnvironmentVariables</key>
-  <dict>
-    <key>PATH</key>
-    <string>/Users/nathantebbs/.nix-profile/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
-  </dict>
-
-  <key>StandardOutPath</key>
-  <string>/Users/nathantebbs/Library/Logs/emacs-daemon.out</string>
-  <key>StandardErrorPath</key>
-  <string>/Users/nathantebbs/Library/Logs/emacs-daemon.err</string>
-
   <key>ProcessType</key>
   <string>Interactive</string>
 </dict>

@@ -1,0 +1,10 @@
+# source	target	name
+.emacs.d	.emacs.d	emacs
+.vimrc	.vimrc	vim
+tmux	.config/tmux	tmux
+nvim	.config/nvim	neovim
+wezterm	.config/wezterm	wezterm
+bashrc	.bashrc	bash
+bash_profile	.bash_profile	bash profile
+gitconfig	.gitconfig	git
+clang-format	.clang-format	clang-format
