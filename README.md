@@ -66,9 +66,9 @@ Shared link policy lives in `util/links.tsv`. Platform link policy lives in
 
 ## Editors
 
-Emacs is the primary editor and owns `$EDITOR`. Vim and Neovim are the
-backups: stable, unchanging, and what `$EDITOR` falls back to when no daemon
-is answering.
+Emacs is the primary GUI editor. Neovim owns `$EDITOR` and `$VISUAL` because
+terminal editor calls are usually short tasks such as Git commit messages.
+Vim remains the minimal backup editor.
 
 ### Vim
 
@@ -155,7 +155,8 @@ same keys doing the same things. Telescope stands in for fzf.vim.
 
 Neovim already binds `grn`, `gra`, `grr`, `gri`, `gO` and `K` for rename, code action, references, implementation, symbols and hover, so those are not rebound.
 
-Theme: `modus` (dark background), lightline with the `one` colorscheme.
+Theme: `modus` with a transparent terminal background. Lightline uses the
+`one` colorscheme.
 
 ### Emacs
 
@@ -207,8 +208,8 @@ host and are not defined here.
 | `et` | Frame inside the current terminal (`emacsclient -t`) |
 | Emacsclient.app (macOS) | Same as `emacs`, from Spotlight, the Dock or Aerospace |
 
-None of these pass `-a ""`. The editor command falls back to Neovim when no
-daemon answers.
+None of these pass `-a ""`. They report a missing daemon instead of starting
+an unmanaged one.
 
 `Emacsclient.app` is macOS-only. Build it explicitly with
 `macos/scripts/make-emacsclient-app.sh`. It is not part of root deployment.
@@ -332,8 +333,8 @@ and runs `chsh`. It is idempotent.
   emacsctl restart  # kill and relaunch
   emacsctl status   # check if running
   ```
-- `$EDITOR` and `$VISUAL`, both `emacsclient -t -a nvim`. Git waits for the
-  buffer. Finish it with `C-x #`. Neovim opens when no daemon answers.
+- `$EDITOR` and `$VISUAL`, both `nvim`. Git commit messages and other terminal
+  editor calls open in Neovim.
 - `ls` colors. macOS gets `CLICOLOR` plus an `LSCOLORS` palette with cyan directories; Linux gets `ls --color=auto`, since GNU ls ignores `LSCOLORS` entirely. oh-my-zsh used to supply an `ls -G` alias, so without this the switch would have lost colors outright
 - PATH additions, each guarded so a machine missing the toolchain still gets a working shell: `~/.local/bin`, `~/.cargo/bin`, `~/go/bin`, Emacs.app, and Bun
 

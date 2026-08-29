@@ -23,7 +23,7 @@ emacsctl() {
   esac
 }
 
-export EDITOR="emacsclient -t -a nvim"
+export EDITOR="nvim"
 export VISUAL="$EDITOR"
 export CLICOLOR=1
 export LSCOLORS="GxFxBxdxCxDxdxabagacad"

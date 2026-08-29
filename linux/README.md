@@ -20,5 +20,5 @@ Install the committed fonts when needed:
 bash util/scripts/install-fonts.sh
 ```
 
-The shell expects `emacsclient` and `nvim` on `PATH` for `$EDITOR`. It enables
-GNU `ls` colors. The host owns package installation and Emacs daemon setup.
+The shell uses `nvim` for `$EDITOR` and `$VISUAL`. It enables GNU `ls` colors.
+The host owns package installation and Emacs daemon setup.
