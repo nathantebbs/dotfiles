@@ -30,6 +30,10 @@ default-root-container-orientation = 'auto'
 # Find an app's id with: aerospace list-apps
 
 # 1 Browsers
+# Chromium is ungoogled-chromium, and the default handler for https.
+[[on-window-detected]]
+if.app-id = 'org.chromium.Chromium'
+run = 'move-node-to-workspace 1'
 [[on-window-detected]]
 if.app-id = 'org.mozilla.firefox'
 run = 'move-node-to-workspace 1'
