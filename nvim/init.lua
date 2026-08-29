@@ -147,7 +147,7 @@ require("lazy").setup({
       'nvim-telescope/telescope.nvim', version = '*',
       dependencies = {
         'nvim-lua/plenary.nvim',
-        -- Native fzf sorter. Needs make, which setup.sh installs.
+        -- Native fzf sorter. Building it requires make.
         { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
       }
     },
@@ -219,6 +219,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
 -- =====================
 vim.opt.background = "dark"
 vim.cmd.colorscheme("modus")
+
+-- Let the terminal provide the background, matching the Vim config.
+for _, group in ipairs({ "Normal", "NormalNC", "NormalFloat", "SignColumn", "EndOfBuffer" }) do
+  vim.api.nvim_set_hl(0, group, { bg = "none" })
+end
 
 vim.opt.laststatus = 2
 vim.g.lightline = { colorscheme = "one" }
