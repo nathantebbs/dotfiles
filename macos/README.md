@@ -31,6 +31,11 @@ Install the committed fonts when needed:
 bash util/scripts/install-fonts.sh
 ```
 
+macOS ships Bash 3.2. It lacks features used by the shared shell config. Zsh is
+the macOS default, but these dotfiles deliberately use Bash on both machines.
+The Homebrew package provides a current Bash without adding another shell
+config.
+
 Set Homebrew Bash as the login shell after the Brewfile has been installed:
 
 ```sh
