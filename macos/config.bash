@@ -28,5 +28,10 @@ export VISUAL="$EDITOR"
 export CLICOLOR=1
 export LSCOLORS="GxFxBxdxCxDxdxabagacad"
 
+# /etc/paths.d/homebrew appends, which lands Homebrew after /bin. The system
+# bash 3.2 then shadows the 5.x the Brewfile installs. Prepending fixes that.
+[ -d "/opt/homebrew/bin" ] \
+  && export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+
 [ -d "/Applications/Emacs.app/Contents/MacOS/bin" ] \
   && export PATH="/Applications/Emacs.app/Contents/MacOS/bin:$PATH"

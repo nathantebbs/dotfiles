@@ -336,7 +336,7 @@ and runs `chsh`. It is idempotent.
 - `$EDITOR` and `$VISUAL`, both `nvim`. Git commit messages and other terminal
   editor calls open in Neovim.
 - `ls` colors. macOS gets `CLICOLOR` plus an `LSCOLORS` palette with cyan directories; Linux gets `ls --color=auto`, since GNU ls ignores `LSCOLORS` entirely. oh-my-zsh used to supply an `ls -G` alias, so without this the switch would have lost colors outright
-- PATH additions, each guarded so a machine missing the toolchain still gets a working shell: `~/.local/bin`, `~/.cargo/bin`, `~/go/bin`, Emacs.app, and Bun
+- PATH additions, each guarded so a machine missing the toolchain still gets a working shell: `~/.local/bin`, `~/.cargo/bin`, `~/go/bin`, Emacs.app, and Bun. macOS also prepends Homebrew, because `/etc/paths.d/homebrew` appends and the system Bash 3.2 would otherwise shadow the 5.x the Brewfile installs
 
 `~/.bun/_bun` did not come across. It is a zsh `compdef` file with no bash
 equivalent, so bun contributes only its binary now.
