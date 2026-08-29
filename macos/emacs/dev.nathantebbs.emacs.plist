@@ -5,8 +5,7 @@
   <key>Label</key>
   <string>dev.nathantebbs.emacs</string>
 
-  <!-- --fg-daemon, not --daemon: launchd needs the process to stay in the
-       foreground so it can supervise it. -->
+  <!-- Keep Emacs in the foreground so launchd can supervise it. -->
   <key>ProgramArguments</key>
   <array>
     <string>/Applications/Emacs.app/Contents/MacOS/Emacs</string>
