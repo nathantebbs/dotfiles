@@ -200,10 +200,17 @@ vim.diagnostic.config({
   float = { border = "single", source = true },
 })
 
+vim.opt.completeopt = { "menuone", "noselect", "popup" }
+
 -- Core already binds grn, gra, grr, gri, gO and K. These are the gaps.
 vim.api.nvim_create_autocmd("LspAttach", {
   desc = "LSP keymaps, bound per buffer so they exist only where a server ran",
   callback = function(ev)
+    local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
+    if client:supports_method("textDocument/completion") then
+      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+    end
+
     local opts = function(desc) return { buffer = ev.buf, desc = desc } end
     map("n", "gd", vim.lsp.buf.definition, opts("LSP: definition"))
     map("n", "gD", vim.lsp.buf.declaration, opts("LSP: declaration"))
