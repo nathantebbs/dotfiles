@@ -50,6 +50,7 @@
         ;; Languages
         markdown-mode
         pyvenv
+        zig-mode
 
         ;; Documents
         pdf-tools

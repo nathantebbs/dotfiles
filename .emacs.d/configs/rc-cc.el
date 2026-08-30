@@ -25,10 +25,6 @@
 ;; ahead of the Cape backends rc-completion adds at depth 90. Diagnostics are
 ;; Flymake, which Eglot turns on itself. None of them need anything here.
 ;;
-;; The Eglot bindings live in this file rather than in a module of their own
-;; because C and C++ are the only things in this configuration that start a
-;; server. A second consumer is when to lift them out.
-
 ;;; Code:
 
 (require 'treesit)
@@ -399,20 +395,7 @@ it exists every file is compiled with guessed flags."
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-server-programs
                '((c-mode c-ts-mode c++-mode c++-ts-mode objc-mode)
-                 . ("clangd" "--background-index" "--clang-tidy")))
-
-  ;; Everything else is already bound: `M-.' and `M-,' reach definitions and
-  ;; back through Eglot's xref backend, `C-M-.' reaches workspace symbols, and
-  ;; `M-g f' lists the diagnostics through consult-flymake.
-  (keymap-set eglot-mode-map "C-c l a" #'eglot-code-actions)
-  (keymap-set eglot-mode-map "C-c l d" #'eldoc-doc-buffer)
-  (keymap-set eglot-mode-map "C-c l f" #'eglot-format)
-  (keymap-set eglot-mode-map "C-c l i" #'eglot-inlay-hints-mode)
-  (keymap-set eglot-mode-map "C-c l r" #'eglot-rename)
-  (keymap-set eglot-mode-map "C-c l D" #'eglot-find-declaration)
-  (keymap-set eglot-mode-map "C-c l R" #'eglot-reconnect)
-  (keymap-set eglot-mode-map "C-c l m" #'eglot-find-implementation)
-  (keymap-set eglot-mode-map "C-c l t" #'eglot-find-typeDefinition))
+                 . ("clangd" "--background-index" "--clang-tidy"))))
 
 ;; Resolved once at startup, after rc-defaults has repaired PATH. A machine
 ;; without clangd then opens C files with no server rather than raising an

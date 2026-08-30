@@ -129,6 +129,7 @@ No vim-polyglot here, and none in `.vimrc` either. Neovim 0.12 and Vim 9.1 both 
 | `pyright` | Python | `pyright-langserver` |
 | `tinymist` | Typst | Project environment |
 | `ols` | Odin | Project environment |
+| `zls` | Zig | `zls` |
 
 **Key bindings:**
 
@@ -168,10 +169,13 @@ Notable packages:
 
 - **Editing:** Evil, evil-collection, evil-surround, evil-mc, undo-fu (+ session), paredit, move-text, aggressive-indent, stripspace
 - **Completion / navigation:** Vertico, Consult, Marginalia, Embark, Orderless, Corfu + Cape
-- **Languages:** C/C++ (tree-sitter, Eglot/clangd), Odin, Python (tree-sitter, uv/ruff, pyvenv), CMake (tree-sitter), Markdown, Org
+- **Languages:** C/C++ (tree-sitter, Eglot/clangd), Zig (Eglot/ZLS), Odin, Python (tree-sitter, uv/ruff, pyvenv), CMake (tree-sitter), Markdown, Org
 - **Tooling:** Magit, Apheleia (formatting), YASnippet, pdf-tools, helpful, ghostel
 
-C and C++ are the only languages here that run a language server: Eglot drives `clangd` with the same flags as the Neovim config, and `rc-cc.el` covers the tree-sitter modes, indentation, diagnostics and navigation. Python is linted by Flymake driving `ruff` instead, which covers the same ground without a server. Formatting everywhere is apheleia's job. `pdf-tools` has its `epdfinfo` server built, so PDFs open without a build prompt.
+C and C++ use Eglot with `clangd`. Zig uses Eglot with ZLS. Both server commands
+match the Neovim configuration. Python uses Flymake with `ruff` instead.
+Apheleia owns formatting. Its Zig formatter runs `zig fmt`. `pdf-tools` has its
+`epdfinfo` server built, so PDFs open without a build prompt.
 
 Theme: modus-themes. Font: Zenbones Brainy at 17pt. See [Fonts](#fonts).
 

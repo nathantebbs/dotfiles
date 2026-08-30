@@ -186,7 +186,7 @@ require("lazy").setup({
 
 -- Indexing vim.lsp.config resolves those files; require() only searches lua/.
 -- Absent binary means skip, like the PATH guards in config.bash.
-local servers = { "clangd", "gopls", "pyright", "tinymist", "ols" }
+local servers = { "clangd", "gopls", "pyright", "tinymist", "ols", "zls" }
 for _, name in ipairs(servers) do
   local cmd = vim.lsp.config[name].cmd
   if vim.fn.executable(cmd[1]) == 1 then

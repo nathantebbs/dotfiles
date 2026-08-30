@@ -29,7 +29,9 @@ because it repairs `PATH`, which everything shelling out depends on.
 | `rc-editing` | Outline folding, stripspace, apheleia, YASnippet, spelling |
 | `rc-elisp` | paredit, aggressive-indent, highlight-defined, helpful |
 | `rc-programming` | Python (tree-sitter, pyvenv, Flymake), Markdown |
+| `rc-eglot` | Shared Eglot key bindings |
 | `rc-cc` | C and C++: tree-sitter modes, Eglot driving clangd, CMake |
+| `rc-zig` | Zig: build command, Eglot driving ZLS |
 | `rc-odin` | `odin-ts-mode`, written here rather than installed |
 | `rc-org` | Org, agenda, pdf-tools |
 | `rc-git` | Magit |
@@ -65,6 +67,15 @@ M-x rc-odin-install-grammar
 
 That compiles [tree-sitter-odin](https://github.com/tree-sitter-grammars/tree-sitter-odin)
 into `.emacs.d/tree-sitter/`, which is gitignored.
+
+## Zig
+
+`zig-mode` supplies syntax and indentation. Apheleia runs `zig fmt` on save.
+Eglot starts ZLS when `zls` is on `PATH`. A machine without ZLS still opens and
+formats Zig files without an error.
+
+`C-c b` runs `zig build` from the nearest parent containing `build.zig`.
+Navigation, diagnostics and refactoring use the shared Eglot bindings below.
 
 ## Python
 
@@ -216,9 +227,8 @@ the header is under `include/` and the source under `src/`. It falls back to
 
 No debugger is wired in. `lldb` runs in a terminal.
 
-C and C++ are the only things here that start a server, which is why the Eglot
-configuration lives in `rc-cc.el` rather than a module of its own. A second
-consumer is when to lift it out.
+The shared bindings live in `rc-eglot.el`. Each language module owns its server
+command and startup guard.
 
 ## Emacs and the daemon
 
