@@ -22,3 +22,24 @@ bash util/scripts/install-fonts.sh
 
 The shell uses `nvim` for `$EDITOR` and `$VISUAL`. It enables GNU `ls` colors.
 The host owns package installation and Emacs daemon setup.
+
+## Emacs daemon
+
+Linux runs Emacs as a systemd user service. Restart it after rebuilding Emacs
+or changing its configuration:
+
+```sh
+systemctl --user restart emacs.service
+```
+
+Use systemd for the other daemon operations too:
+
+```sh
+systemctl --user status emacs.service
+systemctl --user start emacs.service
+systemctl --user stop emacs.service
+journalctl --user -u emacs.service -f
+```
+
+The `emacsctl` shell function is macOS-only. It wraps launchd commands and
+cannot manage the systemd service used on Linux.
