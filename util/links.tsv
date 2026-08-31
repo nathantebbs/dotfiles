@@ -3,7 +3,7 @@
 .vimrc	.vimrc	vim
 tmux	.config/tmux	tmux
 nvim	.config/nvim	neovim
-wezterm	.config/wezterm	wezterm
+kitty	.config/kitty	kitty
 bashrc	.bashrc	bash
 bash_profile	.bash_profile	bash profile
 gitconfig	.gitconfig	git

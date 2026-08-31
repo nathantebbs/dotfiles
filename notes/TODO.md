@@ -127,6 +127,12 @@ history.
       did before. AeroSpace itself was already current at 0.21.3-Beta; the
       warning was about the config schema, not the app
 
+- [x] WezTerm -> kitty. `wezterm/wezterm.lua` is gone; `kitty/kitty.conf` holds
+      the shared settings and `kitty/macos.conf` the Option-key handling and
+      key bindings, pulled in through `include ${KITTY_OS}.conf` instead of
+      the Lua `target_triple` branch WezTerm used. `macos/aerospace.toml` and
+      `macos/Brewfile` updated to match
+
 ## Open
 
 Nothing open.

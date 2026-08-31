@@ -13,4 +13,4 @@ brew "tmux"
 
 cask "aerospace"
 cask "karabiner-elements"
-cask "wezterm"
+cask "kitty"

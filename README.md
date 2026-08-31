@@ -14,7 +14,7 @@ manage Linux services. macOS has an optional minimal
 |------|-----------|
 | `.emacs.d/`, `nvim/`, `.vimrc` | Shared editor configuration |
 | `bashrc`, `bash_profile`, `config.bash` | Shared shell configuration |
-| `tmux/`, `wezterm/` | Shared terminal configuration |
+| `tmux/`, `kitty/` | Shared terminal configuration |
 | `gitconfig`, `clang-format` | Shared tool configuration |
 | `fonts/` | Font assets used by the terminal and editors |
 | `macos/` | Homebrew manifest, launchd, AeroSpace, Karabiner, and macOS shell behavior |
@@ -222,27 +222,31 @@ an unmanaged one.
 
 ## Terminal
 
-### WezTerm
+### Kitty
 
-`wezterm/wezterm.lua` configures the [WezTerm](https://wezterm.org/) terminal emulator.
+`kitty/kitty.conf` configures the [kitty](https://sw.kovidgoyal.net/kitty/) terminal
+emulator. `kitty/macos.conf` holds macOS-only settings and is pulled in by an
+`include ${KITTY_OS}.conf` that kitty itself resolves per host; Linux has no
+`linux.conf` yet, and a missing include is ignored rather than treated as an error.
 
 - Shell: the login shell configured on the host
-- Font: Zenbones Brainy, 14pt, with Symbols Nerd Font Mono as fallback for icon glyphs
+- Font: Zenbones Brainy, 14pt, with the Nerd Font private-use ranges mapped to
+  Symbols Nerd Font Mono for icon glyphs
 - Background opacity: 0.92
 - Cursor: steady block, which is only what an application that reshapes nothing gets
 - Tab bar hidden when only one tab is open
 - No confirmation prompt on window close
 - Scrollback: 10000 lines, inherited from what `tmux.conf` set back when tmux did this job
 - Bell: silent, because Vim rings it for a failed search
+- Layout: `splits`, for WezTerm-style arbitrary directional panes, plus `stack` for the zoom binding below
 
-**Keyboard:**
+**Keyboard (macOS only):**
 
-The Kitty keyboard protocol applies on both platforms. Option handling and the
-bindings below apply only on macOS. Linux keeps WezTerm's default bindings.
+kitty invented the Kitty Keyboard Protocol and always advertises it, so unlike
+WezTerm there is nothing to opt into. Only the Option handling and bindings
+below are macOS-specific; Linux keeps kitty's default bindings.
 
 - **Left Option is Meta.** macOS otherwise composes `Option+key` into a glyph, so Vim never sees `<M-...>`, Emacs never sees `M-p`, and readline never sees `M-b`. Right Option still composes, which is where accented characters come from
-- **Dead keys off.** A dead key waits for a second press to combine with, eating the first when a plain keystroke was meant
-- **Kitty keyboard protocol advertised.** Terminals cannot otherwise distinguish `<C-i>` from `<Tab>` or `<C-[>` from `<Esc>`, since they arrive as the same byte. Applications opt in, so anything that does not ask is unaffected
 
 **Key bindings:**
 
@@ -258,11 +262,13 @@ Everything hangs off `Cmd`, the one modifier macOS never forwards to the termina
 | `Cmd x` | Close pane |
 | `Cmd [` / `Cmd ]` | Previous / next tab |
 | `Cmd K` | Clear scrollback |
-| `Cmd X` | Copy mode, which navigates with `hjkl`, `v` and `y` |
-| `Cmd Shift Space` | Quick select: label every path and URL on screen, jump by typing its letters |
+| `Cmd X` | Show scrollback in a pager, kitty's built-in stand-in for copy mode |
+| `Cmd Shift Space` | Select a URL on screen, jump by typing its label |
 | `Cmd Enter` | Fullscreen |
 
-`Cmd+t`, `Cmd+w` and `Cmd+1`..`9` keep their defaults.
+`Cmd+t`, `Cmd+w` and `Cmd+1`..`9` keep their defaults. kitty's own hints kitten
+covers what WezTerm's quick select did for paths and hashes:
+`Ctrl+Shift+P`, `f` for a path, `n` for `path:linenum`.
 
 ## Window manager
 
@@ -435,6 +441,6 @@ ship its own. A project with its own file still wins, which is the point.
 
 ## Fonts
 
-Configs use **Zenbones Brainy** (WezTerm, Emacs) and **Symbols Nerd Font Mono**
-(`fonts/NFM.ttf`, the WezTerm icon fallback). Both are committed under
+Configs use **Zenbones Brainy** (kitty, Emacs) and **Symbols Nerd Font Mono**
+(`fonts/NFM.ttf`, the kitty icon fallback). Both are committed under
 `fonts/`. Install them explicitly with `util/scripts/install-fonts.sh`.
