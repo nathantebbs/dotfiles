@@ -119,6 +119,13 @@ __prompt_elapsed() {
   fi
 }
 
+# `\$' expands to # for root and $ for anyone else. Only the unprivileged half
+# becomes a lambda; the root warning is the whole point of that character and
+# is not worth trading away. Fixed at startup, since the euid cannot change
+# under a running shell.
+__prompt_char=λ
+[ "$EUID" = 0 ] && __prompt_char='#'
+
 __prompt() {
   local status=$1
   history -a
@@ -164,7 +171,7 @@ __prompt() {
     mark=$bad
   fi
 
-  PS1="$line$off\\n$mark\\\$ $off"
+  PS1="$line$off\\n$mark$__prompt_char $off"
   __prompt_armed=1
 }
 
