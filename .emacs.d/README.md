@@ -32,7 +32,7 @@ because it repairs `PATH`, which everything shelling out depends on.
 | `rc-eglot` | Shared Eglot key bindings |
 | `rc-cc` | C and C++: tree-sitter modes, Eglot driving clangd, CMake |
 | `rc-zig` | Zig: build command, Eglot driving ZLS |
-| `rc-odin` | `odin-ts-mode`, written here rather than installed |
+| `rc-odin` | Odin: `odin-ts-mode` written here, Eglot driving ols, odinfmt |
 | `rc-org` | Org, agenda, pdf-tools |
 | `rc-git` | Magit |
 | `rc-terminal` | ghostel and its Evil integration |
@@ -67,6 +67,30 @@ M-x rc-odin-install-grammar
 
 That compiles [tree-sitter-odin](https://github.com/tree-sitter-grammars/tree-sitter-odin)
 into `.emacs.d/tree-sitter/`, which is gitignored.
+
+Eglot starts [ols](https://github.com/DanielGavin/ols) when it is on `PATH`,
+the same server [`nvim/lsp/ols.lua`](../nvim/lsp/ols.lua) uses. Neither ols nor
+`odinfmt` is packaged, so both are built from source. See the root README.
+A machine without ols opens Odin files with no server rather than erroring per
+buffer.
+
+Formatting on save is apheleia running `odinfmt -stdin`. It reads a project's
+`odinfmt.json` if there is one, so both editors produce the same result. The
+default is tabs at width four, which is what `odin-ts-mode` indents to.
+
+`C-c b` builds. A `Makefile` at the project root wins, since it already carries
+the flags and the `-out:` path a bare `odin build` would have to invent.
+Otherwise the command is `odin build` on the package, which is `src/` when the
+project has one and the root when it does not.
+
+| Key | Does |
+|-----|------|
+| `C-c C-r` | `odin run` |
+| `C-c C-k` | `odin check`, no binary produced |
+| `C-c C-t` | `odin test` |
+
+Errors jump. `odin` reports them as `path(line:column) Error:`, which no entry
+in the default `compilation-error-regexp-alist` matches, so `rc-odin` adds one.
 
 ## Zig
 

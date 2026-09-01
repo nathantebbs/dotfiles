@@ -27,6 +27,13 @@
 ;; Only for the compilation-error-regexp variables set at the end of the file.
 (eval-when-compile (require 'compile))
 
+;; Loaded by the hooks below rather than at startup: `project-current' is
+;; autoloaded and pulls in the rest of project.el on first use.
+(declare-function project-current "project")
+(declare-function project-root "project")
+
+(declare-function eglot-ensure "eglot")
+
 (defgroup rc-odin nil
   "Odin language support."
   :group 'languages)
@@ -338,12 +345,110 @@ left to the type rules instead of being claimed as a constant.")
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.odin\\'" . odin-ts-mode))
 
-;; Odin's own toolchain reports errors as path(line:column), which no entry in
-;; the default alist matches.
+;;; Building
+
+(defcustom rc-odin-build-flags "-vet -strict-style -debug"
+  "Flags appended to every `odin' subcommand this file runs."
+  :type 'string
+  :group 'rc-odin)
+
+(defcustom rc-odin-package-directory "src"
+  "Directory, relative to the project root, holding the main package.
+Used only when it exists; the root itself is the fallback."
+  :type 'string
+  :group 'rc-odin)
+
+;; Expanded, because `project-root' can hand back an abbreviated path and
+;; `shell-quote-argument' escapes the ~ into a literal the shell never expands.
+(defun rc-odin--root ()
+  "Return the root of the project owning the current buffer, or nil."
+  (when-let* ((project (project-current))
+              (root (project-root project)))
+    (expand-file-name root)))
+
+;; A package in Odin is a directory, not a file, so every subcommand takes one.
+(defun rc-odin--package (root)
+  "Return the package directory `odin' should be pointed at under ROOT."
+  (let ((src (expand-file-name rc-odin-package-directory root)))
+    (if (file-directory-p src) src root)))
+
+(defun rc-odin--command (subcommand)
+  "Return the shell command running odin SUBCOMMAND on this buffer's project."
+  (let* ((root (or (rc-odin--root) default-directory))
+         (package (rc-odin--package root)))
+    (format "cd %s && odin %s %s %s"
+            (shell-quote-argument root)
+            subcommand
+            (shell-quote-argument (file-relative-name package root))
+            rc-odin-build-flags)))
+
+;; No build command: `C-c b' is `compile' globally, and the compile-command set
+;; below already builds. These three are the subcommands it cannot reach.
+(defun rc-odin-run ()
+  "Build and run this buffer's Odin package."
+  (interactive)
+  (compile (rc-odin--command "run")))
+
+(defun rc-odin-check ()
+  "Type check this buffer's Odin package without producing a binary."
+  (interactive)
+  (compile (rc-odin--command "check")))
+
+(defun rc-odin-test ()
+  "Run the tests in this buffer's Odin package."
+  (interactive)
+  (compile (rc-odin--command "test")))
+
+;; A Makefile wins over a constructed command line: it already carries the
+;; flags and the -out: path that a bare `odin build' would have to invent.
+(defun rc-odin-set-compile-command ()
+  "Point `compile' at this buffer's Odin project."
+  ;; A loose file outside any project is still a package, so the root is not
+  ;; required; a package in Odin is a directory and there is always one.
+  (let ((root (or (rc-odin--root) default-directory)))
+    (setq-local compile-command
+                (if (file-exists-p (expand-file-name "Makefile" root))
+                    (format "make -C %s" (shell-quote-argument root))
+                  (rc-odin--command "build")))))
+
+(add-hook 'odin-ts-mode-hook #'rc-odin-set-compile-command)
+
+;; Odin reports errors as path(line:column) Error:, which no entry in the
+;; default alist matches. The level is optional in the pattern so that a
+;; message shape this does not anticipate still yields a jumpable location.
 (with-eval-after-load 'compile
   (add-to-list 'compilation-error-regexp-alist-alist
-               '(odin "^\\(.+?\\)(\\([0-9]+\\):\\([0-9]+\\))" 1 2 3))
+               '(odin "^\\(.+?\\)(\\([0-9]+\\):\\([0-9]+\\))\\(?: \\(Warning\\)\\)?"
+                      1 2 3 (4)))
   (add-to-list 'compilation-error-regexp-alist 'odin))
+
+;;; Eglot
+
+;; ols takes no arguments; collections and profiles come from an ols.json at
+;; the project root. Eglot ships no Odin entry, so this adds rather than wins.
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs '(odin-ts-mode . ("ols"))))
+
+;; Resolved once at startup, after rc-defaults has repaired PATH. A machine
+;; without ols then opens Odin files with no server rather than raising an
+;; error in every buffer, which is how nvim/lsp/ treats a missing binary too.
+(when (executable-find "ols")
+  (add-hook 'odin-ts-mode-hook #'eglot-ensure))
+
+;;; Formatting
+
+;; odinfmt is built from the ols tree and reads the odinfmt.json the project
+;; root holds, so both editors format identically. -stdin is the shape apheleia
+;; wants: source in, source out, leaving point and the markers alone.
+(with-eval-after-load 'apheleia
+  (setf (alist-get 'odinfmt apheleia-formatters) '("odinfmt" "-stdin")
+        (alist-get 'odin-ts-mode apheleia-mode-alist) 'odinfmt))
+
+;;; Keymap
+
+(keymap-set odin-ts-mode-map "C-c C-r" #'rc-odin-run)
+(keymap-set odin-ts-mode-map "C-c C-k" #'rc-odin-check)
+(keymap-set odin-ts-mode-map "C-c C-t" #'rc-odin-test)
 
 (provide 'rc-odin)
 ;;; rc-odin.el ends here
