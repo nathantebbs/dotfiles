@@ -74,7 +74,15 @@ These are separate from deployment:
 
 ```sh
 bash util/scripts/install-fonts.sh
+bash util/scripts/install-ols.sh
 bash util/scripts/install-vimplug.sh
 bash macos/scripts/install-bash.sh
 bash macos/scripts/make-emacsclient-app.sh
 ```
+
+`install-ols.sh` builds the Odin language server and `odinfmt` from source,
+since neither is packaged. It needs the `odin` compiler and nothing else. The
+checkout goes to `~/source/third_party/ols` and the two binaries are symlinked
+into `~/.local/bin`. Override with `OLS_SRC_DIR` and `OLS_BIN_DIR`. Emacs and
+Neovim both skip Odin server support when `ols` is not on `PATH`, so this is
+only needed on a machine where I write Odin.
