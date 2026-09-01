@@ -23,20 +23,37 @@ vim.bo.errorformat = table.concat({
   [[%-G%.%#]],
 }, ",")
 
+-- A package in Odin is a directory holding .odin files, so a root that holds
+-- only subdirectories is not one. The buffer's own directory always is, which
+-- is what makes the fallback safe. Mirrors rc-odin--package.
+local function holds_odin(dir)
+  if not dir or not vim.uv.fs_stat(dir) then
+    return false
+  end
+  for name, kind in vim.fs.dir(dir) do
+    if kind == "file" and name:sub(-5) == ".odin" then
+      return true
+    end
+  end
+  return false
+end
+
 -- A Makefile at the root wins, since it already carries the flags and the
--- -out: path a bare odin build would have to invent. Otherwise build the
--- package, which is a directory in Odin rather than a file: src/ when the
--- project has one and the root when it does not.
-local root = vim.fs.root(0, { ".git", "ols.json", "odinfmt.json" })
-  or vim.fn.expand("%:p:h")
+-- -out: path a bare odin build would have to invent.
+local buffer_dir = vim.fn.expand("%:p:h")
+local root = vim.fs.root(0, { ".git", "ols.json", "odinfmt.json" }) or buffer_dir
 
 if vim.uv.fs_stat(root .. "/Makefile") then
   vim.bo.makeprg = "make -C " .. vim.fn.fnameescape(root)
 else
   local src = root .. "/src"
-  local package = vim.uv.fs_stat(src) and src or root
-  vim.bo.makeprg = "odin build " .. vim.fn.fnameescape(package)
-    .. " -vet -strict-style -debug"
+  local package = (holds_odin(src) and src)
+    or (holds_odin(root) and root)
+    or buffer_dir
+  -- cd first: odin writes the binary into the process working directory, so
+  -- without this :make drops it wherever Neovim happens to have been started.
+  vim.bo.makeprg = "cd " .. vim.fn.fnameescape(root) .. " && odin build "
+    .. vim.fn.fnameescape(package) .. " -vet -strict-style -debug"
 end
 
 -- Format on save, which is what apheleia does for Odin in Emacs. Routed

@@ -354,7 +354,7 @@ left to the type rules instead of being claimed as a constant.")
 
 (defcustom rc-odin-package-directory "src"
   "Directory, relative to the project root, holding the main package.
-Used only when it exists; the root itself is the fallback."
+Used only when it exists and holds Odin source."
   :type 'string
   :group 'rc-odin)
 
@@ -366,11 +366,20 @@ Used only when it exists; the root itself is the fallback."
               (root (project-root project)))
     (expand-file-name root)))
 
-;; A package in Odin is a directory, not a file, so every subcommand takes one.
+(defun rc-odin--package-p (dir)
+  "Return DIR when it directly holds Odin source, and nil otherwise."
+  (and (file-directory-p dir)
+       (directory-files dir nil "\\.odin\\'" t 1)
+       dir))
+
+;; A package in Odin is a directory holding .odin files, so a root that holds
+;; only subdirectories is not one. `default-directory' always is, which is what
+;; makes the fallback safe.
 (defun rc-odin--package (root)
   "Return the package directory `odin' should be pointed at under ROOT."
-  (let ((src (expand-file-name rc-odin-package-directory root)))
-    (if (file-directory-p src) src root)))
+  (or (rc-odin--package-p (expand-file-name rc-odin-package-directory root))
+      (rc-odin--package-p root)
+      default-directory))
 
 (defun rc-odin--command (subcommand)
   "Return the shell command running odin SUBCOMMAND on this buffer's project."
