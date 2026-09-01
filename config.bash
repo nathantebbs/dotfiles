@@ -63,6 +63,15 @@ alias gca!='git commit -v -a --amend'
 [ -d "$HOME/.cargo/bin" ] && export PATH="$HOME/.cargo/bin:$PATH"
 [ -d "$HOME/go/bin" ]     && export PATH="$HOME/go/bin:$PATH"
 
+# The current directory, last, so an installed command always wins over a file
+# of the same name sitting in a checkout. That ordering is what makes this
+# tolerable; it still means `cd`ing into an untrusted tree puts its executables
+# one typo away. Traded knowingly against typing ./ for every local binary.
+case ":$PATH:" in
+  *:.:*) ;;
+  *) export PATH="$PATH:." ;;
+esac
+
 # ~/.bun/_bun is a zsh compdef file with no bash equivalent, so only the
 # binary comes across.
 if [ -d "$HOME/.bun" ]; then
