@@ -176,7 +176,41 @@ require("lazy").setup({
 
     -- Language Support
     { "kaarmu/typst.vim", ft = 'typst', lazy=false },
+
+    -- Parsers and queries only; Neovim owns the highlighter itself. The plugin
+    -- does not support lazy loading, and :TSUpdate on every sync is what keeps
+    -- the parsers on the versions this revision expects.
+    --
+    -- Needs the tree-sitter CLI, which is the tree-sitter-cli formula and not
+    -- the tree-sitter one. Without it :TSUpdate cannot build a parser.
+    {
+      "nvim-treesitter/nvim-treesitter",
+      branch = "main",
+      lazy = false,
+      build = ":TSUpdate",
+    },
   })
+
+-- =====================
+-- Tree-sitter
+-- =====================
+-- Filetype names, which double as parser names for everything listed. sh is
+-- left out for that reason: it parses as bash and would need the mapping.
+--
+-- Highlighting is per buffer, so a language absent here keeps the regex syntax
+-- it already had rather than losing highlighting altogether.
+local ts_filetypes = { "c", "cpp", "go", "lua", "odin", "python", "zig" }
+
+require("nvim-treesitter").install(ts_filetypes)
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("rc_treesitter", { clear = true }),
+  pattern = ts_filetypes,
+  desc = "Tree-sitter highlighting, where a parser is installed",
+  callback = function()
+    pcall(vim.treesitter.start)
+  end,
+})
 
 -- =====================
 -- LSP

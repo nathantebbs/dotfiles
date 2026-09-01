@@ -10,6 +10,9 @@ brew "neovim"
 brew "poppler"
 brew "ripgrep"
 brew "tmux"
+# nvim-treesitter builds parsers with this. The tree-sitter formula is the
+# library only and has no CLI.
+brew "tree-sitter-cli"
 
 cask "aerospace"
 cask "karabiner-elements"
