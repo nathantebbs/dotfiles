@@ -110,6 +110,11 @@ map("n", "<leader>l", "<cmd>Telescope current_buffer_fuzzy_find<cr>", { desc = "
 map("n", "<leader>/", "<cmd>Telescope live_grep<cr>", { desc = "Grep the project" })
 map("n", "<leader>m", "<cmd>Telescope keymaps<cr>", { desc = "Maps" })
 
+-- Definitions come from the tag index util/scripts/tags.sh writes, which the
+-- default 'tags' of ./tags; already finds by walking up from the buffer. The
+-- built-in <C-]> jumps and <C-t> comes back; this is the same index, searchable.
+map("n", "<leader>d", "<cmd>Telescope tags<cr>", { desc = "Definitions" })
+
 -- Files and buffers
 map("n", "<leader>e", "<cmd>Ex<cr>", { desc = "netrw" })
 map("n", "<leader>k", "<cmd>bdelete<cr>", { desc = "Delete buffer" })

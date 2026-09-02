@@ -3,5 +3,9 @@
 
 nvim.log
 
+# util/scripts/tags.sh, if it is ever run here
+tags
+.tags
+
 # deploy.sh moves anything already at a target aside before linking
 *.backup.[0-9]*

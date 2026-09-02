@@ -13,6 +13,8 @@ brew "tmux"
 # nvim-treesitter builds parsers with this. The tree-sitter formula is the
 # library only and has no CLI.
 brew "tree-sitter-cli"
+# util/scripts/tags.sh needs this one, not the BSD ctags Xcode ships.
+brew "universal-ctags"
 
 cask "aerospace"
 cask "karabiner-elements"

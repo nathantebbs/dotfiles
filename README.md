@@ -74,11 +74,20 @@ These are separate from deployment:
 
 ```sh
 bash util/scripts/install-fonts.sh
+bash util/scripts/tags.sh [project]
 bash util/scripts/install-odinfmt.sh
 bash util/scripts/install-vimplug.sh
 bash macos/scripts/install-bash.sh
 bash macos/scripts/make-emacsclient-app.sh
 ```
+
+`tags.sh` indexes a project for goto-definition, which is what both editors
+use now that neither runs a language server. It writes `tags` for Neovim, which
+finds it through the default `./tags;`, and `.tags` for Emacs, which
+`rc-programming` visits when a buffer opens. Both come from one universal-ctags
+run, so the two editors jump to the same place. C, C++, Go and Python are its
+own parsers; Odin and Zig are regex definitions in the script, since
+universal-ctags ships neither. Rerun it when the index goes stale.
 
 `install-odinfmt.sh` builds `odinfmt` from source, since it is not packaged.
 It needs the `odin` compiler and nothing else. The checkout goes to

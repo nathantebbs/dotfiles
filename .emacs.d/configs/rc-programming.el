@@ -16,6 +16,23 @@
 
 (require 'treesit)
 
+;;; Tags
+
+;; What answers `M-.' now that no language server does. util/scripts/tags.sh
+;; writes .tags at the project root in the etags format this reads. The
+;; vi-format tags beside it is Neovim's: macOS filesystems are
+;; case-insensitive, so the two cannot both be called TAGS.
+(defun rc-programming-visit-tags-table ()
+  "Point `M-.' at the project's own .tags, when it has one."
+  (when-let* ((root (locate-dominating-file default-directory ".tags")))
+    (setq-local tags-table-list (list (expand-file-name ".tags" root)))))
+
+(add-hook 'prog-mode-hook #'rc-programming-visit-tags-table)
+
+;; Rerunning the script rewrites the index under a live Emacs, and the prompt
+;; asking whether to reread it has only one sensible answer.
+(setopt tags-revert-without-query t)
+
 ;;; Python
 
 ;; Select Python 3 explicitly. Older Emacs versions may still try `python'.

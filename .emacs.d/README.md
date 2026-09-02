@@ -28,7 +28,7 @@ because it repairs `PATH`, which everything shelling out depends on.
 | `rc-evil` | Evil, evil-collection, evil-mc, evil-surround, undo-fu, move-text |
 | `rc-editing` | Outline folding, stripspace, apheleia, YASnippet, spelling |
 | `rc-elisp` | paredit, aggressive-indent, highlight-defined, helpful |
-| `rc-programming` | Python (tree-sitter, pyvenv, Flymake), Markdown |
+| `rc-programming` | Tags, Python (tree-sitter, pyvenv, Flymake), Markdown |
 | `rc-cc` | C and C++: tree-sitter modes, clang-format indentation, CMake |
 | `rc-zig` | Zig: build command |
 | `rc-odin` | Odin: `odin-ts-mode` written here, odinfmt |
@@ -209,15 +209,27 @@ sidesteps all of it.
 ### Keys
 
 There is no language server. Completion is Corfu over the Cape backends
-`rc-completion` adds, navigation is xref, and errors come from `compile`.
+`rc-completion` adds, navigation is [tags](#tags), and errors come from
+`compile`.
 
 | Key | Does |
 |-----|------|
 | `M-.` / `M-,` | Definition, and back |
+| `M-?` | References |
 | `C-c b` | Build, through `compile` |
 | `C-c o` | Switch between source and header, through `ff-find-other-file` |
 
 No debugger is wired in. `lldb` runs in a terminal.
+
+## Tags
+
+`M-.` is the etags backend, not a server. `util/scripts/tags.sh` writes the
+index; `rc-programming` points `tags-table-list` at the nearest `.tags` when a
+buffer opens, so nothing has to be visited by hand. The index is a file, so it
+is as current as the last run of the script.
+
+The vi-format `tags` beside it is Neovim's half of the same index. macOS
+filesystems are case-insensitive, which is why the Emacs one is not `TAGS`.
 
 ## Emacs and the daemon
 
