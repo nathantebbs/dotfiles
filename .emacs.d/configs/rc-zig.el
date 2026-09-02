@@ -2,8 +2,8 @@
 
 ;;; Commentary:
 
-;; zig-mode supplies syntax and indentation. Apheleia runs zig fmt on save.
-;; Eglot starts ZLS when it is available, and compile builds the nearest package.
+;; zig-mode supplies syntax and indentation. Apheleia runs zig fmt on save,
+;; and compile builds the nearest package.
 
 ;;; Code:
 
@@ -19,10 +19,6 @@
                         (shell-quote-argument root)))))
 
 (add-hook 'zig-mode-hook #'rc-zig-set-compile-command)
-
-;; A missing server must not prevent Zig files from opening.
-(when (executable-find "zls")
-  (add-hook 'zig-mode-hook #'eglot-ensure))
 
 (provide 'rc-zig)
 ;;; rc-zig.el ends here

@@ -32,8 +32,6 @@
 (declare-function project-current "project")
 (declare-function project-root "project")
 
-(declare-function eglot-ensure "eglot")
-
 (defgroup rc-odin nil
   "Odin language support."
   :group 'languages)
@@ -430,19 +428,6 @@ Used only when it exists and holds Odin source."
                '(odin "^\\(.+?\\)(\\([0-9]+\\):\\([0-9]+\\))\\(?: \\(Warning\\)\\)?"
                       1 2 3 (4)))
   (add-to-list 'compilation-error-regexp-alist 'odin))
-
-;;; Eglot
-
-;; ols takes no arguments; collections and profiles come from an ols.json at
-;; the project root. Eglot ships no Odin entry, so this adds rather than wins.
-(with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs '(odin-ts-mode . ("ols"))))
-
-;; Resolved once at startup, after rc-defaults has repaired PATH. A machine
-;; without ols then opens Odin files with no server rather than raising an
-;; error in every buffer, which is how nvim/lsp/ treats a missing binary too.
-(when (executable-find "ols")
-  (add-hook 'odin-ts-mode-hook #'eglot-ensure))
 
 ;;; Formatting
 

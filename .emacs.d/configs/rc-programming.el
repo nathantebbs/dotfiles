@@ -7,8 +7,7 @@
 ;;
 ;; Two languages take a file of their own. Odin is in rc-odin, since its major
 ;; mode is written rather than installed, and C and C++ are in rc-cc, along
-;; with the CMake that builds them, since they are the only ones that run a
-;; language server.
+;; with the CMake that builds them.
 ;;
 ;; Bindings that live in a mode's own keymap go behind with-eval-after-load,
 ;; since the map does not exist until the mode's package loads.

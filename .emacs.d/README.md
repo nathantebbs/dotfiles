@@ -29,10 +29,9 @@ because it repairs `PATH`, which everything shelling out depends on.
 | `rc-editing` | Outline folding, stripspace, apheleia, YASnippet, spelling |
 | `rc-elisp` | paredit, aggressive-indent, highlight-defined, helpful |
 | `rc-programming` | Python (tree-sitter, pyvenv, Flymake), Markdown |
-| `rc-eglot` | Shared Eglot key bindings |
-| `rc-cc` | C and C++: tree-sitter modes, Eglot driving clangd, CMake |
-| `rc-zig` | Zig: build command, Eglot driving ZLS |
-| `rc-odin` | Odin: `odin-ts-mode` written here, Eglot driving ols, odinfmt |
+| `rc-cc` | C and C++: tree-sitter modes, clang-format indentation, CMake |
+| `rc-zig` | Zig: build command |
+| `rc-odin` | Odin: `odin-ts-mode` written here, odinfmt |
 | `rc-org` | Org, agenda, pdf-tools |
 | `rc-git` | Magit |
 | `rc-terminal` | ghostel and its Evil integration |
@@ -68,15 +67,11 @@ M-x rc-odin-install-grammar
 That compiles [tree-sitter-odin](https://github.com/tree-sitter-grammars/tree-sitter-odin)
 into `.emacs.d/tree-sitter/`, which is gitignored.
 
-Eglot starts [ols](https://github.com/DanielGavin/ols) when it is on `PATH`,
-the same server [`nvim/lsp/ols.lua`](../nvim/lsp/ols.lua) uses. Neither ols nor
-`odinfmt` is packaged, so both are built from source. See the root README.
-A machine without ols opens Odin files with no server rather than erroring per
-buffer.
-
 Formatting on save is apheleia running `odinfmt -stdin`. It reads a project's
 `odinfmt.json` if there is one, so both editors produce the same result. The
 default is tabs at width four, which is what `odin-ts-mode` indents to.
+`odinfmt` is not packaged, so it is built from source. See the root README. A
+machine without it saves Odin files unformatted.
 
 `C-c b` builds. A `Makefile` at the project root wins, since it already carries
 the flags and the `-out:` path a bare `odin build` would have to invent.
@@ -95,11 +90,8 @@ in the default `compilation-error-regexp-alist` matches, so `rc-odin` adds one.
 ## Zig
 
 `zig-mode` supplies syntax and indentation. Apheleia runs `zig fmt` on save.
-Eglot starts ZLS when `zls` is on `PATH`. A machine without ZLS still opens and
-formats Zig files without an error.
 
 `C-c b` runs `zig build` from the nearest parent containing `build.zig`.
-Navigation, diagnostics and refactoring use the shared Eglot bindings below.
 
 ## Python
 
@@ -145,11 +137,9 @@ That builds the C, C++, Doxygen and CMake grammars into
 M-x rc-cc-cmake-configure
 ```
 
-That runs `cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON`. **Nothing
-crossing a translation unit works before that database exists**: clangd falls
-back to guessing the flags for every file. clangd finds `build/` on its own,
-so there is nothing to point at it. `compile` is set to `cmake --build
-<root>/build` in a CMake project, so `C-c b` builds the same tree.
+That runs `cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON`. `compile`
+is set to `cmake --build <root>/build` in a CMake project, so `C-c b` builds
+the same tree.
 
 `c-ts-mode` and `c++-ts-mode` come in through `major-mode-remap-alist`, but
 only where both grammars are present, so a fresh clone stays in cc-mode, with
@@ -216,43 +206,18 @@ the indent of a brace opening a namespace or class, and closing that with
 tree-sitter rules needs a special case per declaration form. The region path
 sidesteps all of it.
 
-### The server
+### Keys
 
-Eglot drives `clangd --background-index --clang-tidy`, the same two flags as
-[`nvim/lsp/clangd.lua`](../nvim/lsp/clangd.lua). Background indexing answers
-references and callers from the whole project rather than the open buffers, and
-clang-tidy folds its checks into the diagnostics Flymake shows. A machine
-without `clangd` opens C files with no server rather than erroring per buffer.
-
-Completion is Corfu, with Eglot's capf landing ahead of the Cape backends
-`rc-completion` adds at depth 90. Diagnostics are Flymake, which Eglot turns on
-itself. Neither needed anything in `rc-cc.el`.
+There is no language server. Completion is Corfu over the Cape backends
+`rc-completion` adds, navigation is xref, and errors come from `compile`.
 
 | Key | Does |
 |-----|------|
 | `M-.` / `M-,` | Definition, and back |
-| `C-M-.` | Workspace symbol |
-| `M-g f` | Diagnostics, through `consult-flymake` |
 | `C-c b` | Build, through `compile` |
-| `C-c o` | Switch between source and header |
-| `C-c l a` | Code actions |
-| `C-c l d` | Documentation buffer |
-| `C-c l f` | Format region or buffer through the server |
-| `C-c l i` | Toggle inlay hints |
-| `C-c l r` | Rename |
-| `C-c l D` | Declaration |
-| `C-c l m` | Implementation |
-| `C-c l t` | Type definition |
-| `C-c l R` | Reconnect the server |
-
-`C-c o` asks clangd for the counterpart, which beats matching basenames once
-the header is under `include/` and the source under `src/`. It falls back to
-`ff-find-other-file` in a buffer with no server.
+| `C-c o` | Switch between source and header, through `ff-find-other-file` |
 
 No debugger is wired in. `lldb` runs in a terminal.
-
-The shared bindings live in `rc-eglot.el`. Each language module owns its server
-command and startup guard.
 
 ## Emacs and the daemon
 

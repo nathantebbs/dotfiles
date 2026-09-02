@@ -2,8 +2,8 @@
 -- Runs after Neovim's own ftplugin/odin.vim, which sets commentstring and
 -- suffixesadd. Indentation, :make and format on save are what it leaves out.
 --
--- The Emacs half of this is .emacs.d/configs/rc-odin.el. Both editors use ols
--- and odinfmt, so the two agree on formatting and on where a project starts.
+-- The Emacs half of this is .emacs.d/configs/rc-odin.el. Both editors call
+-- odinfmt, so the two agree on formatting and on where a project starts.
 
 -- Tabs, against the spaces init.lua sets everywhere else: the core library and
 -- odinfmt both use them. The width has to match odinfmt.json's tabs_width or a
@@ -56,20 +56,33 @@ else
     .. vim.fn.fnameescape(package) .. " -vet -strict-style -debug"
 end
 
--- Format on save, which is what apheleia does for Odin in Emacs. Routed
--- through ols rather than running odinfmt directly, so the buffer edit is the
--- server's workspace edit and point survives it. A machine without ols saves
--- unformatted rather than erroring.
+-- Format on save, which is what apheleia does for Odin in Emacs. odinfmt reads
+-- the project's odinfmt.json, so it runs from the buffer's directory the way
+-- apheleia runs it. A machine without odinfmt saves unformatted.
 local group = vim.api.nvim_create_augroup("rc_odin", { clear = false })
 vim.api.nvim_clear_autocmds({ group = group, buffer = 0 })
 vim.api.nvim_create_autocmd("BufWritePre", {
   group = group,
   buffer = 0,
-  desc = "Format Odin through ols",
+  desc = "Format Odin through odinfmt",
   callback = function(ev)
-    if next(vim.lsp.get_clients({ bufnr = ev.buf, method = "textDocument/formatting" })) then
-      vim.lsp.buf.format({ bufnr = ev.buf, timeout_ms = 2000 })
+    if vim.fn.executable("odinfmt") == 0 then
+      return
     end
+    local source = table.concat(vim.api.nvim_buf_get_lines(ev.buf, 0, -1, false), "\n")
+    local result = vim.system({ "odinfmt", "-stdin" }, {
+      stdin = source .. "\n",
+      cwd = vim.fn.expand("%:p:h"),
+    }):wait(2000)
+    -- A syntax error makes odinfmt exit non-zero. Keeping the buffer as typed
+    -- beats replacing it with a diagnostic.
+    if result.code ~= 0 or not result.stdout or result.stdout == "" then
+      return
+    end
+    local formatted = vim.split(result.stdout:gsub("\n$", ""), "\n", { plain = true })
+    local view = vim.fn.winsaveview()
+    vim.api.nvim_buf_set_lines(ev.buf, 0, -1, false, formatted)
+    vim.fn.winrestview(view)
   end,
 })
 

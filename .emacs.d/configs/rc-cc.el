@@ -2,28 +2,20 @@
 
 ;;; Commentary:
 
-;; C and C++ get a language server where the rest of this configuration does
-;; not. clangd is the reason: it is the only tool here that reads the build
-;; system, so cross-file navigation, completion of a struct's own fields and
-;; clang-tidy diagnostics all come from one process nothing else can stand in
-;; for. Python keeps its ruff and Flymake setup, which covers the same ground
-;; for that language without a server.
+;; Tree-sitter modes, clang-format-driven indentation, and CMake. There is no
+;; language server: navigation is xref and tags, and diagnostics come from
+;; `compile'.
 ;;
-;; The target is a CMake project that exports a compilation database.
-;; `rc-cc-cmake-configure' writes one, clangd finds it in build/ without being
-;; told where to look, and `compile' builds the same tree. Nothing crossing a
-;; translation unit works before that database exists, so it is the one step
-;; a new project needs.
+;; The target is a CMake project. `rc-cc-cmake-configure' configures the build
+;; tree and `compile' builds it.
 ;;
 ;; CMake lives here rather than in rc-programming because in this setup it
 ;; exists to build C++, and splitting the build system from the language it
 ;; builds only means reading two files to answer one question.
 ;;
-;; Three things are deliberately absent. Formatting is apheleia running
-;; clang-format from `prog-mode-hook' in rc-editing, which already resolves a
-;; project's own .clang-format. Completion is Corfu, with Eglot's capf landing
-;; ahead of the Cape backends rc-completion adds at depth 90. Diagnostics are
-;; Flymake, which Eglot turns on itself. None of them need anything here.
+;; Formatting is deliberately absent: apheleia runs clang-format from
+;; `prog-mode-hook' in rc-editing, which already resolves a project's own
+;; .clang-format.
 ;;
 ;;; Code:
 
@@ -33,12 +25,6 @@
 ;; autoloaded and pulls in the rest of project.el on first use.
 (declare-function project-current "project")
 (declare-function project-root "project")
-
-;; Eglot functions used by `rc-cc-find-other-file', which runs in a buffer
-;; where Eglot has already loaded.
-(declare-function eglot-current-server "eglot")
-(declare-function eglot-path-to-uri "eglot")
-(declare-function eglot-uri-to-path "eglot")
 
 (defgroup rc-cc nil
   "C and C++ support."
@@ -349,9 +335,7 @@ Falls back to the mode\='s own indentation when clang-format cannot say."
 ;;; CMake
 
 (defcustom rc-cc-cmake-build-directory "build"
-  "Directory, relative to the project root, holding the CMake build tree.
-clangd looks for compile_commands.json at the project root and in this
-directory, so the two have to agree."
+  "Directory, relative to the project root, holding the CMake build tree."
   :type 'string
   :group 'rc-cc)
 
@@ -362,9 +346,7 @@ directory, so the two have to agree."
     (and (file-exists-p (expand-file-name "CMakeLists.txt" root)) root)))
 
 (defun rc-cc-cmake-configure ()
-  "Configure the CMake build tree so that it exports a compilation database.
-clangd reads compile_commands.json out of the build directory, and until
-it exists every file is compiled with guessed flags."
+  "Configure the CMake build tree so that it exports a compilation database."
   (interactive)
   (let* ((root (or (rc-cc--cmake-root)
                    (user-error "No CMakeLists.txt at the project root")))
@@ -385,47 +367,13 @@ it exists every file is compiled with guessed flags."
 (dolist (hook rc-cc--hooks)
   (add-hook hook #'rc-cc-set-compile-command))
 
-;;; Eglot
-
-;; --background-index indexes the whole project, so references and callers are
-;; answered from more than the open buffers, and --clang-tidy folds its checks
-;; into the diagnostics Flymake shows. The two flags nvim/lsp/clangd.lua passes.
-;;
-;; Prepended, which is what makes it win over Eglot's own entry for these modes.
-(with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-               '((c-mode c-ts-mode c++-mode c++-ts-mode objc-mode)
-                 . ("clangd" "--background-index" "--clang-tidy"))))
-
-;; Resolved once at startup, after rc-defaults has repaired PATH. A machine
-;; without clangd then opens C files with no server rather than raising an
-;; error in every buffer, which is how nvim/lsp/ treats a missing binary too.
-(when (executable-find "clangd")
-  (dolist (hook rc-cc--hooks)
-    (add-hook hook #'eglot-ensure)))
-
 ;;; Source and header
 
-;; clangd reads the pairing off the compilation database, which beats matching
-;; basenames once the header is under include/ and the source under src/.
-;; `ff-find-other-file' is the fallback for a buffer with no server.
-(defun rc-cc-find-other-file ()
-  "Switch between this file and its header or source counterpart."
-  (interactive)
-  (let* ((server (and (fboundp 'eglot-current-server) (eglot-current-server)))
-         (uri (and server buffer-file-name
-                   (jsonrpc-request server :textDocument/switchSourceHeader
-                                    (list :uri (eglot-path-to-uri
-                                                buffer-file-name))))))
-    (if (and (stringp uri) (not (string-empty-p uri)))
-        (find-file (eglot-uri-to-path uri))
-      (ff-find-other-file))))
-
 (with-eval-after-load 'cc-mode
-  (keymap-set c-mode-base-map "C-c o" #'rc-cc-find-other-file))
+  (keymap-set c-mode-base-map "C-c o" #'ff-find-other-file))
 
 (with-eval-after-load 'c-ts-mode
-  (keymap-set c-ts-base-mode-map "C-c o" #'rc-cc-find-other-file))
+  (keymap-set c-ts-base-mode-map "C-c o" #'ff-find-other-file))
 
 (provide 'rc-cc)
 ;;; rc-cc.el ends here
