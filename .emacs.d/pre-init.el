@@ -56,7 +56,7 @@
         pdf-tools
 
         ;; Interface
-        modus-themes
+        doom-themes
 
         ;; Everything else
         evil-ghostel

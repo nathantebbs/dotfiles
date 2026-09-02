@@ -1,7 +1,5 @@
 -- ~/.config/nvim/init.lua
 -- Minimal Neovim config based ../.vimrc for desktop environment usage
--- Author: Nathan Tebbs
--- Created: 2026-01-24
 
 -- =====================
 -- Options
@@ -177,7 +175,14 @@ require("lazy").setup({
     { "mbbill/undotree" },
 
     -- Colors
-    { "c9rgreen/vim-colors-modus" },
+    {
+        "folke/tokyonight.nvim",
+        lazy = false,
+        priority = 1000,
+        opts = {
+            style = "moon"
+        },
+    },
 
     -- Language Support
     { "kaarmu/typst.vim", ft = 'typst', lazy=false },
@@ -221,7 +226,7 @@ vim.api.nvim_create_autocmd("FileType", {
 -- UI / Theme
 -- =====================
 vim.opt.background = "dark"
-vim.cmd.colorscheme("modus")
+vim.cmd.colorscheme("tokyonight")
 
 -- Let the terminal provide the background, matching the Vim config.
 for _, group in ipairs({ "Normal", "NormalNC", "NormalFloat", "SignColumn", "EndOfBuffer" }) do

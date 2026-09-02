@@ -12,17 +12,19 @@
 
 ;;; Code:
 
-(require 'modus-themes)
+(require 'doom-themes)
 
-;; The pair `modus-themes-toggle' flips between.
-(setopt modus-themes-to-toggle '(modus-vivendi modus-operandi))
+;; doom-tokyo-night is the port of the palette kitty/current-theme.conf and the
+;; Neovim tokyonight plugin already use, so the three agree.
+(setopt doom-themes-enable-bold t)
+(setopt doom-themes-enable-italic t)
 
 (defun rc-ui-apply-appearance (&rest _)
   "Apply the default font and theme.  Idempotent, so safe on every frame."
   (set-face-attribute 'default nil
                       :height 170 :weight 'normal :family "Zenbones Brainy")
-  (unless (memq 'modus-vivendi custom-enabled-themes)
-    (modus-themes-load-theme 'modus-vivendi)))
+  (unless (memq 'doom-tokyo-night custom-enabled-themes)
+    (load-theme 'doom-tokyo-night :no-confirm)))
 
 ;; A daemon starts with no frame, so a font set now would have nothing to
 ;; attach to and client frames would come up with the wrong one.
