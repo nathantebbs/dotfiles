@@ -2,3 +2,4 @@
 macos/aerospace.toml	.aerospace.toml	aerospace
 macos/karabiner/karabiner.json	.config/karabiner/karabiner.json	karabiner
 macos/emacs/dev.nathantebbs.emacs.plist	Library/LaunchAgents/dev.nathantebbs.emacs.plist	emacs daemon
+macos/scripts/kitty-float.sh	.local/bin/kitty-float	kitty float

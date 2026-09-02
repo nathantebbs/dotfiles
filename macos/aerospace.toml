@@ -39,6 +39,12 @@ if.app-id = 'org.mozilla.firefox'
 run = 'move-node-to-workspace 1'
 
 # 2 Terminals
+# The always-on-top kitty window is floated wherever it lands. It has to be
+# matched before the workspace rule, since the first matching callback wins.
+[[on-window-detected]]
+if.app-id = 'net.kovidgoyal.kitty'
+if.window-title-regex-substring = 'kitty-float'
+run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'net.kovidgoyal.kitty'
 run = 'move-node-to-workspace 2'
@@ -142,6 +148,11 @@ cmd-ctrl-alt-f = 'fullscreen'
 
 # --- Float the focused window (i3: mod+shift+space). ---
 cmd-ctrl-alt-shift-space = 'layout floating tiling'
+
+# --- Summon the always-on-top terminal (i3: mod+enter). ---
+# AeroSpace has no always-on-top, so the window sets its own NSWindow level.
+# See macos/scripts/kitty-float.sh.
+cmd-ctrl-alt-enter = 'exec-and-forget $HOME/.local/bin/kitty-float'
 
 # --- Resize the focused window. ---
 cmd-ctrl-alt-minus = 'resize smart -50'
