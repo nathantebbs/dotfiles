@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-set -xe
+set -e
 
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+version="0.14.0"
+curl -fLo "$HOME/.vim/autoload/plug.vim" --create-dirs \
+  "https://raw.githubusercontent.com/junegunn/vim-plug/$version/plug.vim"

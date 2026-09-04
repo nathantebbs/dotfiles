@@ -25,11 +25,7 @@ Deploy the shared and macOS configuration from the repository root:
 bash setup.sh
 ```
 
-Install the committed fonts when needed:
-
-```sh
-bash util/scripts/install-fonts.sh
-```
+Install the preferred terminal and editor fonts manually when needed.
 
 macOS ships Bash 3.2. It lacks features used by the shared shell config. Zsh is
 the macOS default, but these dotfiles deliberately use Bash on both machines.

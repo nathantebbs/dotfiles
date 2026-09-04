@@ -3,6 +3,9 @@
 
 nvim.log
 
+# Fonts are a per-machine preference, not repository contents.
+fonts/
+
 # util/scripts/tags.sh, if it is ever run here
 tags
 .tags

@@ -158,7 +158,7 @@ require("lazy").setup({
     { "tpope/vim-surround" },
     { "itchyny/lightline.vim" },
 
-    { "windwp/nvim-autopairs" },
+    { "windwp/nvim-autopairs", opts = {} },
 
     {
       "folke/todo-comments.nvim",
@@ -212,6 +212,9 @@ require("lazy").setup({
 local ts_filetypes = { "c", "cpp", "go", "lua", "odin", "python", "zig" }
 
 require("nvim-treesitter").install(ts_filetypes)
+
+-- Prefer the native sorter when its optional build completed successfully.
+pcall(require("telescope").load_extension, "fzf")
 
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("rc_treesitter", { clear = true }),

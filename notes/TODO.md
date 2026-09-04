@@ -1,8 +1,7 @@
 # Historical TODO
 
 This file records completed work from earlier repository states. It is not
-current operating documentation. Paths and behavior below remain unchanged as
-history.
+current operating documentation. Entries describe the repository at that time.
 
 ## Done
 
