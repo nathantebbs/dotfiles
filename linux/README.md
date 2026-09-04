@@ -1,45 +1,75 @@
-# Linux configuration
+# Arch Linux and Hyprland
 
-This directory holds Linux behavior that works across distributions. It does
-not install packages, name distribution packages, enable services, or assume a
-desktop environment.
+This directory defines my Arch Linux desktop. It assumes Hyprland,
+Hyprlauncher, Waybar, Dunst, PipeWire, NetworkManager, Kitty, and Dolphin.
 
-The root setup script deploys shared configuration first. It then reads
-`linux/links.tsv`. That manifest is empty because the repository has no
-Linux-only files to link yet.
+## Packages
 
-Run deployment from the repository root:
+Deployment never runs `sudo`, `pacman`, or `yay`. Check the package manifest:
 
 ```sh
-bash setup.sh
+bash linux/scripts/check-packages.sh
 ```
 
-Install the committed fonts when needed:
+The checker reports missing packages and prints the commands that would install
+them. Official packages use `pacman`. Future AUR entries use an existing `yay`
+installation. Every current package comes from an official Arch repository.
+
+## Deploy
+
+Run these commands from the repository root:
 
 ```sh
-bash util/scripts/install-fonts.sh
+bash setup.sh --platform linux --dry-run
+bash setup.sh --platform linux
 ```
 
-The shell uses `nvim` for `$EDITOR` and `$VISUAL`. It enables GNU `ls` colors.
-The host owns package installation and Emacs daemon setup.
+Deployment links the shared configuration and these Linux directories:
+
+- `~/.config/hypr`
+- `~/.config/waybar`
+- `~/.config/dunst`
+
+The deployer moves each existing target to a timestamped backup. It leaves an
+existing correct link alone.
+
+The wallpaper config expects `~/Pictures/mountain.jpg`. Change the tracked path
+in `linux/hypr/hyprpaper.conf` when the workstation wallpaper changes.
+
+## Session
+
+Hyprland starts Waybar, Hyprpaper, Hypridle, Hyprlauncher, Dunst, the
+NetworkManager applet, and Hyprpolkitagent.
+
+Check the active configuration after an edit:
+
+```sh
+Hyprland --verify-config --config linux/hypr/hyprland.lua
+hyprctl reload
+hyprctl configerrors
+```
+
+## Bindings
+
+| Binding | Action |
+| --- | --- |
+| `Super+Return` | Open Kitty |
+| `Super+R` | Open Hyprlauncher |
+| `Super+E` | Open Dolphin |
+| `Super+Q` | Close the active window |
+| `Super+H/J/K/L` | Move focus |
+| `Super+Shift+L` | Lock the session |
+| `Super+M` | Open Hyprshutdown |
+| `Print` | Capture every output |
+| `Super+Print` | Capture a selected region |
 
 ## Emacs daemon
 
-Linux runs Emacs as a systemd user service. Restart it after rebuilding Emacs
-or changing its configuration:
+Arch provides an Emacs user service. Enable it once if needed:
 
 ```sh
-systemctl --user restart emacs.service
+systemctl --user enable --now emacs.service
 ```
 
-Use systemd for the other daemon operations too:
-
-```sh
-systemctl --user status emacs.service
-systemctl --user start emacs.service
-systemctl --user stop emacs.service
-journalctl --user -u emacs.service -f
-```
-
-The `emacsctl` shell function is macOS-only. It wraps launchd commands and
-cannot manage the systemd service used on Linux.
+The Bash function `emacsctl` starts, stops, restarts, checks, and follows logs
+for that service.

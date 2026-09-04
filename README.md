@@ -1,11 +1,12 @@
 # dotfiles
 
-My configuration for the tools I use on macOS and Linux. Shared files live at
-the root. Platform integration lives under [`macos/`](macos/) and
-[`linux/`](linux/).
+My configuration for macOS and an opinionated Arch Linux + Hyprland desktop.
+Shared files live at the root. Platform integration lives under
+[`macos/`](macos/) and [`linux/`](linux/).
 
-The setup script deploys configuration. It does not install Linux packages or
-manage Linux services. The macOS side has a small optional
+The setup script deploys configuration. It does not install packages or change
+system services. The Linux package checker reports missing Arch packages and
+prints the command to install them. The macOS side has a small optional
 [`Brewfile`](macos/Brewfile), but I keep system setup explicit.
 
 ## Deploy
@@ -52,8 +53,7 @@ Kitty is the terminal. AeroSpace handles tiling on macOS. Karabiner maps the
 right diamond key to the modifier AeroSpace uses. Bash is the login shell and
 tmux remains available for remote sessions.
 
-The repository also carries my Git configuration, C formatting rules, and the
-fonts used by Kitty and Emacs.
+The repository also carries my Git configuration and C formatting rules.
 
 ## Layout
 
@@ -63,9 +63,8 @@ fonts used by Kitty and Emacs.
 | `bashrc`, `bash_profile`, `config.bash` | Shell configuration |
 | `kitty/`, `tmux/` | Terminal configuration |
 | `gitconfig`, `clang-format` | Tool configuration |
-| `fonts/` | Editor and terminal font assets |
 | `macos/` | Homebrew, launchd, AeroSpace, and Karabiner |
-| `linux/` | Distribution-neutral Linux behavior |
+| `linux/` | Arch packages, Hyprland, Waybar, Dunst, and Linux shell integration |
 | `util/links.tsv` | Shared deployment manifest |
 
 ## Optional helpers
@@ -73,7 +72,6 @@ fonts used by Kitty and Emacs.
 These are separate from deployment:
 
 ```sh
-bash util/scripts/install-fonts.sh
 bash util/scripts/tags.sh [project]
 bash util/scripts/install-odinfmt.sh
 bash util/scripts/install-vimplug.sh
@@ -88,6 +86,15 @@ finds it through the default `./tags;`, and `.tags` for Emacs, which
 run, so the two editors jump to the same place. C, C++, Go and Python are its
 own parsers; Odin and Zig are regex definitions in the script, since
 universal-ctags ships neither. Rerun it when the index goes stale.
+
+On Arch Linux, report missing workstation packages with:
+
+```sh
+bash linux/scripts/check-packages.sh
+```
+
+Zenbones Brainy is a manual machine preference. Arch installs the Nerd Font
+symbols used by Waybar through the package manifest.
 
 `install-odinfmt.sh` builds `odinfmt` from source, since it is not packaged.
 It needs the `odin` compiler and nothing else. The checkout goes to

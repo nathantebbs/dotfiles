@@ -1,1 +1,4 @@
-# Linux has no platform-only links yet.
+# source	target	name
+linux/hypr	.config/hypr	hyprland
+linux/waybar	.config/waybar	waybar
+linux/dunst	.config/dunst	dunst
