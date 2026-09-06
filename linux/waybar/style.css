@@ -20,7 +20,6 @@ window#waybar {
 }
 
 .modules-left,
-.modules-center,
 .modules-right {
     margin: 6px 8px 0;
     padding: 0 5px;

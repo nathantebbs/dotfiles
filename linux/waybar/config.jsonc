@@ -4,7 +4,6 @@
     "height": 40,
     "spacing": 6,
     "modules-left": ["custom/arch", "hyprland/workspaces"],
-    "modules-center": ["hyprland/window"],
     "modules-right": ["tray", "pulseaudio", "network", "cpu", "memory", "clock", "custom/power"],
 
     "custom/arch": {
@@ -16,11 +15,11 @@
         "all-outputs": true,
         "format": "{name}"
     },
-    "hyprland/window": {
-        "format": "{}",
-        "max-length": 80,
-        "separate-outputs": true
-    },
+    // "hyprland/window": {
+    //     "format": "{}",
+    //     "max-length": 80,
+    //     "separate-outputs": true
+    // },
     "tray": {
         "spacing": 8
     },
